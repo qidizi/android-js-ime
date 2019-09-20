@@ -7,7 +7,8 @@
 *. 支持手势控制   
 *. 支持完整pc控制功能，比如ctrl、alt、ctrl+c等   
 *. 更多功能可以通过修改html来实现   
-*. 项目github https://github.com/qidizi/android-js-ime    
+*. 项目github https://github.com/qidizi/android-js-ime  
+*. 测试环境：小米9+android 10      
 
 # 截图 
 
