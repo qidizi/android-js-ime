@@ -1,0 +1,222 @@
+/*@font-face 在安卓24模拟器上可以加载，但是在27或以上都不能加载*/
+@font-face {
+    font-family: "Menlo Bold";
+    src: url("./Menlo-Bold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Menlo Bold Italic";
+    src: url("./Menlo-BoldItalic.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Menlo Italic";
+    src: url("./Menlo-Italic.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Menlo Regular";
+    src: url("./Menlo-Regular.ttf") format("truetype");
+}
+
+html, body {
+    display: block;
+    width: 100%;
+    /*注意当前高度为由内容顶起来的，所以，不能设置％比。可以使用固定的px值*/
+    height: auto;
+    overflow: auto;
+    padding: 0;
+    margin: 0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    /*如果不设置背景色，就能透明看到窗口后面内容*/
+    background-color: transparent;
+    font-size: 62.5%;
+}
+
+body {
+    /*在某些版本的案卓高度为0*/
+    min-height: 2rem;
+    font-family: "Menlo Bold", monospace;
+    display: block;
+    font-size: 0; /*与block配合，忽略html中空格*/
+}
+
+main {
+    display: block;
+    margin: 0 auto;
+    overflow: hidden;
+    width: 100%;
+}
+
+section {
+    width: 100%;
+    margin: 0 0 10px;
+    padding: 0;
+    display: block;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    background-color: transparent;
+}
+
+section.quick_words {
+    text-align: left;
+    white-space: normal;
+}
+
+section kbd {
+    font-size: 1.6rem;
+    display: inline-block;
+    margin: 0;
+    background-color: white;
+    border-radius: 6px;
+    border: 1px solid lightgrey;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    width: 10%;
+    line-height: 4rem;
+    height: 4rem;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+}
+
+section.quick_words kbd {
+    margin-bottom: 0.83%;
+}
+
+section kbd.hold_key {
+    background-color: darkgoldenrod;
+}
+
+section kbd.two_key {
+    width: 20%;
+}
+
+section.number kbd {
+    width: 14%;
+    height: 5rem;
+}
+
+section.number kbd.two_key {
+    width: 28%;
+}
+
+section.wu_bi kbd {
+    background-color: whitesmoke;
+}
+
+section kbd {
+    /*禁用选择文字，防止长按触发，会中断touch事件*/
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    user-select: none;
+    /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+
+@media only screen and (min-width: 800px) {
+    /*横屏时要调整一下高度，目前未找到webview的媒体查询方向切换不起作用的原因，但是使用大小却有效*/
+    section kbd, section.number kbd {
+        line-height: 3rem;
+        height: 3rem;
+    }
+}
+
+.new_line {
+    display: block;
+    height: auto;
+    visibility: hidden;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    clear: both;
+}
+
+.hide_body {
+    display: none;
+}
+
+.candidates {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    text-align: left;
+    height: 3rem;
+    margin-bottom: 5px;
+}
+
+.candidates .words {
+    margin: 0 5px;
+    background-color: white;
+    display: inline-block;
+    padding: 1px 2px;
+    border-radius: 2px;
+    text-align: center;
+    min-width: 3rem;
+}
+
+.candidates .words sup {
+    display: block;
+    font-size: 1rem;
+}
+
+.candidates .words sub {
+    display: block;
+    font-size: 1.2rem;
+}
+
+.candidates .key_codes {
+
+}
+
+.candidates .selected {
+    background-color: cornsilk;
+}
+
+.textarea {
+    display: block;
+    width: 100%;
+    text-align: right;
+}
+
+.textarea i {
+    font-size: 1rem;
+    color: dimgray;
+}
+
+.textarea button {
+    border: 1px solid;
+    border-radius: 3px;
+    margin: 10px;
+}
+
+.textarea textarea {
+    text-align: left;
+    display: block;
+    width: 100%;
+    border: 1px dotted lightgrey;
+    padding: 10px;
+    font-size: 1rem;
+}
+
+.debug_box {
+    width: 100%;
+    overflow: auto;
+    border-bottom: 1px solid lightgrey;
+    display: none;
+    max-height: 100px;
+    font-size: 1rem;
+    text-align: left;
+    padding: 10px;
+    background-color: mintcream;
+    line-height: 150%;
+    white-space: nowrap;
+}
