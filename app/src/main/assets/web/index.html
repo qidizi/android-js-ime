@@ -7,12 +7,42 @@
     <title>js键盘</title>
     <link rel="icon" href="data:image/ico;base64,aWNv">
     <script>
-        document.write("<link rel='stylesheet' id='index_css' href='index.css?s" + +new Date + "' type='text/css' media='all'/>");
+        // 独立出来，防止其它js出错
+        function debug() {
+            console.log.apply(console, arguments);
+            let dom = document.getElementById('debug_box');
+            dom.style.display = 'block';
+            let str = [];
+
+            for (let i = 0; i < arguments.length; i++) {
+                let type = Object.prototype.toString.call(arguments[i]).toLowerCase().substr(8).replace(']', '');
+                str.push('[' + type + ']' + JSON.stringify(arguments[i]));
+            }
+
+            dom.prepend(str.join('\t'), document.createElement('br'));
+        }
+
+        window.onerror = function (error, url, line, col) {
+            debug.call(window, 'js异常：' + error + ' @ ' + url + ' ' + line + ':' + col);
+        };
+        // 加载html使用的是file://协议，无法使用<script type="module"，否则将会触发以下错误
+        // "Failed to load module script: The server responded with a non-JavaScript MIME type of "".
+        // Strict MIME type checking is enforced for module scripts per HTML spec.",
+        // source: file:///android_asset/web/index.js?1569008605055 (0)
+        // 键盘来的浏览器userAgent添加了自定义标志 SoftKeyboard
+        let js = [navigator.userAgent.indexOf('SoftKeyboard') ? 'vue' : 'vue.dev', 'java', 'index'];
+        for (let i = 97; i <= 122; i++) js.push('wu_bi_' + String.fromCharCode(i));
+        let html = "<link rel='stylesheet' href='index.css?s" + +new Date + "' type='text/css' media='all'/>";
+        js.forEach(function (name) {
+            html += '<script  src="./' + name + '.js?' + +new Date + '"><\/script>';
+        });
+        document.write(html);
     </script>
 </head>
 <body>
+<p id="init"><!--方便检查是否加载html-->键盘初始化中...</p>
 <code ondblclick="this.innerHTML = '';this.style.display = 'none';" id="debug_box" class="debug_box"></code>
-<main id="app" class="hide_body"
+<main id="app" style="display: none;"
       @touchcancel="on_touch_cancel" @touchstart="on_touch_start"
       @touchmove="on_touch_move" @touchend="on_touch_end"
       onselect="return false;" ondragstart="return false;"
@@ -238,41 +268,17 @@
         <hr class="new_line"/>
         <kbd data-android="KEYCODE_F11">f11</kbd>
         <kbd data-android="KEYCODE_F12">f12</kbd>
-        <kbd :class="{key:1,hold_key:meta_down}" data-android="KEYCODE_META_LEFT">⌘</kbd>
+        <kbd class="{key:1,hold_key:meta_down}" data-android="KEYCODE_META_LEFT">⌘</kbd>
         <kbd @touchstart.stop.prevent="deploy">部署</kbd>
         <kbd data-android="KEYCODE_FORWARD_DEL">⌦</kbd>
     </section>
     <section v-if="keyboard_show_quick" class="quick_words">
         <!--快捷输入-->
-        <kbd :data-text="kv[1]" v-for="(kv,i) in quick_input">
+        <kbd data-text="kv[1]" v-for="(kv,i) in quick_input">
             {{kv[0]}}
         </kbd>
         <kbd @touchstart.stop.prevent="edit_quick_input">✎</kbd>
     </section>
 </main>
-<script>
-    // 独立出来，防止其它js出错
-    function debug() {
-        console.log.apply(console, arguments);
-        let dom = document.getElementById('debug_box');
-        dom.style.display = 'block';
-        let str = [];
-
-        for (let i = 0; i < arguments.length; i++) {
-            let type = Object.prototype.toString.call(arguments[i]).toLowerCase().substr(8).replace(']', '');
-            str.push('[' + type + ']' + JSON.stringify(arguments[i]));
-        }
-
-        dom.prepend(str.join('\t'), document.createElement('br'));
-    }
-
-    window.onerror = function (error, url, line, col) {
-        debug.call(window, 'js异常：' + error + ' @ ' + url + ' ' + line + ':' + col);
-    }
-</script>
-
-<script>
-    document.write('<script src="index.js?' + +new Date + '" type="module"><\/script>');
-</script>
 </body>
 </html>

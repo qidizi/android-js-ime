@@ -1,4 +1,4 @@
-/*@font-face 在安卓24模拟器上可以加载，但是在27或以上都不能加载*/
+/*@font-face TODO 在安卓24模拟器上可以加载，但是在27或以上都不能加载*/
 @font-face {
     font-family: "Menlo Bold";
     src: url("./Menlo-Bold.ttf") format("truetype");
@@ -139,10 +139,6 @@ section kbd {
     clear: both;
 }
 
-.hide_body {
-    display: none;
-}
-
 .candidates {
     width: 100%;
     overflow-x: auto;
@@ -219,4 +215,12 @@ section kbd {
     background-color: mintcream;
     line-height: 150%;
     white-space: nowrap;
+}
+
+#init {
+    font-size: 1rem;
+    padding: 10px;
+    color: black;
+    background-color: lightgrey;
+    text-align: center;
 }

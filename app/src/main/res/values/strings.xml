@@ -4,7 +4,7 @@
     <string name="help"><![CDATA[
 
         <h1>关于输入法</h1>
-        <p><a target="_blank" href="https://github.com/qidizi/android-js-ime">项目github</a></p>
+        <p><a target="_blank" href="https://github.com/qidizi/android-js-ime">项目github地址</a></p>
         <p>作者：qidizi</p>
         <h2>启用输入法</h2>
         <p>以Android 10为例：系统设置->更多设置->语言与输入法->输入法管理->{{app_name}}->点击右边开关启用</p>
@@ -15,7 +15,7 @@
         <p>上滑切到英文、下滑切到五笔、左滑切到符号、右滑切到数字、左右滑切到控制、右左滑切到快捷短语、上下滑动切到语音输入</p>
         <p>语音输入依赖安装后的第三方引擎，比如讯飞语记</p>
         <h2>自定义键盘</h2>
-        <p>注意下面提到的文件，需要授予文件权限才会出现</p>
+        <p>注意下面提到的文件，需要授予文件权限才复制，复制进程会实时提示进度</p>
         <p>打开手机文件管理，进入目录Android/data/qidizi.js_ime/files/，复制文件index.html并重命名成user.html
         ，左右滑切换到控制键盘，点击部署，如果修改时导致无法使用部署，请通过切换到其它输入法再切换回来即可重新加载。</p>
         <p>关于js的运行逻辑，请结合index.html阅读理解</p>

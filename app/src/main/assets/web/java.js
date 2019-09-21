@@ -1,5 +1,5 @@
 // 放java的使用例子
-const java = {
+window.java = {
     send_text(text) {
         debug('java收到字符串：' + text);
     },
@@ -372,5 +372,3 @@ const java = {
 
 
 };
-
-export default java;

@@ -6,16 +6,47 @@ android {
     defaultConfig {
         // 如果这个不正确aide会提示R找不到。as正常不影响
         applicationId "qidizi.js_ime"
-        minSdkVersion 15
+        minSdkVersion 19
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-       // testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        release {
+            //配置keystore文件的各种信息
+
+            //加载本工程目录之外的资源，防止git缓存
+            Properties properties = new Properties()
+            // 请在本工程同级创建如下目录和编写下列文件名的properties文件，追加内容如下
+
+            //  KEY_PATH=签名key.keystore文件的绝对路径
+            //  KEY_PASS=key的密码
+            //  KEY_ALIAS_NAME=key的别名
+            //  KEY_ALIAS_PASS=别名的密码
+
+            InputStream inputStream = file('../../apk-private-properties/private.properties').newDataInputStream();
+            properties.load(inputStream)
+
+            //签名key文件
+            storeFile file(properties.getProperty('KEY_PATH'))
+            storePassword properties.getProperty('KEY_PASS')
+            keyAlias properties.getProperty('KEY_ALIAS_NAME')
+            keyPassword properties.getProperty('KEY_ALIAS_PASS')
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
-           // proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // 禁用混淆
+            // proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            debuggable true
+            signingConfig signingConfigs.release
+        }
+
+        debug {
+            signingConfig signingConfigs.release
         }
     }
 }
