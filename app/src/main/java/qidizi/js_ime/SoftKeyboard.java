@@ -192,7 +192,11 @@ public class SoftKeyboard extends InputMethodService {
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
                 // 总是弹出给用户，防止自定义时空白页不知道原因
-                Toast.makeText(ct, consoleMessage.message(), Toast.LENGTH_LONG).show();
+                Toast.makeText(
+                        ct,
+                        consoleMessage.message() + "#" + consoleMessage.lineNumber(),
+                        Toast.LENGTH_LONG
+                ).show();
                 return super.onConsoleMessage(consoleMessage);
             }
         });
@@ -270,6 +274,8 @@ public class SoftKeyboard extends InputMethodService {
             // java.lang.Throwable: A WebView method was called on thread 'JavaBridge'.
             // All WebView methods must be called on the same thread
             // 所以，把待执行方法放入它的队列
+            // 如切换到其它输入法再切回来，webview被destroy但是JsInterface并没有重置
+            JsInterface.js_listener = null;
             webView.post(new Runnable() {
                 @Override
                 public void run() {

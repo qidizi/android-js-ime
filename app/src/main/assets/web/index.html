@@ -274,7 +274,7 @@
     </section>
     <section v-if="keyboard_show_quick" class="quick_words">
         <!--快捷输入-->
-        <kbd data-text="kv[1]" v-for="(kv,i) in quick_input">
+        <kbd :data-text="kv[1]" v-for="(kv,i) in quick_input">
             {{kv[0]}}
         </kbd>
         <kbd @touchstart.stop.prevent="edit_quick_input">✎</kbd>

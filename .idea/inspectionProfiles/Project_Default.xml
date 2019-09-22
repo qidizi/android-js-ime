@@ -4,7 +4,7 @@
     <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="12">
+          <list size="13">
             <item index="0" class="java.lang.String" itemvalue="@touchstart.stop.prevent" />
             <item index="1" class="java.lang.String" itemvalue="v-for" />
             <item index="2" class="java.lang.String" itemvalue="v-if" />
@@ -17,6 +17,7 @@
             <item index="9" class="java.lang.String" itemvalue="@touchcancel" />
             <item index="10" class="java.lang.String" itemvalue="v-model.trim" />
             <item index="11" class="java.lang.String" itemvalue=":placeholder" />
+            <item index="12" class="java.lang.String" itemvalue=":data-text" />
           </list>
         </value>
       </option>

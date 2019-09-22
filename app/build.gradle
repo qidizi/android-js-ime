@@ -25,7 +25,7 @@ android {
             //  KEY_ALIAS_NAME=key的别名
             //  KEY_ALIAS_PASS=别名的密码
 
-            InputStream inputStream = file('../../apk-private-properties/private.properties').newDataInputStream();
+            InputStream inputStream = file('../../apk-private-properties/private.properties').newDataInputStream()
             properties.load(inputStream)
 
             //签名key文件
@@ -42,10 +42,15 @@ android {
             // 禁用混淆
             // proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             debuggable true
+            // 点击idea右侧的Gradle面板中的other/assembleRelease即可自动签名apk
+
+            // 禁止idea提示 Cannot infer arguments types
+            //noinspection GroovyAssignabilityCheck
             signingConfig signingConfigs.release
         }
 
         debug {
+            //noinspection GroovyAssignabilityCheck
             signingConfig signingConfigs.release
         }
     }
