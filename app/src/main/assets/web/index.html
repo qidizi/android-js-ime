@@ -30,7 +30,9 @@
         // Strict MIME type checking is enforced for module scripts per HTML spec.",
         // source: file:///android_asset/web/index.js?1569008605055 (0)
         // 键盘来的浏览器userAgent添加了自定义标志 SoftKeyboard
-        let js = [navigator.userAgent.indexOf('SoftKeyboard') ? 'vue' : 'vue.dev', 'java', 'index'];
+        let js = [navigator.userAgent.indexOf('SoftKeyboard') ? 'vue' : 'vue.dev',
+            'java', 'kbd-wu_bi', 'kbd-en', 'kbd-quick',
+            "speech", 'index'];
         for (let i = 97; i <= 122; i++) js.push('wu_bi_' + String.fromCharCode(i));
         let html = "<link rel='stylesheet' href='index.css?s" + +new Date + "' type='text/css' media='all'/>";
         js.forEach(function (name) {
@@ -45,17 +47,18 @@
 <main id="app" style="display: none;"
       @touchcancel="on_touch_cancel" @touchstart="on_touch_start"
       @touchmove="on_touch_move" @touchend="on_touch_end"
-      onselect="return false;" ondragstart="return false;"
+      ondblclick="return false;" oncontextmenu="return false;"
 >
-    <label class="textarea disable-gesture" v-if="textarea_show"
-    >
-        <textarea :placeholder="textarea_placeholder"
-                  rows="10" v-model.trim="textarea_value"></textarea>
-        <i>暂无法编辑请剪出改好贴回</i>
-        <button @touchstart.stop.prevent="textarea_close">放弃</button>
-        <button @touchstart.stop.prevent="textarea_save">保存</button>
-    </label>
-    <section v-if="keyboard_show_wu_bi" class="wu_bi">
+    <kbd-en></kbd-en>
+    <kbd-wu-bi></kbd-wu-bi>
+    <kbd-quick></kbd-quick>
+    <speech></speech>
+</main>
+<script type="text/html">
+
+
+
+    <section style="display: none" class="cn">
         <!--中文 http://xahlee.info/comp/unicode_computing_symbols.html-->
         <nav class="candidates disable-gesture">
             <code class="key_codes words selected" @click.stop.prevent="use_candidate(keys)"
@@ -78,191 +81,305 @@
             </code>
         </nav>
 
-        <kbd @touchstart.stop.prevent="show_custom_candidates($event,
-            ['…','「','」','『','』','〔','〕','【','】','——','……','—','《','》','〈','〉','[',']','﹏﹏','___']
-            )">㊕
+        <template vd-for="(kbd,i) in en_kbd">
+            <kbd>
+                <b class="kbd-c">·</b>
+                <b class="kbd-u">上边</b>
+                <b class="kbd-d">下边</b>
+                <b class="kbd-l">左边</b>
+                <b class="kbd-r">右边</b>
+            </kbd>
+        </template>
+        <kbd @touchstart.stop.prevent
+        >
+            <b class="kbd-c">㊕</b>
+            <b class="kbd-d">㊕</b>
         </kbd>
-        <kbd data-text="·">·</kbd>
-        <kbd data-text="、">、</kbd>
-        <kbd data-text="‘">‘</kbd>
-        <kbd data-text="’">’</kbd>
-        <kbd data-text="“">“</kbd>
-        <kbd data-text="”">”</kbd>
-        <kbd data-text="（">（</kbd>
-        <kbd data-text="）">）</kbd>
-        <kbd data-text="-">-</kbd>
+        <kbd data-text="·">
+            <b class="kbd-c">·</b>
+            <b class="kbd-u">上边</b>
+            <b class="kbd-d">下边</b>
+            <b class="kbd-l">左边</b>
+            <b class="kbd-r">右边</b>
+        </kbd>
+        <kbd data-text="、">
+            <b class="kbd-c">、</b>
+        </kbd>
+        <kbd data-text="‘">
+            <b class="kbd-c">‘</b>
+        </kbd>
+        <kbd data-text="’">
+            <b class="kbd-c">’</b>
+        </kbd>
+        <kbd data-text="“">
+            <b class="kbd-c">“</b>
+        </kbd>
+        <kbd data-text="”">
+            <b class="kbd-c">”</b>
+        </kbd>
+        <kbd data-text="（">
+            <b class="kbd-c">（</b>
+        </kbd>
+        <kbd data-text="）">
+            <b class="kbd-c">）</b>
+        </kbd>
+        <kbd data-text="-">
+            <b class="kbd-c">-</b>
+        </kbd>
         <hr class="new_line"/>
-        <kbd data-android="KEYCODE_Q">q</kbd>
-        <kbd data-android="KEYCODE_W">w</kbd>
-        <kbd data-android="KEYCODE_E">e</kbd>
-        <kbd data-android="KEYCODE_R">r</kbd>
-        <kbd data-android="KEYCODE_T">t</kbd>
-        <kbd data-android="KEYCODE_Y">y</kbd>
-        <kbd data-android="KEYCODE_U">u</kbd>
-        <kbd data-android="KEYCODE_I">i</kbd>
-        <kbd data-android="KEYCODE_O">o</kbd>
-        <kbd data-android="KEYCODE_P">p</kbd>
+        <kbd data-android="KEYCODE_Q">
+            <b class="kbd-c">q</b>
+        </kbd>
+        <kbd data-android="KEYCODE_W">
+            <b class="kbd-c">w</b>
+        </kbd>
+        <kbd data-android="KEYCODE_E">
+            <b class="kbd-c">e</b>
+        </kbd>
+        <kbd data-android="KEYCODE_R">
+            <b class="kbd-c">r</b>
+        </kbd>
+        <kbd data-android="KEYCODE_T">
+            <b class="kbd-c">t</b>
+        </kbd>
+        <kbd data-android="KEYCODE_Y">
+            <b class="kbd-c">y</b>
+        </kbd>
+        <kbd data-android="KEYCODE_U">
+            <b class="kbd-c">u</b>
+        </kbd>
+        <kbd data-android="KEYCODE_I">
+            <b class="kbd-c">i</b>
+        </kbd>
+        <kbd data-android="KEYCODE_O">
+            <b class="kbd-c">o</b>
+        </kbd>
+        <kbd data-android="KEYCODE_P">
+            <b class="kbd-c">p</b>
+        </kbd>
         <hr class="new_line"/>
-        <kbd data-android="KEYCODE_A">a</kbd>
-        <kbd data-android="KEYCODE_S">s</kbd>
-        <kbd data-android="KEYCODE_D">d</kbd>
-        <kbd data-android="KEYCODE_F">f</kbd>
-        <kbd data-android="KEYCODE_G">g</kbd>
-        <kbd data-android="KEYCODE_H">h</kbd>
-        <kbd data-android="KEYCODE_J">j</kbd>
-        <kbd data-android="KEYCODE_K">k</kbd>
-        <kbd data-android="KEYCODE_L">l</kbd>
+        <kbd data-android="KEYCODE_A">
+            <b class="kbd-c">a</b>
+        </kbd>
+        <kbd data-android="KEYCODE_S">
+            <b class="kbd-c">s</b>
+        </kbd>
+        <kbd data-android="KEYCODE_D">
+            <b class="kbd-c">d</b>
+        </kbd>
+        <kbd data-android="KEYCODE_F">
+            <b class="kbd-c">f</b>
+        </kbd>
+        <kbd data-android="KEYCODE_G">
+            <b class="kbd-c">g</b>
+        </kbd>
+        <kbd data-android="KEYCODE_H">
+            <b class="kbd-c">h</b>
+        </kbd>
+        <kbd data-android="KEYCODE_J">
+            <b class="kbd-c">j</b>
+        </kbd>
+        <kbd data-android="KEYCODE_K">
+            <b class="kbd-c">k</b>
+        </kbd>
+        <kbd data-android="KEYCODE_L">
+            <b class="kbd-c">l</b>
+        </kbd>
         <hr class="new_line"/>
-        <kbd @touchstart.stop.prevent="cn_keyboard_reset">清</kbd>
-        <kbd data-android="KEYCODE_Z">z</kbd>
-        <kbd data-android="KEYCODE_X">x</kbd>
-        <kbd data-android="KEYCODE_C">c</kbd>
-        <kbd data-android="KEYCODE_V">v</kbd>
-        <kbd data-android="KEYCODE_B">b</kbd>
-        <kbd data-android="KEYCODE_N">n</kbd>
-        <kbd data-android="KEYCODE_M">m</kbd>
-        <kbd class="two_key" data-android="KEYCODE_DEL">⌫</kbd>
+        <kbd @touchstart.stop.prevent="cn_keyboard_reset">
+            <b class="kbd-c">清</b>
+        </kbd>
+        <kbd data-android="KEYCODE_Z">
+            <b class="kbd-c">z</b>
+        </kbd>
+        <kbd data-android="KEYCODE_X">
+            <b class="kbd-c">x</b>
+        </kbd>
+        <kbd data-android="KEYCODE_C">
+            <b class="kbd-c">c</b>
+        </kbd>
+        <kbd data-android="KEYCODE_V">
+            <b class="kbd-c">v</b>
+        </kbd>
+        <kbd data-android="KEYCODE_B">
+            <b class="kbd-c">b</b>
+        </kbd>
+        <kbd data-android="KEYCODE_N">
+            <b class="kbd-c">n</b>
+        </kbd>
+        <kbd data-android="KEYCODE_M">
+            <b class="kbd-c">m</b>
+        </kbd>
+        <kbd class="two_key" data-android="KEYCODE_DEL">
+            <b class="kbd-c">⌫</b>
+        </kbd>
         <hr class="new_line"/>
-        <kbd data-text="：">：</kbd>
-        <kbd data-text="？">？</kbd>
-        <kbd data-text="！">！</kbd>
-        <kbd data-text="；">；</kbd>
-        <kbd class="two_key" data-android="KEYCODE_SPACE">␣</kbd>
-        <kbd class="two_key" data-android="KEYCODE_ENTER">⏎</kbd>
-        <kbd data-text="。">。</kbd>
-        <kbd data-text="，">，</kbd>
+        <kbd data-text="：">
+            <b class="kbd-c">：</b>
+        </kbd>
+        <kbd data-text="？">
+            <b class="kbd-c">？</b>
+        </kbd>
+        <kbd data-text="！">
+            <b class="kbd-c">！</b>
+        </kbd>
+        <kbd data-text="；">
+            <b class="kbd-c">；</b>
+        </kbd>
+        <kbd class="two_key" data-android="KEYCODE_SPACE">
+            <b class="kbd-c">␣</b>
+        </kbd>
+        <kbd class="two_key" data-android="KEYCODE_ENTER">
+            <b class="kbd-c">⏎</b>
+        </kbd>
+        <kbd data-text="。">
+            <b class="kbd-c">。</b>
+        </kbd>
+        <kbd data-text="，">
+            <b class="kbd-c">，</b>
+        </kbd>
     </section>
+    <!--
     <section v-if="keyboard_show_number" class="number">
-        <!--数字-->
-        <kbd data-android="KEYCODE_PLUS">+</kbd>
-        <kbd data-android="KEYCODE_1">1</kbd>
-        <kbd data-android="KEYCODE_2">2</kbd>
-        <kbd data-android="KEYCODE_3">3</kbd>
-        <kbd data-android="KEYCODE_EQUALS">=</kbd>
+        数字
+        <kbd data-android="KEYCODE_PLUS">
+            <b class="kbd-c">+</kbd>
+        <kbd data-android="KEYCODE_1">
+            <b class="kbd-c">1</kbd>
+        <kbd data-android="KEYCODE_2">
+            <b class="kbd-c">2</kbd>
+        <kbd data-android="KEYCODE_3">
+            <b class="kbd-c">3</kbd>
+        <kbd data-android="KEYCODE_EQUALS">
+            <b class="kbd-c">=</kbd>
         <hr class="new_line"/>
-        <kbd data-android="KEYCODE_MINUS">-</kbd>
-        <kbd data-android="KEYCODE_4">4</kbd>
-        <kbd data-android="KEYCODE_5">5</kbd>
-        <kbd data-android="KEYCODE_6">6</kbd>
-        <kbd data-android="KEYCODE_DEL">⌫</kbd>
+        <kbd data-android="KEYCODE_MINUS">
+            <b class="kbd-c">-</kbd>
+        <kbd data-android="KEYCODE_4">
+            <b class="kbd-c">4</kbd>
+        <kbd data-android="KEYCODE_5">
+            <b class="kbd-c">5</kbd>
+        <kbd data-android="KEYCODE_6">
+            <b class="kbd-c">6</kbd>
+        <kbd data-android="KEYCODE_DEL">
+            <b class="kbd-c">⌫</kbd>
         <hr class="new_line"/>
-        <kbd data-android="KEYCODE_STAR">*</kbd>
-        <kbd data-android="KEYCODE_7">7</kbd>
-        <kbd data-android="KEYCODE_8">8</kbd>
-        <kbd data-android="KEYCODE_9">9</kbd>
-        <kbd data-android="KEYCODE_ENTER">⏎</kbd>
+        <kbd data-android="KEYCODE_STAR">
+            <b class="kbd-c">*</kbd>
+        <kbd data-android="KEYCODE_7">
+            <b class="kbd-c">7</kbd>
+        <kbd data-android="KEYCODE_8">
+            <b class="kbd-c">8</kbd>
+        <kbd data-android="KEYCODE_9">
+            <b class="kbd-c">9</kbd>
+        <kbd data-android="KEYCODE_ENTER">
+            <b class="kbd-c">⏎</kbd>
         <hr class="new_line"/>
-        <kbd data-android="KEYCODE_SLASH">/</kbd>
-        <kbd data-android="KEYCODE_0">0</kbd>
-        <kbd class="two_key" data-android="KEYCODE_SPACE">␣</kbd>
-        <kbd data-android="KEYCODE_PERIOD">.</kbd>
+        <kbd data-android="KEYCODE_SLASH">
+            <b class="kbd-c">/</kbd>
+        <kbd data-android="KEYCODE_0">
+            <b class="kbd-c">0</kbd>
+        <kbd class="two_key" data-android="KEYCODE_SPACE">
+            <b class="kbd-c">␣</kbd>
+        <kbd data-android="KEYCODE_PERIOD">
+            <b class="kbd-c">.</kbd>
     </section>
     <section v-if="keyboard_show_symbol">
-        <!--符号-->
-        <kbd data-android="⇧KEYCODE_GRAVE">~</kbd>
-        <kbd data-android="KEYCODE_GRAVE">`</kbd>
-        <kbd data-android="⇧KEYCODE_1">!</kbd>
-        <kbd data-android="⇧KEYCODE_2">@</kbd>
-        <kbd data-android="⇧KEYCODE_3">#</kbd>
-        <kbd data-android="⇧KEYCODE_4">$</kbd>
-        <kbd data-android="⇧KEYCODE_5">%</kbd>
-        <kbd data-android="⇧KEYCODE_6">^</kbd>
-        <kbd data-android="⇧KEYCODE_7">&</kbd>
-        <kbd data-android="⇧KEYCODE_8">*</kbd>
+        <kbd data-android="⇧KEYCODE_GRAVE">
+            <b class="kbd-c">~</kbd>
+        <kbd data-android="KEYCODE_GRAVE">
+            <b class="kbd-c">`</kbd>
+        <kbd data-android="⇧KEYCODE_1">
+            <b class="kbd-c">!</kbd>
+        <kbd data-android="⇧KEYCODE_2">
+            <b class="kbd-c">@</kbd>
+        <kbd data-android="⇧KEYCODE_3">
+            <b class="kbd-c">#</kbd>
+        <kbd data-android="⇧KEYCODE_4">
+            <b class="kbd-c">$</kbd>
+        <kbd data-android="⇧KEYCODE_5">
+            <b class="kbd-c">%</kbd>
+        <kbd data-android="⇧KEYCODE_6">
+            <b class="kbd-c">^</kbd>
+        <kbd data-android="⇧KEYCODE_7">
+            <b class="kbd-c">&</kbd>
+        <kbd data-android="⇧KEYCODE_8">
+            <b class="kbd-c">*</kbd>
         <hr class="new_line"/>
-        <kbd data-android="⇧KEYCODE_9">(</kbd>
-        <kbd data-android="⇧KEYCODE_0">)</kbd>
-        <kbd data-android="KEYCODE_MINUS">-</kbd>
-        <kbd data-android="⇧KEYCODE_MINUS">_</kbd>
-        <kbd data-android="KEYCODE_EQUALS">=</kbd>
-        <kbd data-android="KEYCODE_PLUS">+</kbd>
-        <kbd data-android="KEYCODE_LEFT_BRACKET">[</kbd>
-        <kbd data-android="KEYCODE_RIGHT_BRACKET">]</kbd>
-        <kbd data-android="⇧KEYCODE_LEFT_BRACKET">{</kbd>
-        <kbd data-android="⇧KEYCODE_RIGHT_BRACKET">}</kbd>
+        <kbd data-android="⇧KEYCODE_9">
+            <b class="kbd-c">(</kbd>
+        <kbd data-android="⇧KEYCODE_0">
+            <b class="kbd-c">)</kbd>
+        <kbd data-android="KEYCODE_MINUS">
+            <b class="kbd-c">-</kbd>
+        <kbd data-android="⇧KEYCODE_MINUS">
+            <b class="kbd-c">_</kbd>
+        <kbd data-android="KEYCODE_EQUALS">
+            <b class="kbd-c">=</kbd>
+        <kbd data-android="KEYCODE_PLUS">
+            <b class="kbd-c">+</kbd>
+        <kbd data-android="KEYCODE_LEFT_BRACKET">
+            <b class="kbd-c">[</kbd>
+        <kbd data-android="KEYCODE_RIGHT_BRACKET">
+            <b class="kbd-c">]</kbd>
+        <kbd data-android="⇧KEYCODE_LEFT_BRACKET">
+            <b class="kbd-c">{</kbd>
+        <kbd data-android="⇧KEYCODE_RIGHT_BRACKET">
+            <b class="kbd-c">}</kbd>
         <hr class="new_line"/>
-        <kbd data-android="KEYCODE_BACKSLASH">\</kbd>
-        <kbd data-android="⇧KEYCODE_BACKSLASH">|</kbd>
-        <kbd data-android="KEYCODE_SEMICOLON">;</kbd>
-        <kbd data-android="⇧KEYCODE_SEMICOLON">:</kbd>
-        <kbd data-android="KEYCODE_APOSTROPHE">'</kbd>
-        <kbd data-android="⇧KEYCODE_APOSTROPHE">"</kbd>
-        <kbd data-android="KEYCODE_COMMA">,</kbd>
-        <kbd data-android="⇧KEYCODE_COMMA">&lt;</kbd>
-        <kbd data-android="KEYCODE_PERIOD">.</kbd>
-        <kbd data-android="⇧KEYCODE_PERIOD">&gt;</kbd>
+        <kbd data-android="KEYCODE_BACKSLASH">
+            <b class="kbd-c">\</kbd>
+        <kbd data-android="⇧KEYCODE_BACKSLASH">
+            <b class="kbd-c">|</kbd>
+        <kbd data-android="KEYCODE_SEMICOLON">
+            <b class="kbd-c">;</kbd>
+        <kbd data-android="⇧KEYCODE_SEMICOLON">
+            <b class="kbd-c">:</kbd>
+        <kbd data-android="KEYCODE_APOSTROPHE">
+            <b class="kbd-c">'</kbd>
+        <kbd data-android="⇧KEYCODE_APOSTROPHE">
+            <b class="kbd-c">"</kbd>
+        <kbd data-android="KEYCODE_COMMA">
+            <b class="kbd-c">,</kbd>
+        <kbd data-android="⇧KEYCODE_COMMA">
+            <b class="kbd-c">&lt;</kbd>
+        <kbd data-android="KEYCODE_PERIOD">
+            <b class="kbd-c">.</kbd>
+        <kbd data-android="⇧KEYCODE_PERIOD">
+            <b class="kbd-c">&gt;</kbd>
         <hr class="new_line"/>
-        <kbd data-android="KEYCODE_SLASH">/</kbd>
-        <kbd data-android="⇧KEYCODE_SLASH">?</kbd>
-        <kbd class="two_key" data-android="KEYCODE_SPACE">␣</kbd>
-        <kbd class="two_key" data-android="KEYCODE_ENTER">⏎</kbd>
-        <kbd data-android="KEYCODE_DEL">⌫</kbd>
+        <kbd data-android="KEYCODE_SLASH">
+            <b class="kbd-c">/</kbd>
+        <kbd data-android="⇧KEYCODE_SLASH">
+            <b class="kbd-c">?</kbd>
+        <kbd class="two_key" data-android="KEYCODE_SPACE">
+            <b class="kbd-c">␣</kbd>
+        <kbd class="two_key" data-android="KEYCODE_ENTER">
+            <b class="kbd-c">⏎</kbd>
+        <kbd data-android="KEYCODE_DEL">
+            <b class="kbd-c">⌫</kbd>
     </section>
-    <section v-if="keyboard_show_en">
-        <!--英文-->
+        -->
 
-        <kbd data-android="KEYCODE_TAB">⇥</kbd>
-        <kbd data-android="KEYCODE_ESCAPE">⎋</kbd>
-        <kbd data-android="KEYCODE_MOVE_HOME">Home</kbd>
-        <kbd data-android="KEYCODE_MOVE_END">End</kbd>
-        <kbd data-android="KEYCODE_PAGE_UP">⇞</kbd>
-        <kbd data-android="KEYCODE_PAGE_DOWN">⇟</kbd>
-        <kbd data-android="KEYCODE_DPAD_LEFT">←</kbd>
-        <kbd data-android="KEYCODE_DPAD_RIGHT">→</kbd>
-        <kbd data-android="KEYCODE_DPAD_UP">↑</kbd>
-        <kbd data-android="KEYCODE_DPAD_DOWN">↓</kbd>
-        <hr class="new_line"/>
-        <kbd data-android="KEYCODE_Q">{{shift_toggle_text('q')}}</kbd>
-        <kbd data-android="KEYCODE_W">{{shift_toggle_text('w')}}</kbd>
-        <kbd data-android="KEYCODE_E">{{shift_toggle_text('e')}}</kbd>
-        <kbd data-android="KEYCODE_R">{{shift_toggle_text('r')}}</kbd>
-        <kbd data-android="KEYCODE_T">{{shift_toggle_text('t')}}</kbd>
-        <kbd data-android="KEYCODE_Y">{{shift_toggle_text('y')}}</kbd>
-        <kbd data-android="KEYCODE_U">{{shift_toggle_text('u')}}</kbd>
-        <kbd data-android="KEYCODE_I">{{shift_toggle_text('i')}}</kbd>
-        <kbd data-android="KEYCODE_O">{{shift_toggle_text('o')}}</kbd>
-        <kbd data-android="KEYCODE_P">{{shift_toggle_text('p')}}</kbd>
-        <hr class="new_line"/>
-        <kbd data-android="KEYCODE_A">{{shift_toggle_text('a')}}</kbd>
-        <kbd data-android="KEYCODE_S">{{shift_toggle_text('s')}}</kbd>
-        <kbd data-android="KEYCODE_D">{{shift_toggle_text('d')}}</kbd>
-        <kbd data-android="KEYCODE_F">{{shift_toggle_text('f')}}</kbd>
-        <kbd data-android="KEYCODE_G">{{shift_toggle_text('g')}}</kbd>
-        <kbd data-android="KEYCODE_H">{{shift_toggle_text('h')}}</kbd>
-        <kbd data-android="KEYCODE_J">{{shift_toggle_text('j')}}</kbd>
-        <kbd data-android="KEYCODE_K">{{shift_toggle_text('k')}}</kbd>
-        <kbd data-android="KEYCODE_L">{{shift_toggle_text('l')}}</kbd>
-        <hr class="new_line"/>
-        <kbd :class="{key:1,hold_key:shift_down}" data-android="KEYCODE_SHIFT_LEFT">⇧</kbd>
-        <kbd data-android="KEYCODE_Z">{{shift_toggle_text('z')}}</kbd>
-        <kbd data-android="KEYCODE_X">{{shift_toggle_text('x')}}</kbd>
-        <kbd data-android="KEYCODE_C">{{shift_toggle_text('c')}}</kbd>
-        <kbd data-android="KEYCODE_V">{{shift_toggle_text('v')}}</kbd>
-        <kbd data-android="KEYCODE_B">{{shift_toggle_text('b')}}</kbd>
-        <kbd data-android="KEYCODE_N">{{shift_toggle_text('n')}}</kbd>
-        <kbd data-android="KEYCODE_M">{{shift_toggle_text('m')}}</kbd>
-        <kbd class="two_key" data-android="KEYCODE_DEL">⌫</kbd>
-        <hr class="new_line"/>
-        <kbd data-android="^KEYCODE_A">全选</kbd>
-        <kbd data-android="^KEYCODE_C"><!--安卓自带的KEYCODE_COPY有些app并不兼容，所以还是用组合键吧-->复</kbd>
-        <kbd data-android="^KEYCODE_V">贴</kbd>
-        <kbd data-android="^KEYCODE_X">剪</kbd>
-        <kbd class="two_key" data-android="KEYCODE_SPACE">␣</kbd>
-        <kbd class="two_key" data-android="KEYCODE_ENTER">⏎</kbd>
-        <kbd :class="{key:1,hold_key:alt_down}" data-android="KEYCODE_ALT_LEFT">⌥</kbd>
-        <kbd :class="{key:1,hold_key:ctrl_down}" data-android="KEYCODE_CTRL_LEFT">Ctrl</kbd>
+    <section style="display: none">
+        <!--英文
 
-    </section>
-    <section v-if="keyboard_show_other">
-        <!--扩展-->
-        <kbd data-android="KEYCODE_F1">f1</kbd>
-        <kbd data-android="KEYCODE_F2">f2</kbd>
-        <kbd data-android="KEYCODE_F3">f3</kbd>
-        <kbd data-android="KEYCODE_F4">f4</kbd>
-        <kbd data-android="KEYCODE_F5">f5</kbd>
-        <kbd data-android="KEYCODE_F6">f6</kbd>
-        <kbd data-android="KEYCODE_F7">f7</kbd>
-        <kbd data-android="KEYCODE_F8">f8</kbd>
+
+        <kbd data-android="KEYCODE_F2">
+            <b class="kbd-c">f2</b>
+        </kbd>
+        <kbd data-android="KEYCODE_F3">
+            <b class="kbd-c">f3</kbd>
+        <kbd data-android="KEYCODE_F4">
+            <b class="kbd-c">f4</kbd>
+        <kbd data-android="KEYCODE_F5">
+            <b class="kbd-c">f5</kbd>
+        <kbd data-android="KEYCODE_F6">
+            <b class="kbd-c">f6</kbd>
+        <kbd data-android="KEYCODE_F7">
+            <b class="kbd-c">f7</kbd>
+        <kbd data-android="KEYCODE_F8">
+            <b class="kbd-c">f8</kbd>
         <kbd data-android="KEYCODE_F9">f9</kbd>
         <kbd data-android="KEYCODE_F10">f10</kbd>
         <hr class="new_line"/>
@@ -271,14 +388,152 @@
         <kbd class="{key:1,hold_key:meta_down}" data-android="KEYCODE_META_LEFT">⌘</kbd>
         <kbd @touchstart.stop.prevent="deploy">部署</kbd>
         <kbd data-android="KEYCODE_FORWARD_DEL">⌦</kbd>
-    </section>
-    <section v-if="keyboard_show_quick" class="quick_words">
-        <!--快捷输入-->
-        <kbd :data-text="kv[1]" v-for="(kv,i) in quick_input">
-            {{kv[0]}}
+-->
+        <kbd data-android="KEYCODE_TAB">
+            <b class="kbd-c">⇥</b>
         </kbd>
-        <kbd @touchstart.stop.prevent="edit_quick_input">✎</kbd>
+        <kbd data-android="KEYCODE_ESCAPE">
+            <b class="kbd-c">⎋</b>
+        </kbd>
+        <kbd data-android="KEYCODE_MOVE_HOME">
+            <b class="kbd-c">Home</b>
+        </kbd>
+        <kbd data-android="KEYCODE_MOVE_END">
+            <b class="kbd-c">End</b>
+        </kbd>
+        <kbd data-android="KEYCODE_PAGE_UP">
+            <b class="kbd-c">⇞</b>
+        </kbd>
+        <kbd data-android="KEYCODE_PAGE_DOWN">
+            <b class="kbd-c">⇟</b>
+        </kbd>
+        <kbd data-android="KEYCODE_DPAD_LEFT">
+            <b class="kbd-c">←</b>
+        </kbd>
+        <kbd data-android="KEYCODE_DPAD_RIGHT">
+            <b class="kbd-c">→</b>
+        </kbd>
+        <kbd data-android="KEYCODE_DPAD_UP">
+            <b class="kbd-c">↑</b>
+        </kbd>
+        <kbd data-android="KEYCODE_DPAD_DOWN">
+            <b class="kbd-c">↓</b>
+        </kbd>
+        <hr class="new_line"/>
+        <kbd data-android="KEYCODE_Q">
+            <b class="kbd-c">{{shift_toggle_text('q')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_W">
+            <b class="kbd-c">{{shift_toggle_text('w')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_E">
+            <b class="kbd-c">{{shift_toggle_text('e')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_R">
+            <b class="kbd-c">{{shift_toggle_text('r')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_T">
+            <b class="kbd-c">{{shift_toggle_text('t')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_Y">
+            <b class="kbd-c">{{shift_toggle_text('y')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_U">
+            <b class="kbd-c">{{shift_toggle_text('u')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_I">
+            <b class="kbd-c">{{shift_toggle_text('i')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_O">
+            <b class="kbd-c">{{shift_toggle_text('o')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_P">
+            <b class="kbd-c">{{shift_toggle_text('p')}}</b>
+        </kbd>
+        <hr class="new_line"/>
+        <kbd data-android="KEYCODE_A">
+            <b class="kbd-c">{{shift_toggle_text('a')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_S">
+            <b class="kbd-c">{{shift_toggle_text('s')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_D">
+            <b class="kbd-c">{{shift_toggle_text('d')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_F">
+            <b class="kbd-c">{{shift_toggle_text('f')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_G">
+            <b class="kbd-c">{{shift_toggle_text('g')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_H">
+            <b class="kbd-c">{{shift_toggle_text('h')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_J">
+            <b class="kbd-c">{{shift_toggle_text('j')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_K">
+            <b class="kbd-c">{{shift_toggle_text('k')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_L">
+            <b class="kbd-c">{{shift_toggle_text('l')}}</b>
+        </kbd>
+        <hr class="new_line"/>
+        <kbd :class="{key:1,hold_key:shift_down}" data-android="KEYCODE_SHIFT_LEFT">
+            <b class="kbd-c">⇧</b>
+        </kbd>
+        <kbd data-android="KEYCODE_Z">
+            <b class="kbd-c">{{shift_toggle_text('z')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_X">
+            <b class="kbd-c">{{shift_toggle_text('x')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_C">
+            <b class="kbd-c">{{shift_toggle_text('c')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_V">
+            <b class="kbd-c">{{shift_toggle_text('v')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_B">
+            <b class="kbd-c">{{shift_toggle_text('b')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_N">
+            <b class="kbd-c">{{shift_toggle_text('n')}}</b>
+        </kbd>
+        <kbd data-android="KEYCODE_M">
+            <b class="kbd-c">{{shift_toggle_text('m')}}</b>
+        </kbd>
+        <kbd class="two_key" data-android="KEYCODE_DEL">
+            <b class="kbd-c">⌫</b>
+        </kbd>
+        <hr class="new_line"/>
+        <kbd data-android="^KEYCODE_A">
+            <b class="kbd-c">全选</b>
+        </kbd>
+        <kbd data-android="^KEYCODE_C">
+            <b class="kbd-c"><!--安卓自带的KEYCODE_COPY有些app并不兼容，所以还是用组合键吧-->复</b>
+        </kbd>
+        <kbd data-android="^KEYCODE_V">
+            <b class="kbd-c">贴</b>
+        </kbd>
+        <kbd data-android="^KEYCODE_X">
+            <b class="kbd-c">剪</b>
+        </kbd>
+        <kbd class="two_key" data-android="KEYCODE_SPACE">
+            <b class="kbd-c">␣</b>
+        </kbd>
+        <kbd class="two_key" data-android="KEYCODE_ENTER">
+            <b class="kbd-c">⏎</b>
+        </kbd>
+        <kbd :class="{key:1,hold_key:alt_down}" data-android="KEYCODE_ALT_LEFT">
+            <b class="kbd-c">⌥</b>
+        </kbd>
+        <kbd :class="{key:1,hold_key:ctrl_down}" data-android="KEYCODE_CTRL_LEFT">
+            <b class="kbd-c">Ctrl</b>
+        </kbd>
+
     </section>
-</main>
+
+</script>
 </body>
 </html>

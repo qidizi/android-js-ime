@@ -71,7 +71,6 @@ section.quick_words {
 }
 
 section kbd {
-    font-size: 1.6rem;
     display: inline-block;
     margin: 0;
     background-color: white;
@@ -81,15 +80,79 @@ section kbd {
     box-sizing: border-box;
     overflow-x: hidden;
     width: 10%;
-    line-height: 4rem;
     height: 4rem;
     cursor: pointer;
-    font-weight: bold;
     text-align: center;
+    position: relative;
+}
+
+section > kbd > b {
+    position: absolute;
+    font-style: normal;
+    word-break: break-all;
+    word-wrap: break-word;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    font-size: 0.8rem;
+    line-height: 0.8rem;
+    box-sizing: border-box;
+}
+
+section > kbd > b.kbd-c {
+    position: static;
+    width: 100%;
+    height: 100%;
+    line-height: 4rem;
+}
+
+section > kbd > b.kbd-u {
+    top: 1px;
+    left: 0;
+    width: 100%;
+}
+
+section > kbd > b.kbd-d {
+    width: 100%;
+    left: 0;
+    bottom: 0;
+}
+
+section > kbd > b.kbd-l {
+    height: 100%;
+    top: 0;
+    left: 0;
+    line-height: 4rem;
+    /*-webkit-writing-mode: vertical-lr;*/
+}
+
+section > kbd > b.kbd-r {
+    height: 100%;
+    right: 1px;
+    top: 0;
+    line-height: 4rem;
+    /*-webkit-writing-mode: vertical-lr;*/
+}
+
+section kbd.kbd_z_w {
+    width: 6%;
+}
+
+section kbd.kbd_bs_w {
+    width: 13%;
+}
+
+section kbd.kbd_l_w {
+    width: 6%;
+}
+
+section kbd.kbd_m_w {
+    width: 14.5%;
 }
 
 section.quick_words kbd {
     margin-bottom: 0.83%;
+    font-size: 1.6rem;
 }
 
 section kbd.hold_key {
@@ -109,7 +172,7 @@ section.number kbd.two_key {
     width: 28%;
 }
 
-section.wu_bi kbd {
+section.cn kbd {
     background-color: whitesmoke;
 }
 
@@ -223,4 +286,30 @@ section kbd {
     color: black;
     background-color: lightgrey;
     text-align: center;
+}
+
+.speech {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.speech .speech_result {
+    padding: 10px;
+    margin-bottom: 20px;
+    text-align: left;
+    width: 100%;
+    height: 100px;
+    display: block;
+    overflow: auto;
+}
+
+.speech button {
+    margin: 10px 20px;
+    outline: none;
 }
