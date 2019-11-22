@@ -136,18 +136,41 @@ section > kbd > key.kbd-r {
 
 section kbd.kbd_z_w {
     width: 6%;
+    visibility: hidden;
 }
 
 section kbd.kbd_bs_w {
     width: 13%;
 }
 
+section kbd.kbd_sp_w {
+    width: 14.5%;
+}
+
+section kbd.kbd_rn_w {
+    width: 14.5%;
+}
+
+section kbd.kbd_f {
+    background-color: cornsilk;
+}
+
+section kbd.kbd_j {
+    background-color: cornsilk;
+}
+
+section kbd.kbd_rn_w {
+    width: 14.5%;
+}
+
 section kbd.kbd_l_w {
     width: 6%;
+    visibility: hidden;
 }
 
 section kbd.kbd_m_w {
     width: 14.5%;
+    visibility: hidden;
 }
 
 section.quick_words kbd {

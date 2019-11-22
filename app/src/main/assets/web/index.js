@@ -300,6 +300,7 @@ window.onload = function () {
                     // 不是kbd，不支持单个手势
                     if (1 === gesture_len && !this.target_is_kbd(touch))
                         return;
+
                     // 触发手势
                     this.$children.forEach(function (vm) {
                         vm.$emit(touch.directions, ev);

@@ -1,20 +1,36 @@
 Vue.component('kbd-wu-bi', {
     mounted() {
-        this.$on(['D_U','show'], this.on_show);
+        this.$on(['D_U', 'show'], this.on_show);
         this.$on('hide', this.on_hide);
+        this.$on('U', this.on_u);
+        this.$on('D', this.on_d);
+        this.$on('L', this.on_l);
+        this.$on('R', this.on_r);
         this.$on('tab', this.on_tab);
         this.$on('long_tab', this.on_long_tab);
+       // this.$root.$emit('register_default', this, this.show = true);
+
     },
     methods: {
         on_show() {
             // 不支持从其它键盘返回
             this.$root.$emit('child_show', this, true);
             this.show = true;
-            console.log('cn')
-
         },
         on_hide() {
             this.show = false;
+        },
+        on_u(ev){
+
+        },
+        on_d(ev){
+
+        },
+        on_l(ev){
+
+        },
+        on_r(ev){
+
         },
         on_tab(ev) {
             console.log(ev.target, ev.type);
@@ -190,9 +206,18 @@ Vue.component('kbd-wu-bi', {
          },*/
     },
 
+    //http://xahlee.info/comp/unicode_computing_symbols.html
     template: '<div class="kbd-wu-bi" v-show="show">' +
-        '<section  v-for="kvs in kbd">' +
-        '<kbd  v-for="kv in kvs">' +
+        '<nav class="candidates">' +
+        '<code v-for="(t,i) in candidates">' +
+        '<sup>' +
+        '<b>{{keys}}</b>{{t.keys.substr(keys.length)}}' +
+        '</sup>' +
+        '<sub>{{t.words}}</sub>' +
+        '</code>' +
+        '</nav>' +
+        '<section  v-for="(kvs,row) in kbd">' +
+        '<kbd  v-for="(kv,cell) in kvs" :class="kv.cls" :data-row="row" :data-cell="cell">' +
         '<key class="kbd-c" v-if="kv.c">{{kv.c.label}}</key>' +
         '<key class="kbd-u" v-if="kv.u">{{kv.u.label}}</key>' +
         '<key class="kbd-d" v-if="kv.d">{{kv.d.label}}</key>' +
@@ -203,302 +228,186 @@ Vue.component('kbd-wu-bi', {
         '</div>'
     , data() {
         return {
+            candidates: [],
+            keys: '',
             show: false,
             kbd: [
                 [
                     {
-                        c: {label: 1},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
-                    },
-                    {
-                        c: {label: 2},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
-                    },
-                    {
-                        c: {label: 3},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
-                    },
-                    {
-                        c: {label: 4},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
-                    },
-                    {
-                        c: {label: 5},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
-                    },
-                    {
-                        c: {label: 6},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
-                    },
-                    {
-                        c: {label: 7},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
-                    },
-                    {
-                        c: {label: 8},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
-                    },
-                    {
-                        c: {label: 9},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
-                    },
-                    {
-                        c: {label: 0},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
-                    },
-
-                ], [
-                    {
                         c: {label: 'Q'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        u: {label: '！'},
+                        d: {label: '1'},
                     },
                     {
                         c: {label: 'W'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
+                        d: {label: '2'},
                         r: {label: 'r'},
                     },
                     {
                         c: {label: 'E'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        d: {label: '3'},
                     },
                     {
                         c: {label: 'R'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        u: {label: '¥'},
+                        d: {label: '4'},
                     },
                     {
                         c: {label: 'T'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        d: {label: '5'},
                     },
                     {
                         c: {label: 'Y'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        u: {label: '……'},
+                        d: {label: '6'},
                     },
                     {
                         c: {label: 'U'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        d: {label: '7'},
                     },
                     {
                         c: {label: 'I'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        d: {label: '8'},
                     },
                     {
                         c: {label: 'O'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        d: {label: '9'},
+                        u: {label: '（'},
                     },
                     {
                         c: {label: 'P'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        d: {label: '0'},
+                        u: {label: '）'},
                     }
                 ], [
                     {
                         c: {label: 'A'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
                     },
                     {
                         c: {label: 'S'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
                     },
                     {
                         c: {label: 'D'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
                     },
                     {
                         c: {label: 'F'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        cls:'kbd_f'
                     },
                     {
                         c: {label: 'G'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
                     },
                     {
                         c: {label: 'H'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        l: {label: '「'},
+                        r: {label: '」'},
                     },
                     {
                         c: {label: 'J'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        l: {label: '『'},
+                        r: {label: '』'},
+                        cls:'kbd_j'
                     },
                     {
                         c: {label: 'K'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        u: {label: '﹏﹏'},
+                        d: {label: '__'},
+                        l: {label: '<'},
+                        r: {label: '>'},
                     },
                     {
                         c: {label: 'L'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                    },
+                    {
+                        cls: 'kbd_l_w'
                     }
                 ], [
 
+
+                    {
+                        cls: 'kbd_z_w'
+
+                    },
                     {
                         c: {label: 'Z'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        u: {label: ''},
+                        r: {label: '·'},
+                    },
+                    {
+                        c: {label: 'Z'},
+                        u: {label: '__'},
+                        d: {label: '～'},
+                        l: {label: '－'},
+                        r: {label: '-'},
                     },
                     {
                         c: {label: 'X'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        u: {label: '——'},
+                        l: {label: '【'},
+                        r: {label: '】'},
                     },
                     {
                         c: {label: 'C'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        l: {label: '〔'},
+                        r: {label: '〕'},
                     },
                     {
                         c: {label: 'V'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        l: {label: '['},
+                        r: {label: ']'},
                     },
                     {
                         c: {label: 'B'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
                     },
                     {
                         c: {label: 'N'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        l: {label: '‘'},
+                        r: {label: '’'},
                     },
                     {
                         c: {label: 'M'},
-                        u: {label: 'u'},
-                        d: {label: 'd'},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        l: {label: '“'},
+                        r: {label: '”'},
+                    },
+                    {
+                        c: {label: '⌫'},
+                        cls: 'kbd_bs_w'
                     }
                 ], [
 
                     {
-                        c: {label: 'Ctrl'},
-                        u: {label: 'Alt'},
-                        d: {label: ''},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        c: {label: '⇦'},
                     },
                     {
-                        c: {label: 'Alt'},
-                        u: {label: 'Alt'},
-                        d: {label: ''},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        c: {label: '⇧'},
+                    },
+                    {
+                        c: {label: '⇩'},
+                    },
+                    {
+                        c: {label: '⇨'},
                     },
                     {
                         c: {label: '␣'},
-                        u: {label: 'Alt'},
-                        d: {label: ''},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        cls: 'kbd_sp_w'
+
+                    },
+                    {
+                        c: {label: '，'},
+                        l: {label: '：'},
+                        r: {label: '；'},
+                        u: {label: '《'},
+                    },
+                    {
+                        c: {label: '。'},
+                        r: {label: '、'},
+                        u: {label: '》'},
+                    },
+                    {
+                        c: {label: '？'},
                     },
                     {
                         c: {label: '⏎'},
-                        u: {label: 'Alt'},
-                        d: {label: ''},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
-                    },
-                    {
-                        c: {label: '⌫'},
-                        u: {label: 'Alt'},
-                        d: {label: ''},
-                        l: {label: 'l'},
-                        r: {label: 'r'},
+                        cls: 'kbd_rn_w'
                     }
                 ]
             ],
