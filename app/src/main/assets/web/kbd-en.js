@@ -1,6 +1,6 @@
 Vue.component('kbd-en', {
     mounted() {
-        this.$on('U_D', this.on_show);
+        this.$on(['U_D','show'], this.on_show);
         this.$on('hide', this.on_hide);
         this.$on('tab', this.on_tab);
         this.$on('long_tab', this.on_long_tab);
@@ -11,6 +11,7 @@ Vue.component('kbd-en', {
             // 不支持从其它键盘返回
             this.$root.$emit('child_show', this, true);
             this.show = true;
+            console.log('en')
         },
         on_hide() {
             this.show = false;
@@ -82,11 +83,11 @@ Vue.component('kbd-en', {
     template: '<div class="kbd-en" v-show="show">' +
         '<section  v-for="kvs in kbd">' +
         '<kbd  v-for="kv in kvs" :class="kv.cls">' +
-        '<b class="kbd-c" v-if="kv.c">{{kv.c.text}}</b>' +
-        '<b class="kbd-u" v-if="kv.u">{{kv.u.text}}</b>' +
-        '<b class="kbd-d" v-if="kv.d">{{kv.d.text}}</b>' +
-        '<b class="kbd-l" v-if="kv.l">{{kv.l.text}}</b>' +
-        '<b class="kbd-r" v-if="kv.r">{{kv.r.text}}</b>' +
+        '<key class="kbd-c" v-if="kv.c">{{kv.c.label}}</key>' +
+        '<key class="kbd-u" v-if="kv.u">{{kv.u.label}}</key>' +
+        '<key class="kbd-d" v-if="kv.d">{{kv.d.label}}</key>' +
+        '<key class="kbd-l" v-if="kv.l">{{kv.l.label}}</key>' +
+        '<key class="kbd-r" v-if="kv.r">{{kv.r.label}}</key>' +
         '</kbd>' +
         '</section>' +
         '</div>'
@@ -96,134 +97,134 @@ Vue.component('kbd-en', {
             kbd: [
                 [
                     {
-                        c: {text: 1},
-                        u: {text: '!'},
+                        c: {label:1},
+                        u: {label:'!'},
                     },
                     {
-                        c: {text: 2},
-                        u: {text: '@'},
-                        l: {text: '<'},
-                        r: {text: '>'},
+                        c: {label:2},
+                        u: {label:'@'},
+                        l: {label:'<'},
+                        r: {label:'>'},
                     },
                     {
-                        c: {text: 3},
-                        u: {text: '#'},
-                        l: {text: "'"},
-                        r: {text: '"'},
+                        c: {label:3},
+                        u: {label:'#'},
+                        l: {label:"'"},
+                        r: {label:'"'},
                     },
                     {
-                        c: {text: 4},
-                        u: {text: '$'},
-                        l: {text: ';'},
-                        r: {text: ':'},
+                        c: {label:4},
+                        u: {label:'$'},
+                        l: {label:';'},
+                        r: {label:':'},
                     },
                     {
-                        c: {text: 5},
-                        u: {text: '%'},
-                        l: {text: '\\'},
-                        r: {text: '|'},
+                        c: {label:5},
+                        u: {label:'%'},
+                        l: {label:'\\'},
+                        r: {label:'|'},
                     },
                     {
-                        c: {text: 6},
-                        u: {text: '^'},
-                        l: {text: '{'},
-                        r: {text: '}'},
+                        c: {label:6},
+                        u: {label:'^'},
+                        l: {label:'{'},
+                        r: {label:'}'},
                     },
                     {
-                        c: {text: 7},
-                        u: {text: '&'},
-                        l: {text: '['},
-                        r: {text: ']'},
+                        c: {label:7},
+                        u: {label:'&'},
+                        l: {label:'['},
+                        r: {label:']'},
                     },
                     {
-                        c: {text: 8},
-                        u: {text: '*'},
-                        l: {text: '~'},
-                        r: {text: '`'},
+                        c: {label:8},
+                        u: {label:'*'},
+                        l: {label:'~'},
+                        r: {label:'`'},
                     },
                     {
-                        c: {text: 9},
-                        u: {text: '('},
-                        l: {text: '_'},
-                        r: {text: '+'},
+                        c: {label:9},
+                        u: {label:'('},
+                        l: {label:'_'},
+                        r: {label:'+'},
                     },
                     {
-                        c: {text: 0},
-                        u: {text: ')'},
-                        l: {text: '-'},
-                        r: {text: '='},
+                        c: {label:0},
+                        u: {label:')'},
+                        l: {label:'-'},
+                        r: {label:'='},
                     },
 
                 ], [
                     {
-                        c: {text: 'Q'},
-                        u: {text: 'F1'},
-                        d: {text: 'F11'},
+                        c: {label:'Q'},
+                        u: {label:'F1'},
+                        d: {label:'F11'},
                     },
                     {
-                        c: {text: 'W'},
-                        u: {text: 'F2'},
-                        d: {text: 'F12'},
+                        c: {label:'W'},
+                        u: {label:'F2'},
+                        d: {label:'F12'},
                     },
                     {
-                        c: {text: 'E'},
-                        u: {text: 'F3'},
+                        c: {label:'E'},
+                        u: {label:'F3'},
                     },
                     {
-                        c: {text: 'R'},
-                        u: {text: 'F4'},
+                        c: {label:'R'},
+                        u: {label:'F4'},
                     },
                     {
-                        c: {text: 'T'},
-                        u: {text: 'F5'},
+                        c: {label:'T'},
+                        u: {label:'F5'},
                     },
                     {
-                        c: {text: 'Y'},
-                        u: {text: 'F6'},
+                        c: {label:'Y'},
+                        u: {label:'F6'},
                     },
                     {
-                        c: {text: 'U'},
-                        u: {text: 'F7'},
+                        c: {label:'U'},
+                        u: {label:'F7'},
                     },
                     {
-                        c: {text: 'I'},
-                        u: {text: 'F8'},
+                        c: {label:'I'},
+                        u: {label:'F8'},
                     },
                     {
-                        c: {text: 'O'},
-                        u: {text: 'F9'},
+                        c: {label:'O'},
+                        u: {label:'F9'},
                     },
                     {
-                        c: {text: 'P'},
-                        u: {text: 'F10'},
+                        c: {label:'P'},
+                        u: {label:'F10'},
                     }
                 ], [
                     {
-                        c: {text: 'A'},
+                        c: {label:'A'},
                     },
                     {
-                        c: {text: 'S'},
+                        c: {label:'S'},
                     },
                     {
-                        c: {text: 'D'},
+                        c: {label:'D'},
                     },
                     {
-                        c: {text: 'F'},
+                        c: {label:'F'},
                     },
                     {
-                        c: {text: 'G'},
+                        c: {label:'G'},
                     },
                     {
-                        c: {text: 'H'},
+                        c: {label:'H'},
                     },
                     {
-                        c: {text: 'J'},
+                        c: {label:'J'},
                     },
                     {
-                        c: {text: 'K'},
+                        c: {label:'K'},
                     },
                     {
-                        c: {text: 'L'},
+                        c: {label:'L'},
                     },
                     {
                         cls: 'kbd_l_w'
@@ -236,61 +237,61 @@ Vue.component('kbd-en', {
                     },
 
                     {
-                        c: {text: 'Z'},
+                        c: {label:'Z'},
                     },
                     {
-                        c: {text: 'X'},
+                        c: {label:'X'},
                     },
                     {
-                        c: {text: 'C'},
+                        c: {label:'C'},
                     },
                     {
-                        c: {text: 'V'},
+                        c: {label:'V'},
                     },
                     {
-                        c: {text: 'B'},
+                        c: {label:'B'},
                     },
                     {
-                        c: {text: 'N'},
+                        c: {label:'N'},
                     },
                     {
-                        c: {text: 'M'},
+                        c: {label:'M'},
                     },
                     {
-                        c: {text: ','},
+                        c: {label:','},
                     },
                     {
-                        c: {text: '⌫'},
+                        c: {label:'⌫'},
                         cls:'kbd_bs_w'
                     }
                 ], [
                     {
-                        c: {text: '⇦'},
+                        c: {label:'⇦'},
                     },
                     {
-                        c: {text: '⇧'},
+                        c: {label:'⇧'},
                     },
                     {
-                        c: {text: '⇩'},
+                        c: {label:'⇩'},
                     },
                     {
-                        c: {text: '⇨'},
+                        c: {label:'⇨'},
                     },
                     {
-                        c: {text: ' 🄰'},
+                        c: {label:' 🄰'},
                     },
                     {
-                        c: {text: '␣'},
+                        c: {label:'␣'},
                         cls: 'kbd_m_w'
                     },
                     {
-                        c: {text: '.'},
+                        c: {label:'.'},
                     },
                     {
-                        c: {text: '/'},
+                        c: {label:'/'},
                     },
                     {
-                        c: {text: '⏎'},
+                        c: {label:'⏎'},
                         cls: 'kbd_m_w'
                     }
                 ]

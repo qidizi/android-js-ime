@@ -35,11 +35,15 @@ Vue.component('kbd-quick', {
                     kbd = {};
                 }
 
-                kbd[sides[side_i++]] = [display, text];
+                kbd[sides[side_i++]] = {label:display, text:text};
                 new_list.push(kbd);
             });
 
             if (kbd && kbd.c) new_list.push(kbd);
+            new_list.push({
+                c: {label: '返回'},
+                u: {label: '编辑'}
+            });
             return new_list;
         }
     },
@@ -93,11 +97,11 @@ Vue.component('kbd-quick', {
         '<div>' +
         '<section class="quick_words">' +
         '<kbd  v-show="show_kbd" v-for="kv in quick_input_parse">' +
-        '<b class="kbd-c" v-if="kv.c">{{kv.c[0]}}</b>' +
-        '<b class="kbd-u" v-if="kv.u">{{kv.u[0]}}</b>' +
-        '<b class="kbd-d" v-if="kv.d">{{kv.d[0]}}</b>' +
-        '<b class="kbd-l" v-if="kv.l">{{kv.l[0]}}</b>' +
-        '<b class="kbd-r" v-if="kv.r">{{kv.r[0]}}</b>' +
+        '<key class="kbd-c" v-if="kv.c">{{kv.c.label}}</key>' +
+        '<key class="kbd-u" v-if="kv.u">{{kv.u.label}}</key>' +
+        '<key class="kbd-d" v-if="kv.d">{{kv.d.label}}</key>' +
+        '<key class="kbd-l" v-if="kv.l">{{kv.l.label}}</key>' +
+        '<key class="kbd-r" v-if="kv.r">{{kv.r.label}}</key>' +
         '</kbd>' +
         '</section>' +
         '</div>' +

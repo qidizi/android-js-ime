@@ -90,6 +90,16 @@ window.onload = function () {
             this.$on('register_default', this.on_register_default);
         },
         methods: {
+            on_child_show(vm, can_back) {
+                can_back && (this.back_uid = vm._uid);
+                this.show_uid = vm._uid;
+                this.$children.forEach(function (_vm) {
+                    _vm._uid !== vm._uid && _vm.$emit('hide', vm._uid);
+                });
+            },
+            on_back() {
+                this.$children[this.back_uid - 1].$emit('show');
+            },
             "java_listener"(what, info) {
                 // 接收java通知，比如输入框要求显示数字键盘
                 this.$children.forEach(function (vm) {
@@ -284,12 +294,20 @@ window.onload = function () {
                         continue;
                     }
 
+                    let gesture_len = touch.directions.length;
                     touch.directions = touch.directions.join('_');
+
+                    // 不是kbd，不支持单个手势
+                    if (1 === gesture_len && !this.target_is_kbd(touch))
+                        return;
                     // 触发手势
                     this.$children.forEach(function (vm) {
                         vm.$emit(touch.directions, ev);
                     });
                 }
+            },
+            target_is_kbd(ev) {
+                return !(!ev.target || '.KBD.KEY.'.indexOf('.' + ev.target.tagName + '.') < 0);
             },
             on_tab(ev) {
                 this.$children.forEach(function (vm) {
@@ -306,16 +324,6 @@ window.onload = function () {
             },
             on_show_default(vm) {
                 this.$children[this.default_uid - 1].$emit('show');
-            },
-            on_child_show(vm, can_back) {
-                can_back && (this.back_uid = vm._uid);
-                this.show_uid = vm._uid;
-                this.$children.forEach(function (_vm) {
-                    _vm._uid !== vm._uid && vm.$emit('hide', vm._uid);
-                });
-            },
-            on_back() {
-                this.$children[this.back_uid - 1].$emit('show');
             },
             cn_keyboard_reset() {
                 // 重置中文输入状态
