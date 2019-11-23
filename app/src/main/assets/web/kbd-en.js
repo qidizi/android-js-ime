@@ -2,31 +2,10 @@ Vue.component('kbd-en', {
     mounted() {
         this.$on(['U_D', 'show'], this.on_show);
         this.$on('hide', this.on_hide);
-        this.$on('tab', this.on_tab);
-        this.$on('U', this.on_u);
-        this.$on('D', this.on_d);
-        this.$on('L', this.on_l);
-        this.$on('R', this.on_r);
-        this.$on('long_tab', this.on_long_tab);
+        this.$on('touch', this.on_touch);
         this.$root.$emit('register_default', this, this.show = true);
     },
     methods: {
-        target_is_kbd(ev, direction) {
-            if (!ev.target || '.KBD.KEY.'.indexOf('.' + ev.target.tagName + '.') < 0) return false;
-            let kbd = 'KBD' === ev.target.tagName ? ev.target : ev.target.parentElement;
-            let kbd_obj = this.kbd[kbd.dataset.row][kbd.dataset.cell][direction];
-
-            // 优先fn
-            if (kbd_obj.fn)
-                kbd_obj.fn.call(this, kbd, ev);
-            else if (kbd_obj.code)
-                java.send_key_press(kbd_obj.code);
-            else if (kbd_obj.text)
-                java.send_text(kbd_obj.text);
-            else
-                java.send_text(kbd_obj.label);
-            return true;
-        },
         on_show() {
             // 不支持从其它键盘返回
             this.$root.$emit('child_show', this, true);
@@ -35,23 +14,22 @@ Vue.component('kbd-en', {
         on_hide() {
             this.show = false;
         },
-        on_u(ev) {
-            if (this.target_is_kbd(ev, 'u')) return;
-        },
-        on_d(ev) {
-            if (this.target_is_kbd(ev, 'd')) return;
-        },
-        on_l(ev) {
-            if (this.target_is_kbd(ev, 'l')) return;
-        },
-        on_r(ev) {
-            if (this.target_is_kbd(ev, 'r')) return;
-        },
-        on_tab(ev) {
-            if (this.target_is_kbd(ev, 'c')) return;
-        },
-        'on_long_tab'(ev) {
-            if (this.target_is_kbd(ev, 'c')) return;
+        on_touch(ev) {
+            if (ev.custom_key){
+                // 手势u、d、l、r；tab、long_tab
+                let kbd_obj = this.kbd[ev.custom_kbd_row][ev.custom_kbd_cell][ev.custom_key];
+
+                // 优先fn
+                if (kbd_obj.fn)
+                    kbd_obj.fn.call(this, ev.custom_kbd, ev);
+                else if (kbd_obj.code)
+                    java.send_key_press(kbd_obj.code);
+                else if (kbd_obj.text)
+                    java.send_text(kbd_obj.text);
+                else
+                    java.send_text(kbd_obj.label);
+                return true;
+            }
         },
         get_meta_state(touch) {
             // 获取控制键状态组合

@@ -41,18 +41,6 @@ window.onload = function () {
         return document.getElementById(the_id);
     }
 
-// 需要滚动的dom，不能启用手势判断,否则将本来想滚动，却触发了手势
-// 还有就是想使用click却由于这个判断出现异常
-    function disable_gesture(ev) {
-        return false;// 暂不需要这个试试
-        let el = ev.target;
-
-        do {
-            if (el.dataset.disable_gesture)
-                return true;
-        } while ((el = el.parentElement));
-    }
-
     window.app = new Vue({
         el: '#app',
         name: "SimpleKeyboard",
@@ -107,8 +95,6 @@ window.onload = function () {
                 });
             },
             "on_touch_cancel"(ev) {
-                if (disable_gesture(ev)) return;
-
                 // 触摸事件被打断，如长按时，文本被选中了触发了右键菜单弹出
                 for (let n = 0; ev.changedTouches[n]; n++) {
                     let touch = glb.touch[n];
@@ -116,10 +102,10 @@ window.onload = function () {
                     // 只需要取消延时触发长按定时
                     clearTimeout(touch.long_press_timer);
                 }
+                // type === touchcancel
+                this.on_touch(ev);
             },
             "on_touch_start"(ev) {
-                if (disable_gesture(ev)) return;
-
                 for (let n = 0; ev.changedTouches[n]; n++) {
                     // 手指按下
                     let ev_ct = ev.changedTouches[n];
@@ -173,7 +159,8 @@ window.onload = function () {
                         if (touch.start_2_b_max_px > SMALL_IS_PRESS_PX)
                         // 只要有一次最大位移超过，就取消长按
                             return;
-                        vm.on_long_tab(ev);
+                        ev.custom_type = 'long_tab';
+                        vm.on_touch(ev);
                         //debug('repeat,', touch.long_press_repeat_index);
                         // 重复唯一序号
                         touch.long_press_repeat_index++;
@@ -185,8 +172,6 @@ window.onload = function () {
                 }
             },
             "on_touch_move"(ev) {
-                if (disable_gesture(ev)) return;
-
                 for (let n = 0; ev.changedTouches[n]; n++) {
                     // 触摸中移动
                     let ev_ct = ev.changedTouches[n];
@@ -237,16 +222,16 @@ window.onload = function () {
                         // 这里判断统一使用等于大于起值，小于终值
                         if (angle >= 45 && angle < 135) {
                             // 向上
-                            direction = 'U';
+                            direction = 'u';
                         } else if (angle >= 135 && angle < 225) {
                             // 向左
-                            direction = 'L';
+                            direction = 'l';
                         } else if (angle >= 225 && angle < 315) {
                             // 向下
-                            direction = 'D';
+                            direction = 'd';
                         } else {
                             // 向右
-                            direction = 'R';
+                            direction = 'r';
                         }
 
                         let last_direction = touch.directions[touch.directions.length - 1];
@@ -264,8 +249,6 @@ window.onload = function () {
             },
             "on_touch_end"(ev) {
                 // 放开触摸
-                if (disable_gesture(ev)) return;
-
                 for (let n = 0; ev.changedTouches[n]; n++) {
                     let touch = glb.touch[n];
                     delete glb.touch[n];
@@ -285,7 +268,8 @@ window.onload = function () {
 
                     if (px_is_press) {
                         // 位移属于tab范围
-                        time_is_press ? this.on_tab(ev) : this.on_long_tab(ev);
+                        ev.custom_type = time_is_press ? 'tab' : 'long_tab';
+                        this.on_touch(ev);
                         continue;
                     }
 
@@ -296,28 +280,32 @@ window.onload = function () {
 
                     let gesture_len = touch.directions.length;
                     touch.directions = touch.directions.join('_');
-
-                    // 不是kbd，不支持单个手势
-                    if (1 === gesture_len && !this.target_is_kbd(touch))
-                        return;
-
-                    // 触发手势
-                    this.$children.forEach(function (vm) {
-                        vm.$emit(touch.directions, ev);
-                    });
+                    ev.custom_type = touch.directions;
+                    this.on_touch(ev);
                 }
             },
             target_is_kbd(ev) {
                 return !(!ev.target || '.KBD.KEY.'.indexOf('.' + ev.target.tagName + '.') < 0);
             },
-            on_tab(ev) {
+            on_touch(ev) {
+                // 检查是否touch了kbd
+                if (!ev.custom_type) ev.custom_type = ev.type;
+
+                if (this.target_is_kbd(ev)) {
+                    // 附加上点击的键盘
+                    ev.custom_kbd = 'KBD' === ev.target.tagName ? ev.target : ev.target.parentElement;
+                    // 找到键盘对象
+                    ev.custom_kbd_row = ev.custom_kbd.dataset.row;
+                    ev.custom_kbd_cell = ev.custom_kbd.dataset.cell;
+
+                    if ('.long_tab.tab.'.indexOf('.' + ev.custom_type + '.') > -1) {
+                        ev.custom_key = 'c';
+                    } else if ('.u.d.l.r.'.indexOf('.' + ev.custom_type + '.') > -1)
+                        ev.custom_key = ev.custom_type;
+                }
+
                 this.$children.forEach(function (vm) {
-                    vm.$emit('tab', ev);
-                });
-            },
-            on_long_tab(ev) {
-                this.$children.forEach(function (vm) {
-                    vm.$emit('long_tab', ev);
+                    vm.$emit('touch', ev);
                 });
             },
             on_register_default(vm) {

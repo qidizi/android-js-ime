@@ -8,7 +8,7 @@
     <link rel="icon" href="data:image/ico;base64,aWNv">
     <script>
         // 独立出来，防止其它js出错
-        function debug() {
+        function debug() {alert(3)
             console.log.apply(console, arguments);
             let dom = document.getElementById('debug_box');
             dom.style.display = 'block';
