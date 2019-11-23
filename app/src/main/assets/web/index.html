@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <title>js键盘</title>
-    <link rel="icon" href="data:image/ico;base64,aWNv">
     <script>
+        // 直接在这里追加自定义模块即可
+        let vue_components = [
+            'kbd-wu-bi',
+            'kbd-en',
+            'kbd-quick',
+            "speech"
+        ];
+        ///////////////////////
+
         // 独立出来，防止其它js出错
-        function debug() {alert(3)
-            console.log.apply(console, arguments);
+        function debug() {
+            //console.log.apply(console, arguments);
             let dom = document.getElementById('debug_box');
             dom.style.display = 'block';
             let str = [];
@@ -25,21 +29,12 @@
         window.onerror = function (error, url, line, col) {
             debug.call(window, 'js异常：' + error + ' @ ' + url + ' ' + line + ':' + col);
         };
-        // 加载html使用的是file://协议，无法使用<script type="module"，否则将会触发以下错误
-        // "Failed to load module script: The server responded with a non-JavaScript MIME type of "".
-        // Strict MIME type checking is enforced for module scripts per HTML spec.",
-        // source: file:///android_asset/web/index.js?1569008605055 (0)
-        // 键盘来的浏览器userAgent添加了自定义标志 SoftKeyboard
-        let js = [navigator.userAgent.indexOf('SoftKeyboard') ? 'vue' : 'vue.dev',
-            'java', 'kbd-wu-bi', 'kbd-en', 'kbd-quick',
-            "speech", 'index'];
-        for (let i = 97; i <= 122; i++) js.push('wu_bi_' + String.fromCharCode(i));
-        let html = "<link rel='stylesheet' href='index.css?s" + +new Date + "' type='text/css' media='all'/>";
-        js.forEach(function (name) {
-            html += '<script  src="./' + name + '.js?' + +new Date + '"><\/script>';
-        });
-        document.write(html);
     </script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>js键盘</title>
+    <link rel="icon" href="data:image/ico;base64,aWNv">
 </head>
 <body>
 <p id="init"><!--方便检查是否加载html-->键盘初始化中...</p>
@@ -49,10 +44,26 @@
       @touchmove="on_touch_move" @touchend="on_touch_end"
       ondblclick="return false;" oncontextmenu="return false;"
 >
-    <kbd-en></kbd-en>
-    <kbd-wu-bi></kbd-wu-bi>
-    <kbd-quick></kbd-quick>
-    <speech></speech>
 </main>
+<script>
+    // 加载html使用的是file://协议，无法使用<script type="module"，否则将会触发以下错误
+    // "Failed to load module script: The server responded with a non-JavaScript MIME type of "".
+    // Strict MIME type checking is enforced for module scripts per HTML spec.",
+    // source: file:///android_asset/web/index.js?1569008605055 (0)
+    // 键盘来的浏览器userAgent添加了自定义标志 SoftKeyboard
+    let js = [navigator.userAgent.indexOf('SoftKeyboard') ? 'vue' : 'vue.dev', 'java'];
+    js = js.concat(vue_components);
+    vue_components.forEach(function (v, i) {
+        vue_components[i] = '<' + v + '>' + '</' + v + '>';
+    });
+    document.getElementById('app').innerHTML = vue_components.join('');
+    js = js.concat('index');
+    for (let i = 97; i <= 122; i++) js.push('wu_bi_' + String.fromCharCode(i));
+    let html = "<link rel='stylesheet' href='index.css?s" + +new Date + "' type='text/css' media='all'/>";
+    js.forEach(function (name) {
+        html += '<script  src="./' + name + '.js?' + +new Date + '"><\/script>';
+    });
+    document.write(html);
+</script>
 </body>
 </html>
