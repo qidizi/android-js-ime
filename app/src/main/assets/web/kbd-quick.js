@@ -4,50 +4,85 @@ Vue.component('kbd-quick', {
     data() {
         return {
             show: false,
-            show_kbd: true,
-            lines: '',
-            quick_input: localStorage.getItem(QUICK_INPUT_ITEM_NAME)
+            quick_input: localStorage.getItem(QUICK_INPUT_ITEM_NAME),
+            kbd: []
         };
     },
     mounted() {
         // 加载快捷短语
-        this.$on('R_L', this.on_show);
+        this.$on('r>l', this.on_show);
         this.$on('hide', this.on_hide);
+        this.$on('touch', this.on_touch);
+        //this.$root.$emit('register_default', this, this.show = true);
     },
     computed: {
         quick_input_parse() {
             // 注意需要自行赋值，不是return
-            let new_list = [];
-            let kbd = {};
-            let sides = ['c', 'u', 'd', 'l', 'r'];
-            let side_i = 0;
-            this.quick_input.split('\n').forEach(function (line) {
+
+            let kbd = [
+                {
+                    c: {label: '返回', fn: this.on_back},
+                    u: {label: '调整', fn: this.on_kbd_copy},
+                    l: {label: '导入', fn: this.on_kbd_paste}
+                }
+            ];
+            let sides;
+            let max_cell = 10;
+            // 倒着追加，保证底行（首先右边）是满
+            let lines = (this.quick_input || '').split('\n');
+            //for (let i = 1; i < location.search.replace('?', ''); i++) lines.push(i + ' ' + i);
+            lines.forEach(function (line, i) {
                 line = line.trim();
                 if ('' === line) return;
                 let first_space = line.indexOf(' ');
                 let display = line.substr(0, first_space);
-                let text = line.substr(first_space + 1)
-                    .trim().replace(/\\n/g, '\n');
+                let text = line.substr(first_space + 1).trim();
                 if ('' === text) return;
 
-                if (side_i >= sides.length) {
-                    side_i = 0;
-                    kbd = {};
+                while (true) {
+                    if (!sides || !sides.length) {
+                        kbd.push({});
+                        sides = 'c,u,r,d,l'.split(',');
+                    }
+
+                    let cell = kbd.length % max_cell;
+
+                    if (
+                        // 会出现次个l空，然后左边只有一个c，因为flex布局无法处理
+                        (i >= lines.length - 1 && cell > 7 && 'l' === sides[0]) || // 最后一个如果大于7就不放左侧
+                        (1 === cell && 'r' === sides[0]) || // 最右侧，不能放r
+                        (0 === cell && "l" === sides[0]) || // 右侧不能放l
+                        (kbd.length <= max_cell && 'd' === sides[0]) // 底行，不能放d
+                    ) {
+                        sides.shift();
+                        continue;
+                    }
+
+                    kbd[kbd.length - 1][sides.shift()] = {label: display, text: text};
+                    return;
                 }
-
-                kbd[sides[side_i++]] = {label:display, text:text};
-                new_list.push(kbd);
             });
-
-            if (kbd && kbd.c) new_list.push(kbd);
-            new_list.push({
-                c: {label: '返回'},
-                u: {label: '编辑'}
-            });
-            return new_list;
+            return this.kbd = kbd;
         }
     },
     methods: {
+        on_touch(ev) {
+            if (ev.custom_key) {
+                // 手势u、d、l、r；tab、long_tab
+                let kbd_obj = this.kbd[ev.custom_kbd_i][ev.custom_key];
+                if (!kbd_obj) return;
+                // 优先fn
+                if (kbd_obj.fn)
+                    kbd_obj.fn.call(this, ev.custom_kbd, ev);
+                else if (kbd_obj.code)
+                    java.send_key_press(kbd_obj.code);
+                else if (kbd_obj.text)
+                    java.send_text(kbd_obj.text);
+                else
+                    java.send_text(kbd_obj.label);
+                return true;
+            }
+        },
         on_show() {
             // 不支持从其它键盘返回
             this.$root.$emit('child_show', this, false);
@@ -60,50 +95,34 @@ Vue.component('kbd-quick', {
             this.$root.$emit('back', this);
             this.on_hide();
         },
-        on_editor_paste() {
-            this.$el.querySelector('textarea').focus();
-            document.execCommand('paste', false, this.lines);
+        on_kbd_copy() {
+            let lines = localStorage.getItem(QUICK_INPUT_ITEM_NAME) || '';
+            navigator.clipboard.writeText(lines).then(function () {
+                /* clipboard successfully set */
+            }, function () {
+                /* clipboard write failed */
+            });
         },
-        on_editor_copy() {
-            document.execCommand('copy', false, this.lines);
-        },
-        on_editor_cancel() {
-            this.show_kbd = true;
-            this.lines = '';
-        },
-        on_editor_save() {
+        on_kbd_paste() {
             // 保存
-            localStorage.setItem(QUICK_INPUT_ITEM_NAME, this.lines);
+            let lines = '';
+            navigator.clipboard.readText().then(
+                clipText => lines = clipText
+            );
+            localStorage.setItem(QUICK_INPUT_ITEM_NAME, lines);
             // 更新快捷键盘
-            this.quick_input = this.lines;
-            this.show_kbd = true;
-            this.lines = '';
-        },
-        on_editor_show() {
-            this.lines = localStorage.getItem(QUICK_INPUT_ITEM_NAME) || '';
-            this.show_kbd = false;
+            this.quick_input = lines;
         }
     },
-    template: '<div class="quick" v-show="show">' +
-        '<div class="textarea" v-show="!show_kbd">' +
-        '<textarea placeholder="不支持直接编辑，格式如下：\n\n1键面文字 上屏文字\n2键面文字 上屏文字" ' +
-        'rows="10" v-model.trim="lines" readonly="readonly">' +
-        '</textarea>' +
-        '<button @click="on_editor_paste">粘贴</button>' +
-        '<button @click="on_editor_copy">复制</button>' +
-        '<button @click="on_editor_save">保存</button>' +
-        '<button @click="on_editor_cancel">取消</button>' +
-        '</div>' +
-        '<div>' +
-        '<section class="quick_words">' +
-        '<kbd  v-show="show_kbd" v-for="kv in quick_input_parse">' +
+    template: '<section class="quick_words" v-show="show">' +
+        '<kbd  v-show="show" v-for="(kv,i) in quick_input_parse" :data-i="i">' +
         '<key class="kbd-c" v-if="kv.c">{{kv.c.label}}</key>' +
         '<key class="kbd-u" v-if="kv.u">{{kv.u.label}}</key>' +
         '<key class="kbd-d" v-if="kv.d">{{kv.d.label}}</key>' +
         '<key class="kbd-l" v-if="kv.l">{{kv.l.label}}</key>' +
         '<key class="kbd-r" v-if="kv.r">{{kv.r.label}}</key>' +
         '</kbd>' +
-        '</section>' +
-        '</div>' +
-        '</div>'
-});
+        '</section>'
+
+})
+;

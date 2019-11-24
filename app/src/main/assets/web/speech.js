@@ -8,7 +8,7 @@ Vue.component('speech', {
     },
     mounted() {
         this.$on('speech_to_text_result', this.on_speech_to_text_result);
-        this.$on('L_R', this.on_show);
+        this.$on('l>r', this.on_show);
         this.$on('hide', this.on_hide);
     },
     methods: {

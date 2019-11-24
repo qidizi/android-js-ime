@@ -1,6 +1,6 @@
 Vue.component('kbd-en', {
     mounted() {
-        this.$on(['U_D', 'show'], this.on_show);
+        this.$on(['u>d', 'show'], this.on_show);
         this.$on('hide', this.on_hide);
         this.$on('touch', this.on_touch);
         this.$root.$emit('register_default', this, this.show = true);
@@ -15,10 +15,10 @@ Vue.component('kbd-en', {
             this.show = false;
         },
         on_touch(ev) {
-            if (ev.custom_key){
+            if (ev.custom_key) {
                 // 手势u、d、l、r；tab、long_tab
-                let kbd_obj = this.kbd[ev.custom_kbd_row][ev.custom_kbd_cell][ev.custom_key];
-
+                let kbd_obj = this.kbd[ev.custom_kbd_i][ev.custom_key];
+                if (!kbd_obj) return;
                 // 优先fn
                 if (kbd_obj.fn)
                     kbd_obj.fn.call(this, ev.custom_kbd, ev);
@@ -77,224 +77,78 @@ Vue.component('kbd-en', {
             }
         }
     },
-    template: '<div class="kbd-en" v-show="show">' +
-        '<section  v-for="(kvs,row) in kbd">' +
-        '<kbd  v-for="(kv,cell) in kvs" :class="kv.cls" :data-row="row" :data-cell="cell">' +
+    template: '<section class="kbd-en" v-show="show">' +
+        '<kbd  :class="kv.cls" :data-i="i"  v-for="(kv,i) in kbd" >' +
         '<key class="kbd-c" v-if="kv.c">{{kv.c.label}}</key>' +
         '<key class="kbd-u" v-if="kv.u">{{kv.u.label}}</key>' +
         '<key class="kbd-d" v-if="kv.d">{{kv.d.label}}</key>' +
         '<key class="kbd-l" v-if="kv.l">{{kv.l.label}}</key>' +
         '<key class="kbd-r" v-if="kv.r">{{kv.r.label}}</key>' +
         '</kbd>' +
-        '</section>' +
-        '</div>'
+        '</section>'
     , data() {
         return {
             show: false,
-            kbd: [
-                [
-                    {
-                        c: {label: 1},
-                        u: {label: '!'},
-                    },
-                    {
-                        c: {label: 2},
-                        u: {label: '@'},
-                        l: {label: '<'},
-                        r: {label: '>'},
-                    },
-                    {
-                        c: {label: 3},
-                        u: {label: '#'},
-                        l: {label: "'"},
-                        r: {label: '"'},
-                    },
-                    {
-                        c: {label: 4},
-                        u: {label: '$'},
-                        l: {label: ';'},
-                        r: {label: ':'},
-                    },
-                    {
-                        c: {label: 5},
-                        u: {label: '%'},
-                        l: {label: '\\'},
-                        r: {label: '|'},
-                    },
-                    {
-                        c: {label: 6},
-                        u: {label: '^'},
-                        l: {label: '{'},
-                        r: {label: '}'},
-                    },
-                    {
-                        c: {label: 7},
-                        u: {label: '&'},
-                        l: {label: '['},
-                        r: {label: ']'},
-                    },
-                    {
-                        c: {label: 8},
-                        u: {label: '*'},
-                        l: {label: '~'},
-                        r: {label: '`'},
-                    },
-                    {
-                        c: {label: 9},
-                        u: {label: '('},
-                        l: {label: '_'},
-                        r: {label: '+'},
-                    },
-                    {
-                        c: {label: 0},
-                        u: {label: ')'},
-                    },
-
-                ], [
-                    {
-                        c: {label: 'Q'},
-                        u: {label: 'F1'},
-                        d: {label: 'F11'},
-                    },
-                    {
-                        c: {label: 'W'},
-                        u: {label: 'F2'},
-                        d: {label: 'F12'},
-                    },
-                    {
-                        c: {label: 'E'},
-                        u: {label: 'F3'},
-                    },
-                    {
-                        c: {label: 'R'},
-                        u: {label: 'F4'},
-                    },
-                    {
-                        c: {label: 'T'},
-                        u: {label: 'F5'},
-                    },
-                    {
-                        c: {label: 'Y'},
-                        u: {label: 'F6'},
-                    },
-                    {
-                        c: {label: 'U'},
-                        u: {label: 'F7'},
-                    },
-                    {
-                        c: {label: 'I'},
-                        u: {label: 'F8'},
-                    },
-                    {
-                        c: {label: 'O'},
-                        u: {label: 'F9'},
-                        l: {label: '-'},
-                        r: {label: '='},
-                    },
-                    {
-                        c: {label: 'P'},
-                        u: {label: 'F10'},
-                    }
-                ], [
-                    {
-                        c: {label: 'A'},
-                    },
-                    {
-                        c: {label: 'S'},
-                    },
-                    {
-                        c: {label: 'D'},
-                    },
-                    {
-                        c: {label: 'F'},
-                        cls: 'kbd_f'
-                    },
-                    {
-                        c: {label: 'G'},
-                    },
-                    {
-                        c: {label: 'H'},
-                    },
-                    {
-                        c: {label: 'J'},
-                        cls: 'kbd_j'
-                    },
-                    {
-                        c: {label: 'K'},
-                    },
-                    {
-                        c: {label: 'L'},
-                    },
-                    {
-                        cls: 'kbd_l_w'
-                    }
-                ], [
-
-                    {
-                        cls: 'kbd_z_w'
-
-                    },
-
-                    {
-                        c: {label: 'Z'},
-                    },
-                    {
-                        c: {label: 'X'},
-                    },
-                    {
-                        c: {label: 'C'},
-                    },
-                    {
-                        c: {label: 'V'},
-                    },
-                    {
-                        c: {label: 'B'},
-                    },
-                    {
-                        c: {label: 'N'},
-                    },
-                    {
-                        c: {label: 'M'},
-                    },
-                    {
-                        c: {label: ','},
-                    },
-                    {
-                        c: {label: '⌫'},
-                        cls: 'kbd_bs_w'
-                    }
-                ], [
-                    {
-                        c: {label: ' 🄰'},
-                    },
-                    {
-                        c: {label: '⇦'},
-                    },
-                    {
-                        c: {label: '⇧'},
-                    },
-                    {
-                        c: {label: '⇩'},
-                    },
-                    {
-                        c: {label: '⇨'},
-                    },
-                    {
-                        c: {label: '␣'},
-                        cls: 'kbd_sp_w'
-                    },
-                    {
-                        c: {label: '.'},
-                    },
-                    {
-                        c: {label: '/'},
-                    },
-                    {
-                        c: {label: '⏎'},
-                        cls: 'kbd_rn_w'
-                    }
-                ]
-            ],
+            kbd: [{
+                "c": {"label": "⏎"},
+                "cls": "kbd_rn_w"
+            }, {"c": {"label": "/"}}, {"c": {"label": "."}}, {
+                "c": {"label": "␣"},
+                "cls": "kbd_sp_w"
+            }, {"c": {"label": "⇨"}}, {"c": {"label": "⇩"}}, {"c": {"label": "⇧"}}, {"c": {"label": "⇦"}}, {"c": {"label": " 🄰"}}, {
+                "c": {"label": "⌫"},
+                "cls": "kbd_bs_w"
+            }, {"c": {"label": ","}}, {"c": {"label": "M"}}, {"c": {"label": "N"}}, {"c": {"label": "B"}}, {"c": {"label": "V"}}, {"c": {"label": "C"}}, {"c": {"label": "X"}}, {"c": {"label": "Z"}}, {"cls": "kbd_z_w"}, {"cls": "kbd_l_w"}, {"c": {"label": "L"}}, {"c": {"label": "K"}}, {
+                "c": {"label": "J"},
+                "cls": "kbd_j"
+            }, {"c": {"label": "H"}}, {"c": {"label": "G"}}, {
+                "c": {"label": "F"},
+                "cls": "kbd_f"
+            }, {"c": {"label": "D"}}, {"c": {"label": "S"}}, {"c": {"label": "A"}}, {
+                "c": {"label": "P"},
+                "u": {"label": "F10"}
+            }, {
+                "c": {"label": "O"},
+                "u": {"label": "F9"},
+                "l": {"label": "-"},
+                "r": {"label": "="}
+            }, {"c": {"label": "I"}, "u": {"label": "F8"}}, {
+                "c": {"label": "U"},
+                "u": {"label": "F7"}
+            }, {"c": {"label": "Y"}, "u": {"label": "F6"}}, {
+                "c": {"label": "T"},
+                "u": {"label": "F5"}
+            }, {"c": {"label": "R"}, "u": {"label": "F4"}}, {
+                "c": {"label": "E"},
+                "u": {"label": "F3"}
+            }, {"c": {"label": "W"}, "u": {"label": "F2"}, "d": {"label": "F12"}}, {
+                "c": {"label": "Q"},
+                "u": {"label": "F1"},
+                "d": {"label": "F11"}
+            }, {"c": {"label": 0}, "u": {"label": ")"}}, {
+                "c": {"label": 9},
+                "u": {"label": "("},
+                "l": {"label": "_"},
+                "r": {"label": "+"}
+            }, {"c": {"label": 8}, "u": {"label": "*"}, "l": {"label": "~"}, "r": {"label": "`"}}, {
+                "c": {"label": 7},
+                "u": {"label": "&"},
+                "l": {"label": "["},
+                "r": {"label": "]"}
+            }, {"c": {"label": 6}, "u": {"label": "^"}, "l": {"label": "{"}, "r": {"label": "}"}}, {
+                "c": {"label": 5},
+                "u": {"label": "%"},
+                "l": {"label": "\\"},
+                "r": {"label": "|"}
+            }, {"c": {"label": 4}, "u": {"label": "$"}, "l": {"label": ";"}, "r": {"label": ":"}}, {
+                "c": {"label": 3},
+                "u": {"label": "#"},
+                "l": {"label": "'"},
+                "r": {"label": "\""}
+            }, {"c": {"label": 2}, "u": {"label": "@"}, "l": {"label": "<"}, "r": {"label": ">"}}, {
+                "c": {"label": 1},
+                "u": {"label": "!"}
+            }]
         };
     }
 });

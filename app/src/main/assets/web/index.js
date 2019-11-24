@@ -66,6 +66,12 @@ window.onload = function () {
             back_uid: null,
             default_uid: null
         },
+        created() {
+            // 因为子组件可能会早于主组件mounted
+            this.$on('child_show', this.on_child_show);
+            this.$on('back', this.on_back);
+            this.$on('register_default', this.on_register_default);
+        },
         mounted() {
             // 初始化
             // 不使用jq，只有简单的功能
@@ -73,11 +79,40 @@ window.onload = function () {
             id('app').style.display = 'block';
             // 向java注册接收通知的方法
             java.js_onload("window.app.java_listener");
-            this.$on('child_show', this.on_child_show);
-            this.$on('back', this.on_back);
-            this.$on('register_default', this.on_register_default);
         },
         methods: {
+            on_touch(ev) {
+                // 检查是否touch了kbd
+                if (!ev.custom_type) ev.custom_type = ev.type;
+
+                if (!(!ev.target || '.KBD.KEY.'.indexOf('.' + ev.target.tagName + '.') < 0)) {
+                    // 附加上点击的键盘
+                    ev.custom_kbd = 'KBD' === ev.target.tagName ? ev.target : ev.target.parentElement;
+                    // 找到键盘对象
+                    ev.custom_kbd_i = ev.custom_kbd.dataset.i;
+
+                    if ('.long_tab.tab.'.indexOf('.' + ev.custom_type + '.') > -1) {
+                        ev.custom_key = 'c';
+                    } else if ('.u.d.l.r.'.indexOf('.' + ev.custom_type + '.') > -1)
+                        ev.custom_key = ev.custom_type;
+                }
+
+                // console.log(ev,ev.custom_type, this.$children[this.show_uid - 1], this.show_uid)
+                ev.custom_type.indexOf('>') > 0 ?
+                    // 多方向手势
+                    this.$children.forEach(function (vm) {
+                        // 注意发送的是手势，不是touch
+                        vm.$emit(ev.custom_type, ev);
+                    }) :
+                    // 其它只发送给当前显示的键盘
+                    this.$children[this.show_uid - 1].$emit('touch', ev);
+            },
+            on_register_default(vm) {
+                this.show_uid = this.default_uid = this.back_uid = vm._uid
+            },
+            on_show_default(vm) {
+                this.$children[this.default_uid - 1].$emit('show');
+            },
             on_child_show(vm, can_back) {
                 can_back && (this.back_uid = vm._uid);
                 this.show_uid = vm._uid;
@@ -101,9 +136,9 @@ window.onload = function () {
                     delete glb.touch[n];
                     // 只需要取消延时触发长按定时
                     clearTimeout(touch.long_press_timer);
+                    // type === touchcancel
+                    this.on_touch(ev);
                 }
-                // type === touchcancel
-                this.on_touch(ev);
             },
             "on_touch_start"(ev) {
                 for (let n = 0; ev.changedTouches[n]; n++) {
@@ -278,41 +313,10 @@ window.onload = function () {
                         continue;
                     }
 
-                    let gesture_len = touch.directions.length;
-                    touch.directions = touch.directions.join('_');
+                    touch.directions = touch.directions.join('>');
                     ev.custom_type = touch.directions;
                     this.on_touch(ev);
                 }
-            },
-            target_is_kbd(ev) {
-                return !(!ev.target || '.KBD.KEY.'.indexOf('.' + ev.target.tagName + '.') < 0);
-            },
-            on_touch(ev) {
-                // 检查是否touch了kbd
-                if (!ev.custom_type) ev.custom_type = ev.type;
-
-                if (this.target_is_kbd(ev)) {
-                    // 附加上点击的键盘
-                    ev.custom_kbd = 'KBD' === ev.target.tagName ? ev.target : ev.target.parentElement;
-                    // 找到键盘对象
-                    ev.custom_kbd_row = ev.custom_kbd.dataset.row;
-                    ev.custom_kbd_cell = ev.custom_kbd.dataset.cell;
-
-                    if ('.long_tab.tab.'.indexOf('.' + ev.custom_type + '.') > -1) {
-                        ev.custom_key = 'c';
-                    } else if ('.u.d.l.r.'.indexOf('.' + ev.custom_type + '.') > -1)
-                        ev.custom_key = ev.custom_type;
-                }
-
-                this.$children.forEach(function (vm) {
-                    vm.$emit('touch', ev);
-                });
-            },
-            on_register_default(vm) {
-                this.default_uid = vm._uid;
-            },
-            on_show_default(vm) {
-                this.$children[this.default_uid - 1].$emit('show');
             },
             cn_keyboard_reset() {
                 // 重置中文输入状态
