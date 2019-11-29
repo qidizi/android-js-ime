@@ -52,6 +52,7 @@ main {
     margin: 0 auto;
     overflow: hidden;
     width: 100%;
+    min-height: 200px;
 }
 
 section {
@@ -75,7 +76,10 @@ section {
 }
 
 section kbd {
-    margin: 0;
+    /*禁用选择文字，防止长按触发，会中断touch事件*/
+    /*user-select: none;*/
+    /* Non-prefixed version, currently supported by Chrome and Opera */
+
     background-color: #e8e8e8;
     border-radius: 6px;
     overflow: hidden;
@@ -85,34 +89,36 @@ section kbd {
     width: 9.1%;
     display: inline-block;
     padding: 0;
+    margin: 0 0 0.83%;
+
 }
 
 section > kbd > key {
     font-style: normal;
-    font-weight:lighter;
+    font-weight: lighter;
     position: absolute;
     text-align: center;
     word-break: break-all;
 }
 
-section > kbd > key.kbd-c {
+section > kbd > key.c {
     font-weight: bold;
     font-size: 0.9rem;
     line-height: 1rem;
     width: 0.9rem;
-    top: 50%;/*相对父元素*/
+    top: 50%; /*相对父元素*/
     left: 50%;
-    transform: translate(-50%, -50%);/*相对于本身，margin相对父元素*/
+    transform: translate(-50%, -50%); /*相对于本身，margin相对父元素*/
 }
 
-section > kbd > key.kbd-u {
+section > kbd > key.u {
     top: 0;
     left: 0;
     width: 100%;
     font-size: 0.8rem;
 }
 
-section > kbd > key.kbd-r {
+section > kbd > key.r {
     top: 50%;
     right: 0;
     font-size: 0.9rem;
@@ -121,14 +127,14 @@ section > kbd > key.kbd-r {
     transform: translateY(-50%);
 }
 
-section > kbd > key.kbd-d {
+section > kbd > key.d {
     bottom: 0;
     left: 0;
     width: 100%;
     font-size: 0.8rem;
 }
 
-section > kbd > key.kbd-l {
+section > kbd > key.l {
     top: 50%;
     left: 0;
     line-height: 0.9rem;
@@ -137,21 +143,25 @@ section > kbd > key.kbd-l {
     transform: translateY(-50%);
 }
 
-section kbd.kbd_z_w {
-    width: 6%;
-    visibility: hidden;
+section kbd.kbd_150 {
+    /*9.1/2+9/100/11+9.1*/
+    width: 13.658%;
+}
+
+section kbd.kbd_a_margin_left {
+    margin-left: 2.058%;
+}
+
+section kbd.kbd_z_margin_left {
+    margin-left: 6.558%;
+}
+
+section kbd.kbd_l_margin_right {
+    margin-right: 7.058%;
 }
 
 section kbd.kbd_bs_w {
-    width: 13%;
-}
-
-section kbd.kbd_sp_w {
-    width: 14.5%;
-}
-
-section kbd.kbd_rn_w {
-    width: 14.5%;
+    width: 11%;
 }
 
 section kbd.kbd_f {
@@ -162,52 +172,21 @@ section kbd.kbd_j {
     background-color: cornsilk;
 }
 
-section kbd.kbd_rn_w {
-    width: 14.5%;
+@keyframes hold_key {
+    0% {
+        background-color: black;
+        color: white;
+        padding: 2px
+    }
+    100% {
+        background-color: white;
+        color: blue;
+        padding: 2px
+    }
 }
 
-section kbd.kbd_l_w {
-    width: 6%;
-    visibility: hidden;
-}
-
-section kbd.kbd_m_w {
-    width: 14.5%;
-    visibility: hidden;
-}
-
-section.quick_words kbd {
-    margin-bottom: 0.83%;
-    font-size: 1.6rem;
-}
-
-section kbd.hold_key {
-    background-color: darkgoldenrod;
-}
-
-section kbd.two_key {
-    width: 20%;
-}
-
-section.number kbd {
-    width: 14%;
-    height: 5rem;
-}
-
-section.number kbd.two_key {
-    width: 28%;
-}
-
-section.cn kbd {
-    background-color: whitesmoke;
-}
-
-section kbd {
-    /*禁用选择文字，防止长按触发，会中断touch事件*/
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-    user-select: none;
-    /* Non-prefixed version, currently supported by Chrome and Opera */
+section kbd key.hold_key {
+    animation: hold_key 1s infinite;
 }
 
 @media only screen and (min-width: 800px) {
@@ -218,17 +197,7 @@ section kbd {
     }
 }
 
-.new_line {
-    display: block;
-    height: auto;
-    visibility: hidden;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    clear: both;
-}
-
-.candidates {
+nav.candidates {
     width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
@@ -238,7 +207,7 @@ section kbd {
     margin-bottom: 5px;
 }
 
-.candidates .words {
+nav.candidates code {
     margin: 0 5px;
     background-color: white;
     display: inline-block;
@@ -248,48 +217,25 @@ section kbd {
     min-width: 3rem;
 }
 
-.candidates .words sup {
+textarea.quick_editor {
+    border: 1px solid darkgrey;
+    padding: 5px;
+    color: blue;
+    font-size: 1rem;
+}
+
+nav.candidates code sup {
     display: block;
     font-size: 1rem;
 }
 
-.candidates .words sub {
+nav.candidates code sub {
     display: block;
     font-size: 1.2rem;
 }
 
-.candidates .key_codes {
-
-}
-
-.candidates .selected {
+nav.candidates .selected {
     background-color: cornsilk;
-}
-
-.textarea {
-    display: block;
-    width: 100%;
-    text-align: right;
-}
-
-.textarea i {
-    font-size: 1rem;
-    color: dimgray;
-}
-
-.textarea button {
-    border: 1px solid;
-    border-radius: 3px;
-    margin: 10px;
-}
-
-.textarea textarea {
-    text-align: left;
-    display: block;
-    width: 100%;
-    border: 1px dotted lightgrey;
-    padding: 10px;
-    font-size: 1rem;
 }
 
 .debug_box {
@@ -333,9 +279,16 @@ section kbd {
     height: 100px;
     display: block;
     overflow: auto;
+    color: blue;
+    border: 1px solid black;
+    font-size: 1rem;
 }
 
 .speech button {
     margin: 10px 20px;
     outline: none;
+}
+
+.hide {
+    display: none;
 }

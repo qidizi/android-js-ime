@@ -1,4 +1,4 @@
-window.onload = function () {
+window.addEventListener('load', function () {
 // 小于这个毫秒就是按
     const SMALL_IS_SHORT_PRESS_MS = 750;
 // 小于这个才算按或长按，否则就属于pan
@@ -6,25 +6,7 @@ window.onload = function () {
 // 长按激活后，多少毫秒发送一次按下事件
     const LONG_PRESS_REPEAT_MS = 50;
 // 用于方向判断：由于越近夹角弧度越小，就越不容易控制，所以，ab点连线长必须达到这个值以上才判断
-    const DIRECTION_MIN_PX = 50;
-// 匹配中文，候选框只显示前面x个
-    const CANDIDATE_LIMIT = 15;
-// 键盘是否显示命名前缀
-    const KEYBOARD_SHOW_PRE = 'keyboard_show_';
-// 码表中码词之间分隔符
-    const CODE_LIST_KEY_WORD_SEPARATE = ' ';
-// 码表中2组kw之间分隔
-    const CODE_LIST_SEPARATE = ',';
-// 需要按下shift才能组合的键，如数字2上方的＠，那么<kbd data-android="^KEYCODE_2"
-    const WITH_SHIFT_SYMBOL = '⇧';
-// ctrl控制键标志
-    const WITH_CTRL_SYMBOL = '^';
-// 默认中文
-    const DEFAULT_KEYBOARD_CN = 'cn';
-// 默认英文
-    const DEFAULT_KEYBOARD_EN = 'en';
-// 默认键盘
-    const DEFAULT_KEYBOARD = DEFAULT_KEYBOARD_CN;
+    const DIRECTION_MIN_PX = 10;
 
 // 创建临时全局变量，不放到vue data中，防止刷新ui
 // touch事件关系：
@@ -33,8 +15,7 @@ window.onload = function () {
 // pan：x毫秒内，ab点线长不小于m（因为需要跟长按分清）
     let glb = {
         // 只响应几个手指的触摸
-        touch: [],
-        current_keyboard: DEFAULT_KEYBOARD
+        touch: []
     };
 
     function id(the_id) {
@@ -81,20 +62,24 @@ window.onload = function () {
             java.js_onload("window.app.java_listener");
         },
         methods: {
+            on_menu(ev) {
+                return 'TEXTAREA' === ev.target.tagName;
+            },
             on_touch(ev) {
                 // 检查是否touch了kbd
                 if (!ev.custom_type) ev.custom_type = ev.type;
 
                 if (!(!ev.target || '.KBD.KEY.'.indexOf('.' + ev.target.tagName + '.') < 0)) {
                     // 附加上点击的键盘
-                    ev.custom_kbd = 'KBD' === ev.target.tagName ? ev.target : ev.target.parentElement;
+                    ev.custom_kbd_dom = 'KBD' === ev.target.tagName ? ev.target : ev.target.parentElement;
                     // 找到键盘对象
-                    ev.custom_kbd_i = ev.custom_kbd.dataset.i;
+                    ev.custom_kbd_i = ev.custom_kbd_dom.dataset.i;
 
                     if ('.long_tab.tab.'.indexOf('.' + ev.custom_type + '.') > -1) {
                         ev.custom_key = 'c';
                     } else if ('.u.d.l.r.'.indexOf('.' + ev.custom_type + '.') > -1)
                         ev.custom_key = ev.custom_type;
+                    ev.custom_key_dom = ev.custom_kbd_dom.querySelector('.kbd-' + ev.custom_key);
                 }
 
                 // console.log(ev,ev.custom_type, this.$children[this.show_uid - 1], this.show_uid)
@@ -192,7 +177,7 @@ window.onload = function () {
                     // 不处理组合键
                     function lp_timer() {
                         if (touch.start_2_b_max_px > SMALL_IS_PRESS_PX)
-                        // 只要有一次最大位移超过，就取消长按
+                            // 只要有一次最大位移超过，就取消长按
                             return;
                         ev.custom_type = 'long_tab';
                         vm.on_touch(ev);
@@ -213,7 +198,7 @@ window.onload = function () {
                     let touch = glb.touch[n];
 
                     if (!touch || touch.target !== ev.target)
-                    // 比如子dom触发start，但是禁止start冒泡就会出现异常
+                        // 比如子dom触发start，但是禁止start冒泡就会出现异常
                         continue;
 
                     let ax = touch.ax;
@@ -289,7 +274,7 @@ window.onload = function () {
                     delete glb.touch[n];
 
                     if (!touch || touch.target !== ev.target)
-                    // 比如子dom触发start，但是禁止start冒泡就会出现异常
+                        // 比如子dom触发start，但是禁止start冒泡就会出现异常
                         continue;
 
                     // 务必要清除长按定时
@@ -317,68 +302,7 @@ window.onload = function () {
                     ev.custom_type = touch.directions;
                     this.on_touch(ev);
                 }
-            },
-            cn_keyboard_reset() {
-                // 重置中文输入状态
-                this.candidates = [];
-                this.keys = '';
-            },
-            "show_custom_candidates"(ev, candidates_array) {
-                // 显示自定义的候选，比如一个按键显示更多符号
-                let tmp = [];
-                candidates_array.forEach(function (v) {
-                    tmp.push({words: v});
-                });
-                this.cn_keyboard_reset();
-                this.candidates = tmp;
-            },
-            "use_candidate"(words) {
-                // 点击选择了指定的候选
-                this.cn_keyboard_reset();
-                this.send_text(words);
-            },
-            send_key_press(key, touch) {
-                // 发送一次按键事件
-                if (!java[key]) return;
-                let meta = this.get_meta_state(touch);
-                JAVA.send_key_press(key, meta);
-                this.clear_meta(key);
-            },
-            send_text(text, ev) {
-                // 直接发送字符串
-                if ('string' !== typeof text) {
-                    if (!ev || !ev.target) return false;
-                    text = ev.target.innerText.trim();
-                }
-                JAVA.send_text(text);
-                this.clear_meta();
-            },
-            clear_meta(code) {
-                let metas = ',KEYCODE_SHIFT_LEFT,KEYCODE_SHIFT_RIGHT,KEYCODE_ALT_LEFT' +
-                    ',KEYCODE_ALT_RIGHT,KEYCODE_CTRL_LEFT,KEYCODE_CTRL_RIGHT,KEYCODE_META_LEFT' +
-                    ',KEYCODE_META_RIGHT,';
-                if (metas.indexOf(',' + code + ',') < 0)
-                // 不是按控制键，就清除,shift不清除，让用户自行控制
-                    this.ctrl_down = this.alt_down = this.meta_down = false;
-            },
-            "shift_toggle_text"(t) {
-                // 根据shift按钮状态，改变大小写显示
-                return this.shift_down ? t.toUpperCase() : t.toLowerCase();
-            },
-            'textarea_close'() {
-                // 放弃编辑框操作
-                this.textarea_show = false;
-            },
-            'textarea_save'() {
-                this.textarea_show = false;
-
-                if ('function' === typeof glb.textarea_hide_cb)
-                    glb.textarea_hide_cb.call(this);
-            },
-            'deploy'() {
-                // 重新加载html
-                JAVA.reload();
             }
         },
     });
-};
+});

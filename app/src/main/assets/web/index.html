@@ -26,9 +26,9 @@
             dom.prepend(str.join('\t'), document.createElement('br'));
         }
 
-        window.onerror = function (error, url, line, col) {
-            debug.call(window, 'js异常：' + error + ' @ ' + url + ' ' + line + ':' + col);
-        };
+        window.addEventListener('error', function (ev) {
+            debug.call(window, 'js异常：' + ev.message + ' @ ' + ev.filename + ' ' + ev.lineno + ':' + ev.colno);
+        });
     </script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport"
@@ -42,7 +42,7 @@
 <main id="app" style="display: none;"
       @touchcancel="on_touch_cancel" @touchstart="on_touch_start"
       @touchmove="on_touch_move" @touchend="on_touch_end"
-      ondblclick="return false;" oncontextmenu="return false;"
+      ondblclick="return false;" @contextmenu="on_menu"
 >
 </main>
 <script>
@@ -58,12 +58,17 @@
     });
     document.getElementById('app').innerHTML = vue_components.join('');
     js = js.concat('index');
-    for (let i = 97; i <= 122; i++) js.push('wu_bi_' + String.fromCharCode(i));
-    let html = "<link rel='stylesheet' href='index.css?s" + +new Date + "' type='text/css' media='all'/>";
+    for (let i = 97; i <= 122; i++) js.unshift('wu_bi_' + String.fromCharCode(i));
+    let css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = "index.css?s" + +new Date;
+    document.getElementsByTagName('head')[0].appendChild(css);
     js.forEach(function (name) {
-        html += '<script  src="./' + name + '.js?' + +new Date + '"><\/script>';
+        let js = document.createElement('script');
+        js.src = name + '.js?' + +new Date;
+        js.setAttribute('async',false);
+        document.getElementsByTagName('head')[0].appendChild(js);
     });
-    document.write(html);
 </script>
 </body>
 </html>

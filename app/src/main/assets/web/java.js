@@ -1,28 +1,4 @@
-// 放java的使用例子
-window.java = {
-    send_text(text) {
-        debug('java收到字符串：' + text);
-    },
-    send_key_press(key_code_str, meta_state) {
-        debug('java收到press: code=' + key_code_str + ' 控制键状态=' + meta_state);
-    },
-    send_key_down(key_code_str, repeat, meta_state) {
-        // 因为需要维护 down与up成对出现，否则会出现逻辑混乱，建议无特殊要求，直接使用press
-        debug('java收到key_down: code=' + key_code_str + ' 重复=' + repeat + ' 控制键状态=' + meta_state);
-    },
-    send_key_up(key_code_str, meta_state) {
-        // 因为需要维护 down与up成对出现，否则会出现逻辑混乱，建议无特殊要求，直接使用press
-        debug('java收到key_up: code=' + key_code_str + ' 控制键状态=' + meta_state);
-    },
-    js_onload(js_listener_fn) {
-        debug('java收到html onload，java回调接收方法为：' + js_listener_fn);
-    },
-    reload() {
-        debug('java收到重载html的请求');
-    },
-    speech_to_text() {
-        debug('java收到打开tts的请求');
-    },
+window.android = {
     // meta常量，LEFT或RIGHT ON表示只支持某边键按下
     // 不带左右方向要求的ON表示任意边的该键按下都行
     // 当用MASK，表示使用上面任1比对都为真
@@ -337,4 +313,24 @@ window.java = {
     KEYCODE_SYSTEM_NAVIGATION_RIGHT: 283,
     KEYCODE_ALL_APPS: 284,
     KEYCODE_REFRESH: 285,
+};
+
+window.java = {
+    send_text(text) {
+        window['JAVA'] ? window['JAVA'].send_text(text) : debug('java收到字符串：' + text);
+    },
+    send_key_press(key_code, meta_state) {
+        window['JAVA'] ? window['JAVA'].send_key_press(key_code, meta_state || 0) :
+            debug('java收到press: code=' + key_code + ' 控制键状态=' + meta_state);
+    },
+    js_onload(js_listener_fn) {
+        window['JAVA'] ? window['JAVA'].js_onload(js_listener_fn) :
+            debug('java收到html onload，java回调接收方法为：' + js_listener_fn);
+    },
+    reload() {
+        window['JAVA'] ? window['JAVA'].reload() : debug('java收到重载html的请求');
+    },
+    speech_to_text() {
+        window['JAVA'] ? window['JAVA'].speech_to_text() : debug('java收到打开tts的请求');
+    }
 };

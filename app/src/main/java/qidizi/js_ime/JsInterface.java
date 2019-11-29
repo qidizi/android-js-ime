@@ -26,12 +26,11 @@ class JsInterface {
         webView = wv;
     }
 
-    private void send_key_event(int action, String key_code_str, int repeat, int meta_state) {
+    private void send_key_event(int action, int key_code, int repeat, int meta_state) {
         // 向当前绑定到键盘的应用发送键盘事件
         InputConnection ic = context.getCurrentInputConnection();
         long down_time = SystemClock.uptimeMillis();
         long event_happen_time = SystemClock.uptimeMillis();
-        int key_code = KeyEvent.keyCodeFromString(key_code_str);
         // 可以组合，表示控制键是否按下了,meta_state是按bit运算，只有指定位为1才表示on
         // 这些常量是经过精心设计的，所有不会出现bit位冲突问题
 
@@ -82,23 +81,23 @@ class JsInterface {
 
     //--------------供js调用方法-------
 
-    // TODO 注意暴露给js的方法必须是public，包内是不行的
-    @JavascriptInterface
-    public void send_key_down(String key_code_str, int repeat, int meta_state) {
-        send_key_event(KeyEvent.ACTION_DOWN, key_code_str, repeat, meta_state);
-    }
+//    // TODO 注意暴露给js的方法必须是public，包内是不行的
+//    @JavascriptInterface
+//    public void send_key_down(int key_code, int repeat, int meta_state) {
+//        send_key_event(KeyEvent.ACTION_DOWN, key_code, repeat, meta_state);
+//    }
+//
+//    @JavascriptInterface
+//    public void send_key_up(int key_code, int meta_state) {
+//        send_key_event(KeyEvent.ACTION_UP, key_code, 0, meta_state);
+//    }
 
     @JavascriptInterface
-    public void send_key_up(String key_code_str, int meta_state) {
-        send_key_event(KeyEvent.ACTION_UP, key_code_str, 0, meta_state);
-    }
-
-    @JavascriptInterface
-    public void send_key_press(String key_code_str, int meta_state) {
+    public void send_key_press(int key_code, int meta_state) {
         // 不熟悉的人可能很难做到按合理逻辑处理好down与up成对出现问题，最后导致出现意外效果，
         // 所以，建议只给web提供这个即可
-        send_key_event(KeyEvent.ACTION_DOWN, key_code_str, 0, meta_state);
-        send_key_event(KeyEvent.ACTION_UP, key_code_str, 0, 0);
+        send_key_event(KeyEvent.ACTION_DOWN, key_code, 0, meta_state);
+        send_key_event(KeyEvent.ACTION_UP, key_code, 0, 0);
     }
 
     @JavascriptInterface
