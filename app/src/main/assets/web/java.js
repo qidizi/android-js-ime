@@ -330,7 +330,13 @@ window.java = {
     reload() {
         window['JAVA'] ? window['JAVA'].reload() : debug('java收到重载html的请求');
     },
-    speech_to_text() {
-        window['JAVA'] ? window['JAVA'].speech_to_text() : debug('java收到打开tts的请求');
+    open_speech_recognizer() {
+        window['JAVA'] ? window['JAVA'].open_speech_recognizer() : debug('java收到打开语音识别的请求');
+    },
+    stop_speech_recognizer() {
+        window['JAVA'] ? window['JAVA'].stop_speech_recognizer() : debug('java收到停止语音识别的请求');
+    },
+    cancel_speech_recognizer() {
+        window['JAVA'] ? window['JAVA'].cancel_speech_recognizer() : debug('java收到取消语音识别的请求');
     }
 };

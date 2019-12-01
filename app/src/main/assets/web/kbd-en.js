@@ -155,7 +155,15 @@ window.addEventListener('load', function () {
                     {"c": {"label": "V"}, u: {label: '粘贴', code: android.KEYCODE_PASTE}},
                     {"c": {"label": "C"}, u: {label: '复制', code: android.KEYCODE_COPY}},
                     {"c": {"label": "X"}, u: {label: '剪切', code: android.KEYCODE_CUT}},
-                    {"c": {"label": "Z"}, cls: 'kbd_z_margin_left'},
+                    {
+                        "c": {"label": "Z"}, cls: 'kbd_z_margin_left',
+                        u: {
+                            label: '撤消',
+                            fn() {
+                                java.send_key_press(android.KEYCODE_Z, android.META_CTRL_MASK);
+                            }
+                        }
+                    },
                     {"c": {"label": "L"}, cls: 'kbd_l_margin_right'},
                     {"c": {"label": "K"}},
                     {
@@ -198,7 +206,14 @@ window.addEventListener('load', function () {
                         "c": {"label": "T"},
                         "u": {"label": "F5", code: android.KEYCODE_F5}
                     },
-                    {"c": {"label": "R"}, "u": {"label": "F4", code: android.KEYCODE_F4}},
+                    {
+                        "c": {"label": "R"}, "u": {"label": "F4", code: android.KEYCODE_F4},
+                        d: {
+                            label: "重载", fn() {
+                                java.reload();
+                            }
+                        }
+                    },
                     {
                         "c": {"label": "E"},
                         "u": {"label": "F3", code: android.KEYCODE_F3}

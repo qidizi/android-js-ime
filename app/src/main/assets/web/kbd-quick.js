@@ -25,8 +25,14 @@ window.addEventListener('load', function () {
                 let kbd = [
                     {
                         c: {label: '返回', fn: this.on_back},
-                        u: {label: '调整', fn: this.on_kbd_copy},
-                        l: {label: '导入', fn: this.on_kbd_paste}
+                        u: {label: '调整', fn: this.on_edit},
+                    },
+                    {
+                        c: {
+                            label: '撤消', fn() {
+                                java.send_key_press(android.KEYCODE_Z, android.META_CTRL_MASK);
+                            }
+                        },
                     }
                 ];
                 let sides;
@@ -97,28 +103,34 @@ window.addEventListener('load', function () {
                 this.$root.$emit('back', this);
                 this.on_hide();
             },
-            on_kbd_copy() {
+            on_edit() {
                 this.lines = localStorage.getItem(QUICK_INPUT_ITEM_NAME) || '';
                 this.show_editor = true;
             },
-            on_kbd_paste() {
+            on_save() {
                 // 保存
                 this.show_editor = false;
                 localStorage.setItem(QUICK_INPUT_ITEM_NAME, this.lines);
                 // 更新快捷键盘
                 this.quick_input = this.lines;
                 this.lines = '';
+            },
+            on_edit_cancel() {
+                this.show_editor = false;
+                this.lines = '';
             }
         },
         template: `
     <section class="quick_words" v-show="show">
-        <textarea v-show="show_editor"
-        onclick="this.select();"
-        oncontextmenu="return true;"
-        class="quick_editor"
-         placeholder="格式 如下\键面 上屏内容\n例子 看下面几条\n呢称 qidizi\n手机 13000000000\n公司 谷歌公司"
-         v-model.trim="lines"
-         ></textarea>
+        <div class="editor_box" v-show="show_editor">
+            <textarea 
+            class="quick_editor"
+             placeholder="说明   请剪出编辑，再贴回应用\n键面文字       上屏内容文字\n键面文字2     上屏内容文字2\n"
+             v-model.trim="lines"
+             ></textarea>
+             <button class="cancel btn" @click.stop.prevent="on_edit_cancel">取消</button>
+             <button class="apply btn" @click.stop.prevent="on_save">应用</button>
+         </div>
         <kbd  v-show="show" v-for="(kv,i) in quick_input_parse" :data-i="i">
         <key class="c" v-if="kv.c">{{kv.c.label}}</key>
         <key class="u" v-if="kv.u">{{kv.u.label}}</key>

@@ -1,29 +1,23 @@
 package qidizi.js_ime;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.speech.RecognitionListener;
-import android.speech.RecognizerIntent;
-import android.speech.SpeechRecognizer;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputConnection;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
 
 class JsInterface {
     static String js_listener = null;
     private SoftKeyboard context;
     private WebView webView;
+    private Speech_recognizer speech_recognizer;
 
     JsInterface(SoftKeyboard ct, WebView wv) {
         context = ct;
         webView = wv;
+        speech_recognizer = new Speech_recognizer(webView, context);
     }
 
     private void send_key_event(int action, int key_code, int repeat, int meta_state) {
@@ -123,110 +117,18 @@ class JsInterface {
     }
 
     @JavascriptInterface
-    public void speech_to_text() {
-        // 语音识别出文本
-        Handler mainHandler = new Handler(context.getMainLooper());
+    public void open_speech_recognizer() {
+        speech_recognizer.open_speech_recognizer();
+    }
 
-        Runnable myRunnable = new Runnable() {
-            @Override
-            public void run() {
-                // 语音到文本，必须运行在main thread中
+    @JavascriptInterface
+    public void stop_speech_recognizer() {
+        speech_recognizer.stop_speech_recognizer();
+    }
 
-                // 不能直接new，只能这样用
-                // TODO 需要修改成不重复new
-                SpeechRecognizer sr = SpeechRecognizer.createSpeechRecognizer(context);
-                sr.setRecognitionListener(new RecognitionListener() {
-                    @Override
-                    public void onResults(Bundle results) {
-                        ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-                        if (null == matches) return;
-                        if (matches.size() > 0) {
-                            // 识别出文字，异步通知给js
-                            SoftKeyboard.emit_js_str(webView, "speech_to_text_result", matches.get(0));
-                        }
-                    }
-
-                    @Override
-                    public void onError(int i) {
-                        String error = "";
-                        switch (i) {
-                            case SpeechRecognizer.ERROR_AUDIO:
-                                error = "录制异常";
-                                break;
-                            case SpeechRecognizer.ERROR_CLIENT:
-                                error = "tts组件异常";
-                                break;
-                            case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
-                                error = "请授予录音权限";
-                                break;
-                            case SpeechRecognizer.ERROR_NETWORK:
-                                error = "tts网络异常";
-                                break;
-                            case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
-                                error = "tts网络超时";
-                                break;
-                            case SpeechRecognizer.ERROR_NO_MATCH:
-                                error = "无法识别";
-                                break;
-                            case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
-                                error = "tts正被使用，请稍候";
-                                break;
-                            case SpeechRecognizer.ERROR_SERVER:
-                                error = "tts服务异常";
-                                break;
-                            case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
-                                error = "等待语音输入超时";
-                                break;
-                        }
-                        Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onPartialResults(Bundle bundle) {
-                        // 必须重写
-                    }
-
-                    @Override
-                    public void onEvent(int i, Bundle bundle) {
-                        // 必须重写
-                    }
-
-                    @Override
-                    public void onBufferReceived(byte[] bytes) {
-                        // 必须重写
-                    }
-
-                    @Override
-                    public void onEndOfSpeech() {
-                        Toast.makeText(context, "识别中...", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onBeginningOfSpeech() {
-                        // 必须重写
-                    }
-
-                    @Override
-                    public void onRmsChanged(float v) {
-                        // 必须重写
-                    }
-
-                    @Override
-                    public void onReadyForSpeech(Bundle bundle) {
-                        Toast.makeText(context, "请开始说话...", Toast.LENGTH_LONG).show();
-                    }
-                });
-
-                Intent speechIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                // 识别结束用途，如网络查找，可能要提炼关键字
-                speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                // 不支持边说边识别，只能说完再识别
-                speechIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, false);
-                sr.startListening(speechIntent);
-            }
-        };
-        mainHandler.post(myRunnable);
-
+    @JavascriptInterface
+    public void cancel_speech_recognizer() {
+        speech_recognizer.cancel_speech_recognizer();
     }
 
     /**

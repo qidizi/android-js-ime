@@ -111,7 +111,7 @@ window.addEventListener('load', function () {
             "java_listener"(what, info) {
                 // 接收java通知，比如输入框要求显示数字键盘
                 this.$children.forEach(function (vm) {
-                    vm.$emit('on_' + what, info);
+                    vm.$emit(what, info);
                 });
             },
             "on_touch_cancel"(ev) {
