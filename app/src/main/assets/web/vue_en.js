@@ -1,7 +1,8 @@
-window.addEventListener('load', function () {
-    Vue.component('kbd-en', {
+// vue_组件名做文件名和方法名规则，以方便自动加载
+function vue_en(name) {
+    Vue.component(name, {
         mounted() {
-            this.$on(['u>d', 'show'], this.on_show);
+            this.$on(['0-u>d', 'show'], this.on_show);
             this.$on('hide', this.on_hide);
             this.$on('touch', this.on_touch);
             this.$root.$emit('register_default', this, this.show = true);
@@ -16,7 +17,7 @@ window.addEventListener('load', function () {
 
                 if (obj.code && this.is_meta_code(obj.code) && this.meta_down(obj.code))
                     cls += ' hold_key';
-                return cls;
+                return cls + ' key';
             },
             on_show() {
                 // 不支持从其它键盘返回
@@ -108,15 +109,15 @@ window.addEventListener('load', function () {
             }
         },
         template: `
-        <section class="kbd-en" v-show="show">
-        <kbd  :class="kv.cls" :data-i="i"  v-for="(kv,i) in kbd" >
-        <key :class="get_key_class('c',kv)" v-if="kv.c">{{kv.c.label}}</key>
-        <key :class="get_key_class('u',kv)" v-if="kv.u">{{kv.u.label}}</key>
-        <key :class="get_key_class('d',kv)" v-if="kv.d">{{kv.d.label}}</key>
-        <key :class="get_key_class('l',kv)" v-if="kv.l">{{kv.l.label}}</key>
-        <key :class="get_key_class('r',kv)" v-if="kv.r">{{kv.r.label}}</key>
+        <kbd class="` + name + ` kbd" v-show="show">
+            <kbd  :class="kv.cls + ' keys'" :data-i="i"  v-for="(kv,i) in kbd" >
+                <kbd :class="get_key_class('c',kv)" v-if="kv.c">{{kv.c.label}}</kbd>
+                <kbd :class="get_key_class('u',kv)" v-if="kv.u">{{kv.u.label}}</kbd>
+                <kbd :class="get_key_class('d',kv)" v-if="kv.d">{{kv.d.label}}</kbd>
+                <kbd :class="get_key_class('l',kv)" v-if="kv.l">{{kv.l.label}}</kbd>
+                <kbd :class="get_key_class('r',kv)" v-if="kv.r">{{kv.r.label}}</kbd>
+            </kbd>
         </kbd>
-        </section>
     `,
         data() {
             let data = {
@@ -126,16 +127,43 @@ window.addEventListener('load', function () {
                         "c": {"label": "⏎", code: android.KEYCODE_ENTER},
                         "cls": "kbd_150"
                     },
-                    {"c": {"label": "/"}},
+                    {
+                        "c": {"label": "/"},
+                        u: {label: '?'}
+                    },
                     {"c": {"label": "."}},
                     {
                         "c": {"label": "␣", code: android.KEYCODE_SPACE},
                         "cls": "kbd_150"
                     },
-                    {"c": {"label": "⇨", code: android.KEYCODE_DPAD_RIGHT}},
-                    {"c": {"label": "⇩", code: android.KEYCODE_DPAD_DOWN}},
-                    {"c": {"label": "⇧", code: android.KEYCODE_DPAD_UP}},
-                    {"c": {"label": "⇦", code: android.KEYCODE_DPAD_LEFT}},
+                    {
+                        "c": {
+                            "label": "⇨", fn() {
+                                java.send_right();
+                            }
+                        }
+                    },
+                    {
+                        "c": {
+                            "label": "⇩", fn() {
+                                java.send_down();
+                            }
+                        }
+                    },
+                    {
+                        "c": {
+                            "label": "⇧", fn() {
+                                java.send_up();
+                            }
+                        }
+                    },
+                    {
+                        "c": {
+                            "label": "⇦", fn() {
+                                java.send_left();
+                            }
+                        }
+                    },
                     {
                         "c": {
                             "label": " 🄰", code: android.KEYCODE_SHIFT_LEFT
@@ -152,15 +180,33 @@ window.addEventListener('load', function () {
                     {"c": {"label": "M"}},
                     {"c": {"label": "N"}},
                     {"c": {"label": "B"}},
-                    {"c": {"label": "V"}, u: {label: '粘贴', code: android.KEYCODE_PASTE}},
-                    {"c": {"label": "C"}, u: {label: '复制', code: android.KEYCODE_COPY}},
-                    {"c": {"label": "X"}, u: {label: '剪切', code: android.KEYCODE_CUT}},
+                    {
+                        "c": {"label": "V"}, u: {
+                            label: '粘贴', fn() {
+                                java.send_paste();
+                            }
+                        }
+                    },
+                    {
+                        "c": {"label": "C"}, u: {
+                            label: '复制', fn() {
+                                java.send_copy();
+                            }
+                        }
+                    },
+                    {
+                        "c": {"label": "X"}, u: {
+                            label: '剪切', fn() {
+                                java.send_cut();
+                            }
+                        }
+                    },
                     {
                         "c": {"label": "Z"}, cls: 'kbd_z_margin_left',
                         u: {
                             label: '撤消',
                             fn() {
-                                java.send_key_press(android.KEYCODE_Z, android.META_CTRL_MASK);
+                                java.send_undo();
                             }
                         }
                     },
@@ -182,7 +228,7 @@ window.addEventListener('load', function () {
                         "c": {"label": "A"}, cls: 'kbd_a_margin_left',
                         u: {
                             label: '全选', fn() {
-                                java.send_key_press(android.KEYCODE_A, android.META_CTRL_MASK);
+                                java.send_select_all();
                             }
                         }
                     },
@@ -272,4 +318,4 @@ window.addEventListener('load', function () {
             return data;
         }
     });
-});
+}

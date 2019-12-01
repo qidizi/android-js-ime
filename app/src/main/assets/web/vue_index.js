@@ -1,12 +1,12 @@
-window.addEventListener('load', function () {
+function vue_index(name) {
 // 小于这个毫秒就是按
-    const SMALL_IS_SHORT_PRESS_MS = 750;
-// 小于这个才算按或长按，否则就属于pan
-    const SMALL_IS_PRESS_PX = 10;
+    const SMALL_IS_SHORT_PRESS_MS = 500;
+// 在这个范围内就是按，否则就是swipe
+    const SMALL_IS_PRESS_PX = 5;
 // 长按激活后，多少毫秒发送一次按下事件
     const LONG_PRESS_REPEAT_MS = 50;
-// 用于方向判断：由于越近夹角弧度越小，就越不容易控制，所以，ab点连线长必须达到这个值以上才判断
-    const DIRECTION_MIN_PX = 10;
+    // 达到本px的位移才计一个方向；减少提高灵敏度，增大减少灵敏度
+    const MIN_PX_FOR_ONE_DIRECTION = 10;
 
 // 创建临时全局变量，不放到vue data中，防止刷新ui
 // touch事件关系：
@@ -18,13 +18,9 @@ window.addEventListener('load', function () {
         touch: []
     };
 
-    function id(the_id) {
-        return document.getElementById(the_id);
-    }
-
     window.app = new Vue({
         el: '#app',
-        name: "SimpleKeyboard",
+        name: name,
         data: {
             // 几个控制键是否被按下
             shift_down: false,
@@ -62,40 +58,45 @@ window.addEventListener('load', function () {
             java.js_onload("window.app.java_listener");
         },
         methods: {
-            on_menu(ev) {
+            'on_menu'(ev) {
                 return 'TEXTAREA' === ev.target.tagName;
             },
-            on_touch(ev) {
+            on_touch(touch) {
                 // 检查是否touch了kbd
-                if (!ev.custom_type) ev.custom_type = ev.type;
+                if (!touch.custom_type) touch.custom_type = touch.type;
 
-                if (!(!ev.target || '.KBD.KEY.'.indexOf('.' + ev.target.tagName + '.') < 0)) {
+                if (
+                    'KBD' === touch.target.tagName
+                    && (
+                        has_class(touch.target, 'keys')
+                        || has_class(touch.target, 'key')
+                    )
+                ) {
                     // 附加上点击的键盘
-                    ev.custom_kbd_dom = 'KBD' === ev.target.tagName ? ev.target : ev.target.parentElement;
+                    touch.custom_kbd_dom = has_class(touch.target, 'keys') ? touch.target : touch.target.parentElement;
                     // 找到键盘对象
-                    ev.custom_kbd_i = ev.custom_kbd_dom.dataset.i;
+                    touch.custom_kbd_i = touch.custom_kbd_dom.dataset.i;
 
-                    if ('.long_tab.tab.'.indexOf('.' + ev.custom_type + '.') > -1) {
-                        ev.custom_key = 'c';
-                    } else if ('.u.d.l.r.'.indexOf('.' + ev.custom_type + '.') > -1)
-                        ev.custom_key = ev.custom_type;
-                    ev.custom_key_dom = ev.custom_kbd_dom.querySelector('.kbd-' + ev.custom_key);
+                    if ('.long_tab.tab.'.indexOf('.' + touch.custom_type + '.') > -1) {
+                        touch.custom_key = 'c';
+                    } else if ('.u.d.l.r.'.indexOf('.' + touch.custom_type + '.') > -1)
+                        touch.custom_key = touch.custom_type;
+                    touch.custom_key_dom = touch.custom_kbd_dom.querySelector('.kbd-' + touch.custom_key);
                 }
 
-                // console.log(ev,ev.custom_type, this.$children[this.show_uid - 1], this.show_uid)
-                ev.custom_type.indexOf('>') > 0 ?
+                touch.custom_type.indexOf('>') > 0 ?
                     // 多方向手势
                     this.$children.forEach(function (vm) {
-                        // 注意发送的是手势，不是touch
-                        vm.$emit(ev.custom_type, ev);
+                        // 注意发送的是手势，不是touch；建议只监听0这个手势
+                        vm.$emit(touch.identifier + '-' + touch.custom_type, touch);
                     }) :
                     // 其它只发送给当前显示的键盘
-                    this.$children[this.show_uid - 1].$emit('touch', ev);
+                    this.$children[this.show_uid - 1].$emit('touch', touch);
             },
             on_register_default(vm) {
                 this.show_uid = this.default_uid = this.back_uid = vm._uid
             },
-            on_show_default(vm) {
+            'on_show_default'() {
                 this.$children[this.default_uid - 1].$emit('show');
             },
             on_child_show(vm, can_back) {
@@ -110,77 +111,60 @@ window.addEventListener('load', function () {
             },
             "java_listener"(what, info) {
                 // 接收java通知，比如输入框要求显示数字键盘
+                if ('console_log' === what) {
+                    debug(info.text);
+                }
+
                 this.$children.forEach(function (vm) {
                     vm.$emit(what, info);
                 });
             },
             "on_touch_cancel"(ev) {
                 // 触摸事件被打断，如长按时，文本被选中了触发了右键菜单弹出
-                for (let n = 0; ev.changedTouches[n]; n++) {
-                    let touch = glb.touch[n];
-                    delete glb.touch[n];
+                for (let n = 0, changed_touch; (changed_touch = ev.changedTouches[n]); n++) {
+                    let touch = glb.touch[changed_touch.identifier];
+                    delete glb.touch[changed_touch.identifier];
                     // 只需要取消延时触发长按定时
                     clearTimeout(touch.long_press_timer);
                     // type === touchcancel
-                    this.on_touch(ev);
+                    touch.type = ev.type;
+                    this.on_touch(touch);
                 }
             },
             "on_touch_start"(ev) {
-                for (let n = 0; ev.changedTouches[n]; n++) {
+                for (let n = 0, changed_touch; (changed_touch = ev.changedTouches[n]); n++) {
                     // 手指按下
-                    let ev_ct = ev.changedTouches[n];
                     // 只取起始点的dom
                     // let target = ev.target;
-                    let touch = glb.touch[n] = {};
-                    touch.target = ev.target;
+                    let touch = glb.touch[changed_touch.identifier] = {
+                        identifier: changed_touch.identifier,
+                        type: ev.type,
+                        canceled: false
+                    };
+                    touch.target = changed_touch.target;
                     let vm = this;
                     // 初始该触摸点
                     // 起点坐标与时间
-                    touch.start_x = touch.ax = ev_ct.screenX;
-                    touch.start_y = touch.ay = ev_ct.screenY;
+                    touch.start_x = touch.ax = changed_touch.screenX;
+                    touch.start_y = touch.ay = changed_touch.screenY;
                     touch.start_time = ev.timeStamp;
                     // 起点与b点最大线长
                     touch.start_2_b_max_px = 0;
-                    // 达到长按毫秒数前，最大起点与b点线长，达到这个px才是手势；而按的手指抖动位移是不会超出该px的
-                    touch.before_long_press_start_2_b_max_px = 0;
                     // 长按下后，重复发送down事件的次序（次数，从0开始）
                     touch.long_press_repeat_index = 0;
                     // 从按下到放开，全部移动方向
                     touch.directions = [];
-                    // // 要发送的字符串
-                    // let text = target.getAttribute('data-text');
-                    // touch.text = 'string' === typeof text ? text : '';
-                    // let android_key_code = target.getAttribute('data-android');
-                    // android_key_code = android_key_code ? android_key_code : '';
-                    // touch.with_shift = 0;
-                    // touch.with_ctrl = 0;
-                    //
-                    // // 是否属于按下shift才能出现的键
-                    // if (-1 < android_key_code.indexOf(WITH_SHIFT_SYMBOL)) {
-                    //     android_key_code = android_key_code.replace(WITH_SHIFT_SYMBOL, '');
-                    //     touch.with_shift = 1;
-                    // }
-                    //
-                    // // 是否属于按下ctrl才能出现的键
-                    // if (-1 < android_key_code.indexOf(WITH_CTRL_SYMBOL)) {
-                    //     android_key_code = android_key_code.replace(WITH_CTRL_SYMBOL, '');
-                    //     touch.with_ctrl = 1;
-                    // }
-                    //
-                    // // android完成keyCode字符串
-                    // touch.android_code = android_key_code;
-                    //
                     // 防止意外编程，先清空
                     clearTimeout(touch.long_press_timer);
                     // 超过多少毫秒不放就启动长按处理
                     // 长按只处理android的keyCode单个键码，不处理字符串
                     // 不处理组合键
                     function lp_timer() {
-                        if (touch.start_2_b_max_px > SMALL_IS_PRESS_PX)
+                        if (touch.start_2_b_max_px > SMALL_IS_PRESS_PX || touch.canceled)
                             // 只要有一次最大位移超过，就取消长按
                             return;
-                        ev.custom_type = 'long_tab';
-                        vm.on_touch(ev);
+                        touch.custom_type = 'long_tab';
+                        vm.on_touch(touch);
                         //debug('repeat,', touch.long_press_repeat_index);
                         // 重复唯一序号
                         touch.long_press_repeat_index++;
@@ -192,12 +176,12 @@ window.addEventListener('load', function () {
                 }
             },
             "on_touch_move"(ev) {
-                for (let n = 0; ev.changedTouches[n]; n++) {
+                for (let n = 0, changed_touch; (changed_touch = ev.changedTouches[n]); n++) {
                     // 触摸中移动
-                    let ev_ct = ev.changedTouches[n];
-                    let touch = glb.touch[n];
+                    let touch = glb.touch[changed_touch.identifier];
+                    touch.type = ev.type;
 
-                    if (!touch || touch.target !== ev.target)
+                    if (!touch || touch.target !== changed_touch.target)
                         // 比如子dom触发start，但是禁止start冒泡就会出现异常
                         continue;
 
@@ -205,9 +189,8 @@ window.addEventListener('load', function () {
                     let sx = touch.start_x;
                     let sy = touch.start_y;
                     let ay = touch.ay;
-                    let time = ev.timeStamp;
-                    let bx = ev_ct.screenX;
-                    let by = ev_ct.screenY;
+                    let bx = changed_touch.screenX;
+                    let by = changed_touch.screenY;
                     // 计算与起点连线长
                     // https://baike.baidu.com/item/%E4%B8%A4%E7%82%B9%E9%97%B4%E8%B7%9D%E7%A6%BB%E5%85%AC%E5%BC%8F
                     let sb_px = Math.sqrt(Math.pow(sx - bx, 2) + Math.pow(sy - by, 2));
@@ -218,14 +201,12 @@ window.addEventListener('load', function () {
                         touch.start_2_b_max_px, sb_px
                     );
 
-                    // 判断在长按前是否已经达到手势的起点到b连线长
-                    if (time - touch.start_time < SMALL_IS_SHORT_PRESS_MS) {
-                        touch.before_long_press_start_2_b_max_px = Math.max(
-                            touch.before_long_press_start_2_b_max_px, sb_px
-                        );
-                    }
+                    // 主要超过按的偏移px，就立刻取消长按
+                    if (touch.start_2_b_max_px > SMALL_IS_PRESS_PX)
+                        clearTimeout(touch.long_press_timer);
 
-                    if (ab_px >= DIRECTION_MIN_PX) {
+                    if (ab_px > MIN_PX_FOR_ONE_DIRECTION) {
+                        // 位移多少才按一次swipe计算；
                         // 弧度太小时，手指不好控制，容易误操作，
                         // 只有划超出最小值才计算夹角，且超过最小ab连线长，就使用新的起点来计算
                         // 2个坐标点计算角度;正x为0，正y为90，负x为180，负y为270
@@ -254,14 +235,14 @@ window.addEventListener('load', function () {
                             direction = 'r';
                         }
 
+                        // 超出按（长）的偏移px，才能按swipe算
                         let last_direction = touch.directions[touch.directions.length - 1];
 
                         if (direction !== last_direction) {
                             // 只有移动到不同的方向才计入手势
                             touch.directions.push(direction);
                         }
-
-                        // 使用新a点
+                        // a点要重新设定
                         touch.ax = bx;
                         touch.ay = by;
                     }
@@ -269,11 +250,13 @@ window.addEventListener('load', function () {
             },
             "on_touch_end"(ev) {
                 // 放开触摸
-                for (let n = 0; ev.changedTouches[n]; n++) {
-                    let touch = glb.touch[n];
-                    delete glb.touch[n];
+                for (let n = 0, changed_touch; (changed_touch = ev.changedTouches[n]); n++) {
+                    let touch = glb.touch[changed_touch.identifier];
+                    delete glb.touch[changed_touch.identifier];
+                    touch.type = ev.type;
+                    touch.canceled = true;
 
-                    if (!touch || touch.target !== ev.target)
+                    if (!touch || touch.target !== changed_touch.target)
                         // 比如子dom触发start，但是禁止start冒泡就会出现异常
                         continue;
 
@@ -283,26 +266,19 @@ window.addEventListener('load', function () {
                     let time_is_press = ev.timeStamp - touch.start_time < SMALL_IS_SHORT_PRESS_MS;
                     // 起点b点最大线长属于按？
                     let px_is_press = touch.start_2_b_max_px < SMALL_IS_PRESS_PX;
-                    // 未触发长按前，起点到b最大连线长是否已经达到手势的位移要求
-                    let have_gesture_move = touch.before_long_press_start_2_b_max_px >= SMALL_IS_PRESS_PX;
 
                     if (px_is_press) {
-                        // 位移属于tab范围
-                        ev.custom_type = time_is_press ? 'tab' : 'long_tab';
-                        this.on_touch(ev);
-                        continue;
-                    }
-
-                    if (!have_gesture_move) {
-                        // 虽然最大ab线长达到手势要求，但是限时内的起点到b点并没有达到，导致走了长按，所以不再算手势
+                        // 最大位移属于按或长按范围
+                        touch.custom_type = time_is_press ? 'tab' : 'long_tab';
+                        this.on_touch(touch);
                         continue;
                     }
 
                     touch.directions = touch.directions.join('>');
-                    ev.custom_type = touch.directions;
-                    this.on_touch(ev);
+                    touch.custom_type = touch.directions;
+                    this.on_touch(touch);
                 }
             }
         },
     });
-});
+}

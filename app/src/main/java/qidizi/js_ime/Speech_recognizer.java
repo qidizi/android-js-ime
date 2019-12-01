@@ -69,7 +69,7 @@ public class Speech_recognizer implements RecognitionListener {
                 if (null == speech_recognizer) return;
                 if (null == speechIntent) create_intent();
 
-                // 小米9设置语音输入为小爱同学时，会出现无法绑定的异常，需要去掉勾选成fq，讯飞语记才能使用；
+                // 小米9设置语音输入为小爱同学时，会出现无法绑定的异常，需要去掉勾选成讯飞语记才能使用；
                 speech_recognizer.startListening(speechIntent);
             }
         };

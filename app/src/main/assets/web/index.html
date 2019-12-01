@@ -4,17 +4,46 @@
     <script>
         // 直接在这里追加自定义模块即可
         let vue_components = [
-            'kbd-wu-bi',
-            'kbd-en',
-            'kbd-quick',
-            "speech"
+            'vue_wu_bi',
+            'vue_en',
+            'vue_quick',
+            "vue_speech"
         ];
+
         ///////////////////////
+
+        function load_js(name, onload) {
+            let js = document.createElement('script');
+            js.src = name + '.js?' + +new Date;
+            if ('function' === typeof onload)
+                js.onload = function cb() {
+                    this.onload = null;
+                    this.remove();
+                    onload(name);
+                };
+            document.getElementsByTagName('head')[0].appendChild(js);
+        }
+
+        function id(the_id) {
+            return document.getElementById(the_id);
+        }
+
+        function has_class(dom, cls) {
+            if (!dom || !dom.className) return false;
+            let tmp = ',' + dom.className.toLowerCase().replace(/\s+/g, ',') + ',';
+            cls = cls.toLowerCase().replace(/\s+/g, ',');
+            cls = cls.split(',');
+            let match_count = 0;
+            cls.forEach(function (c, i) {
+                if (tmp.indexOf(',' + c + ',') > -1) match_count++;
+            });
+            return match_count === cls.length;
+        }
 
         // 独立出来，防止其它js出错
         function debug() {
             //console.log.apply(console, arguments);
-            let dom = document.getElementById('debug_box');
+            let dom = id('debug_box');
             dom.style.display = 'block';
             let str = [];
 
@@ -38,7 +67,7 @@
 </head>
 <body>
 <p id="init"><!--方便检查是否加载html-->键盘初始化中...</p>
-<code ondblclick="this.innerHTML = '';this.style.display = 'none';" id="debug_box" class="debug_box"></code>
+<header ondblclick="this.innerHTML = '';this.style.display = 'none';" id="debug_box" class="debug_box"></header>
 <main id="app" style="display: none;"
       @touchcancel="on_touch_cancel" @touchstart="on_touch_start"
       @touchmove="on_touch_move" @touchend="on_touch_end"
@@ -46,29 +75,48 @@
 >
 </main>
 <script>
-    // 加载html使用的是file://协议，无法使用<script type="module"，否则将会触发以下错误
-    // "Failed to load module script: The server responded with a non-JavaScript MIME type of "".
-    // Strict MIME type checking is enforced for module scripts per HTML spec.",
-    // source: file:///android_asset/web/index.js?1569008605055 (0)
-    // 键盘来的浏览器userAgent添加了自定义标志 SoftKeyboard
-    let js = [navigator.userAgent.indexOf('SoftKeyboard') ? 'vue' : 'vue.dev', 'java'];
-    js = js.concat(vue_components);
-    vue_components.forEach(function (v, i) {
-        vue_components[i] = '<' + v + '>' + '</' + v + '>';
-    });
-    document.getElementById('app').innerHTML = vue_components.join('');
-    js = js.concat('index');
-    for (let i = 97; i <= 122; i++) js.unshift('wu_bi_' + String.fromCharCode(i));
-    let css = document.createElement('link');
-    css.rel = 'stylesheet';
-    css.href = "index.css?s" + +new Date;
-    document.getElementsByTagName('head')[0].appendChild(css);
-    js.forEach(function (name) {
-        let js = document.createElement('script');
-        js.src = name + '.js?' + +new Date;
-        js.setAttribute('async',false);
-        document.getElementsByTagName('head')[0].appendChild(js);
-    });
+    +function () {
+        // 加载html使用的是file://协议，无法使用<script type="module"，否则将会触发以下错误
+        // "Failed to load module script: The server responded with a non-JavaScript MIME type of "".
+        // Strict MIME type checking is enforced for module scripts per HTML spec.",
+        // source: file:///android_asset/web/index.js?1569008605055 (0)
+        // 键盘来的浏览器userAgent添加了自定义标志 js_ime
+        // 放置vue自定义组件标签
+        let vue_html = '';
+        vue_components.forEach(function (v, i) {
+            vue_html += '<' + v + '>' + '</' + v + '>';
+        });
+        id('app').innerHTML = vue_html;
+
+        // 加载样式
+        let css = document.createElement('link');
+        css.rel = 'stylesheet';
+        css.href = "index.css?s" + +new Date;
+        document.getElementsByTagName('head')[0].appendChild(css);
+        let loads = 0;
+
+        function on_load(name) {
+            loads++;
+            // 全部加载完成才处理
+            if (loads !== vue_components.length) return;
+            vue_components.forEach(function (file, i) {
+                // vue准备好了，初始化
+                if ('function' !== typeof window[file]) return;
+                window[file].call(Vue, file, i);
+            });
+        }
+
+        vue_components = [
+            navigator.userAgent.indexOf('js_ime') > -1 ? 'vue' : 'vue.dev',
+            'java'
+        ]
+            .concat(vue_components);
+        // 最后才初始index
+        vue_components.push('vue_index');
+        vue_components.forEach(function (name) {
+            load_js(name, on_load);
+        });
+    }();
 </script>
 </body>
 </html>

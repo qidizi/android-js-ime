@@ -338,5 +338,32 @@ window.java = {
     },
     cancel_speech_recognizer() {
         window['JAVA'] ? window['JAVA'].cancel_speech_recognizer() : debug('java收到取消语音识别的请求');
+    },
+    send_cut() {
+        java.send_key_press(android.KEYCODE_X, android.META_CTRL_MASK);
+    },
+    send_paste() {
+        java.send_key_press(android.KEYCODE_V, android.META_CTRL_MASK);
+    },
+    send_select_all() {
+        java.send_key_press(android.KEYCODE_A, android.META_CTRL_MASK);
+    },
+    send_undo() {
+        java.send_key_press(android.KEYCODE_Z, android.META_CTRL_MASK);
+    },
+    send_copy() {
+        java.send_key_press(android.KEYCODE_C, android.META_CTRL_MASK);
+    },
+    send_left() {
+        java.send_key_press(android.KEYCODE_DPAD_LEFT);
+    },
+    send_right() {
+        java.send_key_press(android.KEYCODE_DPAD_RIGHT);
+    },
+    send_up() {
+        java.send_key_press(android.KEYCODE_DPAD_UP);
+    },
+    send_down() {
+        java.send_key_press(android.KEYCODE_DPAD_DOWN);
     }
 };

@@ -1,7 +1,7 @@
-window.addEventListener('load', function () {
+function vue_quick(name) {
 // 快捷短语保存在localStorage的key
     const QUICK_INPUT_ITEM_NAME = 'quick_input_list';
-    Vue.component('kbd-quick', {
+    Vue.component(name, {
         data() {
             return {
                 lines: '',
@@ -13,7 +13,7 @@ window.addEventListener('load', function () {
         },
         mounted() {
             // 加载快捷短语
-            this.$on('r>l', this.on_show);
+            this.$on('0-r>l', this.on_show);
             this.$on('hide', this.on_hide);
             this.$on('touch', this.on_touch);
             //this.$root.$emit('register_default', this, this.show = true);
@@ -118,11 +118,19 @@ window.addEventListener('load', function () {
             on_edit_cancel() {
                 this.show_editor = false;
                 this.lines = '';
-            }
+            },
+            get_key_class(which, kv) {
+                let obj = kv[which];
+                if (!obj) return 'hide';
+                let cls = which;
+                if (obj.cls) cls += ' ' + obj.cls;
+                return cls + ' key';
+            },
         },
         template: `
-    <section class="quick_words" v-show="show">
-        <div class="editor_box" v-show="show_editor">
+        <kbd class="`+name+` kbd" v-show="show">
+        
+        <footer class="editor_box" v-show="show_editor">
             <textarea 
             class="quick_editor"
              placeholder="说明   请剪出编辑，再贴回应用\n键面文字       上屏内容文字\n键面文字2     上屏内容文字2\n"
@@ -130,18 +138,18 @@ window.addEventListener('load', function () {
              ></textarea>
              <button class="cancel btn" @click.stop.prevent="on_edit_cancel">取消</button>
              <button class="apply btn" @click.stop.prevent="on_save">应用</button>
-         </div>
-        <kbd  v-show="show" v-for="(kv,i) in quick_input_parse" :data-i="i">
-        <key class="c" v-if="kv.c">{{kv.c.label}}</key>
-        <key class="u" v-if="kv.u">{{kv.u.label}}</key>
-        <key class="d" v-if="kv.d">{{kv.d.label}}</key>
-        <key class="l" v-if="kv.l">{{kv.l.label}}</key>
-        <key class="r" v-if="kv.r">{{kv.r.label}}</key>
+         </footer>
+         
+            <kbd  :class="kv.cls + ' keys'" :data-i="i"  v-for="(kv,i) in quick_input_parse" >
+                <kbd :class="get_key_class('c',kv)" v-if="kv.c">{{kv.c.label}}</kbd>
+                <kbd :class="get_key_class('u',kv)" v-if="kv.u">{{kv.u.label}}</kbd>
+                <kbd :class="get_key_class('d',kv)" v-if="kv.d">{{kv.d.label}}</kbd>
+                <kbd :class="get_key_class('l',kv)" v-if="kv.l">{{kv.l.label}}</kbd>
+                <kbd :class="get_key_class('r',kv)" v-if="kv.r">{{kv.r.label}}</kbd>
+            </kbd>       
         </kbd>
-    </section>
 `
 
     })
     ;
-})
-;
+}

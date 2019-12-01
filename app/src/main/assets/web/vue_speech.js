@@ -1,5 +1,5 @@
 /** 语音转文本组件 **/
-window.addEventListener('load', function () {
+function vue_speech(name) {
     const WAIT_TIP = '^_^ 请稍候...';
     const TIP = '^_^ 请点我开始说话';
     const LISTEN_TIP = '^_^ Hi，准备好了，请说话...说完点我开始识别';
@@ -12,7 +12,7 @@ window.addEventListener('load', function () {
     // 识别中
     const RECOGNIZING = 4;
     let status = READY;
-    Vue.component('speech', {
+    Vue.component(name, {
         data() {
             return {
                 text: TIP,
@@ -48,9 +48,9 @@ window.addEventListener('load', function () {
                 this.text = '没听懂！点我再试一次呗。';
                 this.result_cls = 'fail';
             });
-            this.$on('l>r', this.on_show);
+            this.$on('0-l>r', this.on_show);
             this.$on('hide', this.on_hide);
-           // this.$root.$emit('register_default', this, this.show = true);
+            // this.$root.$emit('register_default', this, this.show = true);
         },
         methods: {
             on_show() {
@@ -92,15 +92,22 @@ window.addEventListener('load', function () {
                 java.send_text(this.text);
                 this.text = TIP;
                 this.result_cls = '';
-            }
+            },
+            get_key_class(which, kv) {
+                let obj = kv[which];
+                if (!obj) return 'hide';
+                let cls = which;
+                if (obj.cls) cls += ' ' + obj.cls;
+                return cls + ' key';
+            },
         },
         template: `
-    <div class="speech" v-show="show">
+    <kbd class="` + name + ` kbd" v-show="show">
+        <button @click="on_commit_text" class="apply btn">上屏</button>
+        <button @click="on_back" class="cancel btn">返回</button>
         <input type="button" :class="'speech_result ' + result_cls"
          @click.stop.prevent="speech_recognizer" v-model.trim="text" />
-        <button @click="on_back" class="cancel btn">返回</button>
-        <button @click="on_commit_text" class="apply btn">上屏</button>
-    </div>
+    </kbd>
     `
     });
-});
+}

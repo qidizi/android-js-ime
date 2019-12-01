@@ -160,7 +160,7 @@ public class SoftKeyboard extends InputMethodService {
         webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE); // 无缓存
         webSettings.setDatabaseEnabled(true);
         webSettings.setDomStorageEnabled(true);
-        webSettings.setUserAgentString(webSettings.getUserAgentString() + " SoftKeyboard");
+        webSettings.setUserAgentString(webSettings.getUserAgentString() + " in_android js_ime");
 
         if (Build.VERSION.SDK_INT >= 26)
             // 检查网址是否安全
@@ -192,11 +192,11 @@ public class SoftKeyboard extends InputMethodService {
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
                 // 总是弹出给用户，防止自定义时空白页不知道原因
-                Toast.makeText(
-                        ct,
-                        consoleMessage.message() + "#" + consoleMessage.lineNumber(),
-                        Toast.LENGTH_LONG
-                ).show();
+                SoftKeyboard.emit_js_str(
+                        webView,
+                        "console_log",
+                        consoleMessage.lineNumber() + "#" + consoleMessage.message()
+                );
                 return super.onConsoleMessage(consoleMessage);
             }
         });

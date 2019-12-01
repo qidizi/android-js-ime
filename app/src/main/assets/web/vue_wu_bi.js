@@ -1,4 +1,7 @@
-window.addEventListener('load', function () {
+for (let i = 97; i <= 122; i++)
+    load_js('vue_wu_bi_' + String.fromCharCode(i));
+
+function vue_wu_bi(name) {
 // 匹配中文，候选框只显示前面x个
     const CANDIDATE_LIMIT = 15;
 // 码表中码词之间分隔符
@@ -6,9 +9,9 @@ window.addEventListener('load', function () {
 // 码表中2组kw之间分隔
     const CODE_LIST_SEPARATE = ',';
 
-    Vue.component('kbd-wu-bi', {
+    Vue.component(name, {
         mounted() {
-            this.$on(['d>u', 'show'], this.on_show);
+            this.$on(['0-d>u', 'show'], this.on_show);
             this.$on('hide', this.on_hide);
             this.$on('touch', this.on_touch);
             //this.$root.$emit('register_default', this, this.show = true);
@@ -109,7 +112,7 @@ window.addEventListener('load', function () {
                 // 开始匹配码表和显示候选
                 let tmp = [];
 
-                if (4 < keys.length) {
+                if (keys.length > 4) {
                     // 不允许输入超过4码
                     return;
                 } else {
@@ -143,6 +146,11 @@ window.addEventListener('load', function () {
                             return;
                         }
                     }
+                }
+
+                if (!tmp.length) {
+                    // 如果继续加码，没有匹配了，不接受输入；另一种处理方案是可以清空；
+                    return;
                 }
 
                 this.keys = keys;
@@ -186,34 +194,42 @@ window.addEventListener('load', function () {
                 this.candidates = [];
                 this.keys = '';
             },
-            choice_candidate(word) {
+            'choice_candidate'(word) {
                 java.send_text(word);
                 this.keyboard_reset();
-            }
+            },
+            get_key_class(which, kv) {
+                let obj = kv[which];
+                if (!obj) return 'hide';
+                let cls = which;
+                if (obj.cls) cls += ' ' + obj.cls;
+                return cls + ' key';
+            },
         },
 
         //http://xahlee.info/comp/unicode_computing_symbols.html
-        template: `
-        <section class="kbd-wu-bi" v-show="show">
-
-            <kbd  v-for="(kv,i) in kbd" :class="kv.cls" :data-i="i">
-            <key class="c" v-if="kv.c">{{kv.c.label}}</key>
-            <key class="u" v-if="kv.u">{{kv.u.label}}</key>
-            <key class="d" v-if="kv.d">{{kv.d.label}}</key>
-            <key class="l" v-if="kv.l">{{kv.l.label}}</key>
-            <key class="r" v-if="kv.r">{{kv.r.label}}</key>
+        template: `            
+        <kbd class="` + name + ` kbd" v-show="show">
+            <kbd  :class="kv.cls + ' keys'" :data-i="i"  v-for="(kv,i) in kbd" >
+                <kbd :class="get_key_class('c',kv)" v-if="kv.c">{{kv.c.label}}</kbd>
+                <kbd :class="get_key_class('u',kv)" v-if="kv.u">{{kv.u.label}}</kbd>
+                <kbd :class="get_key_class('d',kv)" v-if="kv.d">{{kv.d.label}}</kbd>
+                <kbd :class="get_key_class('l',kv)" v-if="kv.l">{{kv.l.label}}</kbd>
+                <kbd :class="get_key_class('r',kv)" v-if="kv.r">{{kv.r.label}}</kbd>
             </kbd>
             
-            <nav class="candidates">
-            <code v-for="(t,i) in candidates" @click.stop.prevent="choice_candidate(t.words)">
-            <sup>
-            <b>{{keys}}</b>{{t.keys.substr(keys.length)}}
-            </sup>
-            <sub>{{t.words}}</sub>
-            </code>
-            </nav>
             
-            </section>
+            
+            <header class="candidates">
+                <samp v-for="(t,i) in candidates" @click.stop.prevent="choice_candidate(t.words)">
+                    <sup>
+                        <mark>{{keys}}</mark>{{t.keys.substr(keys.length)}}
+                    </sup>
+                    <sub>{{t.words}}</sub>
+                </samp>
+            </header>
+            
+        </kbd>
     `,
         data() {
             return {
@@ -245,6 +261,11 @@ window.addEventListener('load', function () {
                     {
                         "c": {"label": "⌫", code: android.KEYCODE_DEL},
                         "u": {"label": "⌦", code: android.KEYCODE_FORWARD_DEL},
+                        d: {
+                            label: "清码", fn() {
+                                this.keyboard_reset();
+                            }
+                        },
                         "cls": "kbd_bs_w"
                     },
                     {"c": {"label": "！"},},
@@ -260,19 +281,31 @@ window.addEventListener('load', function () {
                         "c": {"label": "V"},
                         "l": {"label": "["},
                         "r": {"label": "]"}
-                        , u: {label: '粘贴', code: android.KEYCODE_PASTE}
+                        , u: {
+                            label: '粘贴', fn() {
+                                java.send_paste();
+                            }
+                        }
                     },
                     {
                         "c": {"label": "C"},
                         "l": {"label": "〔"},
                         "r": {"label": "〕"}
-                        , u: {label: '复制', code: android.KEYCODE_COPY}
+                        , u: {
+                            label: '复制', fn() {
+                                java.send_copy();
+                            }
+                        }
                     },
                     {
                         "c": {"label": "X"},
                         "l": {"label": "【"},
                         "r": {"label": "】"}
-                        , u: {label: '剪切', code: android.KEYCODE_CUT}
+                        , u: {
+                            label: '剪切', fn() {
+                                java.send_cut();
+                            }
+                        }
                     },
                     {
                         "c": {"label": "Z"},
@@ -312,7 +345,7 @@ window.addEventListener('load', function () {
                         "c": {"label": "A"}, cls: 'kbd_a_margin_left',
                         u: {
                             label: '全选', fn() {
-                                java.send_key_press(android.KEYCODE_A, android.META_CTRL_MASK);
+                                java.send_select_all();
                             }
                         }
                     },
@@ -349,4 +382,4 @@ window.addEventListener('load', function () {
             };
         }
     });
-});
+}
