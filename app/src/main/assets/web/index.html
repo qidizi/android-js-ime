@@ -12,6 +12,18 @@
 
         ///////////////////////
 
+
+        function ajax(src, cb, method, body) {
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (200 === xhr.status) {
+                    'function' === typeof cb && cb.call(xhr, xhr.responseText);
+                }
+            };
+            xhr.open(method || 'GET', src);
+            xhr.send(body);
+        }
+
         function load_js(name, onload) {
             let js = document.createElement('script');
             js.src = name + '.js?' + +new Date;

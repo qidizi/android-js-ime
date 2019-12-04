@@ -1,13 +1,29 @@
-for (let i = 97; i <= 122; i++)
-    load_js('vue_wu_bi_' + String.fromCharCode(i));
+// 码表中码词之间分隔符
+const WU_BI_KEY_WORD_SEPARATE = ' ';
+// 码表中2组kw之间分隔
+const WU_BI_KEY_WORD_GROUP_SEPARATE = '\n';
+ajax('vue_wu_bi_dict.txt?' + +new Date, function (str) {
+    window.vue_wu_bi_dict = {};
+    let start = 0;
+    for (let i = 'a'.charCodeAt(0); i <= 'z'.charCodeAt(0); i++) {
+        let char = String.fromCharCode(i);
+
+        if ('y' === char) {
+            vue_wu_bi_dict[char] = str.substring(start).trim();
+            break;
+        }
+
+        let next_char = str.indexOf(
+            WU_BI_KEY_WORD_GROUP_SEPARATE + String.fromCharCode(i + 1)
+        );
+        vue_wu_bi_dict[char] = str.substring(start, next_char + 1).trim();
+        start = next_char + 1;
+    }
+});
 
 function vue_wu_bi(name) {
 // 匹配中文，候选框只显示前面x个
     const CANDIDATE_LIMIT = 15;
-// 码表中码词之间分隔符
-    const CODE_LIST_KEY_WORD_SEPARATE = ' ';
-// 码表中2组kw之间分隔
-    const CODE_LIST_SEPARATE = ',';
 
     Vue.component(name, {
         mounted() {
@@ -120,27 +136,24 @@ function vue_wu_bi(name) {
                     //let start_time = +new Date;
                     // 大概意思是只取前n个以该码开头的匹配
                     let reg = new RegExp(
-                        '(?:(?:^|'
-                        + CODE_LIST_SEPARATE
-                        + ')' + keys + '[a-z]*' + CODE_LIST_KEY_WORD_SEPARATE
-                        + '[^' + CODE_LIST_KEY_WORD_SEPARATE + CODE_LIST_SEPARATE
-                        + ']+){1,' + CANDIDATE_LIMIT + '}'
+                        '((?!'
+                        + WU_BI_KEY_WORD_GROUP_SEPARATE
+                        + ')' + keys + '[^' + WU_BI_KEY_WORD_GROUP_SEPARATE
+                        + ']+)', 'g'
                     );
-                    let match = window['wu_bi_' + keys.substr(0, 1)].match(reg);
+                    let match = (WU_BI_KEY_WORD_GROUP_SEPARATE + vue_wu_bi_dict[keys[0]]);
+                    match = match.match(reg);
                     //debug('码表匹配耗时：' + (+new Date - start_time));
 
                     if (match) {
                         // 有匹配
-                        // 会出现,aa 中文这样的结果，要把首个分隔去掉
-                        let first_sp = new RegExp('^' + CODE_LIST_SEPARATE);
-                        match = match[0].replace(first_sp, '').split(CODE_LIST_SEPARATE);
-                        match.forEach(function (kw) {
-                            kw = kw.split(CODE_LIST_KEY_WORD_SEPARATE);
+                        match.slice(0, CANDIDATE_LIMIT).forEach(function (kw) {
+                            kw = kw.split(WU_BI_KEY_WORD_SEPARATE);
                             tmp.push({keys: kw[0], words: kw[1]});
                         });
 
-                        if (4 === keys.length && 1 === tmp.length) {
-                            // 4码唯一，自动上屏
+                        if (1 === tmp.length) {
+                            // 唯一，自动上屏
                             java.send_text(tmp[0].words);
                             this.keyboard_reset();
                             return;

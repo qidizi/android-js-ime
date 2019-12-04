@@ -295,14 +295,31 @@ function vue_en(name) {
                         "l": {"label": "\\"},
                         "r": {"label": "|"}
                     },
-                    {"c": {"label": 4}, "u": {"label": "$"}, "l": {"label": ";"}, "r": {"label": ":"}},
+                    {
+                        "c": {"label": 4}, "u": {"label": "$"}, "l": {"label": ";"},
+                        "r": {"label": ":"}
+                    },
                     {
                         "c": {"label": 3},
                         "u": {"label": "#"},
                         "l": {"label": "'"},
-                        "r": {"label": "\""}
+                        "r": {"label": "\""},
+                        "d": {
+                            "label": "⇥", fn() {
+                                java.send_key_press(android.KEYCODE_TAB, android.META_SHIFT_MASK);
+                            }
+                        }
                     },
-                    {"c": {"label": 2}, "u": {"label": "@"}, "l": {"label": "<"}, "r": {"label": ">"}},
+                    {
+                        "c": {"label": 2}, "u": {"label": "@"},
+                        "l": {"label": "<"},
+                        "r": {"label": ">"},
+                        "d": {
+                            "label": "⇥", fn() {
+                                java.send_key_press(android.KEYCODE_TAB);
+                            }
+                        }
+                    },
                     {
                         "c": {"label": 1},
                         "u": {"label": "!"},
