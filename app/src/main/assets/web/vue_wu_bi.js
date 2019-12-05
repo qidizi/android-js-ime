@@ -141,6 +141,7 @@ function vue_wu_bi(name) {
                         + ')' + keys + '[^' + WU_BI_KEY_WORD_GROUP_SEPARATE
                         + ']+)', 'g'
                     );
+                    // 注意使用的是支持单行多义，如： kkkk 口 咒骂
                     let match = (WU_BI_KEY_WORD_GROUP_SEPARATE + vue_wu_bi_dict[keys[0]]);
                     match = match.match(reg);
                     //debug('码表匹配耗时：' + (+new Date - start_time));
@@ -148,8 +149,11 @@ function vue_wu_bi(name) {
                     if (match) {
                         // 有匹配
                         match.slice(0, CANDIDATE_LIMIT).forEach(function (kw) {
+                            if (tmp.length >= CANDIDATE_LIMIT) return;
                             kw = kw.split(WU_BI_KEY_WORD_SEPARATE);
-                            tmp.push({keys: kw[0], words: kw[1]});
+
+                            for (let i = 1; i < kw.length; i++)
+                                tmp.push({keys: kw[0], words: kw[i]});
                         });
 
                         if (1 === tmp.length) {

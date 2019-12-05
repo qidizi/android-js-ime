@@ -37,6 +37,7 @@
     </legend>
     <input class="w100" id="clean_var" placeholder="粘贴vue_wu_bi_a-z.js内容到此，点开始后复制使用">
 </fieldset>
+<input type="button" onclick="clean()" value="清理后导出" />
 <script>
     function ajax(src, cb, method, body) {
         let xhr = new XMLHttpRequest();
@@ -53,6 +54,48 @@
     ajax('cn_order.txt', function (str) {
         cn_order = str.replace(/\s+/g, '');
     });
+
+    function clean() {
+        ajax('vue_wu_bi_dict.txt', function (str) {
+            str = str.trim().split('\n');
+            let dict = [];
+            str.forEach(function (line) {
+                line = line.trim().replace(/\s+/, ' ');
+                line = line.split(' ');
+                let key = line[0];
+                let word = line[1];
+                let no_exists = false;
+                word.split('').forEach(function (w) {
+                    if (cn_order.indexOf(w) < 0) {
+                        no_exists = true;
+                    }
+                });
+
+                if (no_exists) {
+                    // 常用字中没有，这个词可以不要了。
+                    return;
+                }
+
+                let code = key[0].charCodeAt(0);
+                if (!dict[code]) dict[code] = [];
+                dict[code].push(key + ' ' + word);
+            });
+
+            let tmp = [];
+            dict.forEach(function (array) {
+                if (!array || !array.length) return;
+                tmp = tmp.concat(array);
+            });
+            let blob = new Blob([tmp.join('\n')], {type: 'plain/text'});
+            let url = window.URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = 'vue_wu_bi_dict.txt';
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);// 释放createObjectURL对象
+        });
+    }
 
     // 致善词表处理
     function ys168() {
