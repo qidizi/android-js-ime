@@ -24,7 +24,7 @@ ajax('vue_wu_bi_dict.txt?' + +new Date, function (str) {
 
 function vue_wu_bi(name) {
 // 匹配中文，候选框只显示前面x个
-    const CANDIDATE_LIMIT = 30;
+    const CANDIDATE_LIMIT = 10;
 
     Vue.component(name, {
         mounted() {
