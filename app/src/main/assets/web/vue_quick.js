@@ -33,6 +33,30 @@ function vue_quick(name) {
                                 java.send_key_press(android.KEYCODE_Z, android.META_CTRL_MASK);
                             }
                         },
+                    },
+                    {
+                        c: {
+                            label: '⏎',
+                            fn() {
+                                java.send_key_press(android.KEYCODE_ENTER);
+                            }
+                        }
+                    },
+                    {
+                        c: {
+                            label: '⌫',
+                            fn() {
+                                java.send_key_press(android.KEYCODE_DEL);
+                            }
+                        }
+                    },
+                    {
+                        c: {
+                            label: '␣',
+                            fn() {
+                                java.send_key_press(android.KEYCODE_SPACE);
+                            }
+                        }
                     }
                 ];
                 let sides;
@@ -128,7 +152,7 @@ function vue_quick(name) {
             },
         },
         template: `
-        <kbd class="`+name+` kbd" v-show="show">
+        <kbd class="` + name + ` kbd" v-show="show">
         
         <footer class="editor_box" v-show="show_editor">
             <textarea 

@@ -79,7 +79,7 @@ kbd.kbd {
 }
 
 kbd.kbd > kbd.keys {
-    background-color: #e8e8e8;
+    background-color: white;
     border-radius: 6px;
     overflow: hidden;
     cursor: pointer;

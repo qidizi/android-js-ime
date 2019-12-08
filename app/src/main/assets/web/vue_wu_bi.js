@@ -2,6 +2,7 @@
 const WU_BI_KEY_WORD_SEPARATE = ' ';
 // 码表中2组kw之间分隔
 const WU_BI_KEY_WORD_GROUP_SEPARATE = '\n';
+// 这个词库建议从qq五笔中导出它的系统词库
 ajax('vue_wu_bi_dict.txt?' + +new Date, function (str) {
     window.vue_wu_bi_dict = {};
     let start = 0;
@@ -23,7 +24,7 @@ ajax('vue_wu_bi_dict.txt?' + +new Date, function (str) {
 
 function vue_wu_bi(name) {
 // 匹配中文，候选框只显示前面x个
-    const CANDIDATE_LIMIT = 15;
+    const CANDIDATE_LIMIT = 30;
 
     Vue.component(name, {
         mounted() {
@@ -126,52 +127,46 @@ function vue_wu_bi(name) {
                 }
 
                 // 开始匹配码表和显示候选
-                let tmp = [];
 
                 if (keys.length > 4) {
                     // 不允许输入超过4码
                     return;
-                } else {
-                    // 只有合理的码，才查找
-                    //let start_time = +new Date;
-                    // 大概意思是只取前n个以该码开头的匹配
-                    let reg = new RegExp(
-                        '((?!'
-                        + WU_BI_KEY_WORD_GROUP_SEPARATE
-                        + ')' + keys + '[^' + WU_BI_KEY_WORD_GROUP_SEPARATE
-                        + ']+)', 'g'
-                    );
-                    // 注意使用的是支持单行多义，如： kkkk 口 咒骂
-                    let match = (WU_BI_KEY_WORD_GROUP_SEPARATE + vue_wu_bi_dict[keys[0]]);
-                    match = match.match(reg);
-                    //debug('码表匹配耗时：' + (+new Date - start_time));
-
-                    if (match) {
-                        // 有匹配
-                        match.slice(0, CANDIDATE_LIMIT).forEach(function (kw) {
-                            if (tmp.length >= CANDIDATE_LIMIT) return;
-                            kw = kw.split(WU_BI_KEY_WORD_SEPARATE);
-
-                            for (let i = 1; i < kw.length; i++)
-                                tmp.push({keys: kw[0], words: kw[i]});
-                        });
-
-                        if (1 === tmp.length) {
-                            // 唯一，自动上屏
-                            java.send_text(tmp[0].words);
-                            this.keyboard_reset();
-                            return;
-                        }
-                    }
                 }
 
-                if (!tmp.length) {
+                let match_words = [];
+                let words = WU_BI_KEY_WORD_GROUP_SEPARATE + vue_wu_bi_dict[keys[0]];
+                //let start_time = +new Date;
+                // 大概意思是只取前n个以该码开头的匹配
+                // 注意词库并不一定是按key的顺序排序，所以，顺序的key并不会出现在顺排位置，而是按词频来排序
+                let reg = new RegExp(
+                    WU_BI_KEY_WORD_GROUP_SEPARATE + keys
+                    + '[^' + WU_BI_KEY_WORD_GROUP_SEPARATE + ']+',
+                    'g'
+                );
+                // 注意使用的词库是支持单行多义，如： kkkk 口 咒骂
+                let kw, limit = CANDIDATE_LIMIT;
+
+                while (limit-- > 0 && (kw = reg.exec(words))) {
+                    kw = kw[0].trim().split(WU_BI_KEY_WORD_SEPARATE);
+
+                    for (let i = 1; i < kw.length; i++)
+                        match_words.push({keys: kw[0], words: kw[i]});
+                }
+
+                if (!match_words.length) {
                     // 如果继续加码，没有匹配了，不接受输入；另一种处理方案是可以清空；
                     return;
                 }
 
+                if (1 === match_words.length) {
+                    // 唯一，自动上屏
+                    java.send_text(match_words[0].words);
+                    this.keyboard_reset();
+                    return;
+                }
+
                 this.keys = keys;
-                this.candidates = tmp;
+                this.candidates = match_words;
             },
             "on_long_press"(code) {
                 // 五笔键盘长按事件

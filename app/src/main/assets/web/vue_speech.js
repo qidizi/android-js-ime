@@ -93,6 +93,15 @@ function vue_speech(name) {
                 this.text = TIP;
                 this.result_cls = '';
             },
+            'on_enter'() {
+                java.send_key_press(android.KEYCODE_ENTER);
+            },
+            'on_del'() {
+                java.send_key_press(android.KEYCODE_DEL);
+            },
+            'on_space'() {
+                java.send_key_press(android.KEYCODE_SPACE);
+            },
             get_key_class(which, kv) {
                 let obj = kv[which];
                 if (!obj) return 'hide';
@@ -104,6 +113,9 @@ function vue_speech(name) {
         template: `
     <kbd class="` + name + ` kbd" v-show="show">
         <button @click="on_commit_text" class="apply btn">上屏</button>
+        <button @click="on_enter" class="btn cancel">⏎</button>
+        <button @click="on_del" class="btn cancel">⌫</button>
+        <button @click="on_space" class="btn cancel">␣</button>
         <button @click="on_back" class="cancel btn">返回</button>
         <input type="button" :class="'speech_result ' + result_cls"
          @click.stop.prevent="speech_recognizer" v-model.trim="text" />
