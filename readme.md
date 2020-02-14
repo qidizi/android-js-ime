@@ -8,7 +8,12 @@
 *. 支持完整pc控制功能，比如ctrl、alt、ctrl+c等   
 *. 更多功能可以通过修改html来实现   
 *. 项目github https://github.com/qidizi/android-js-ime  
-*. 测试环境：小米9+android 10、模拟器中的android 9      
+*. 测试环境：小米9+android 10、模拟器中的android 9  
+
+# 感谢  
+
+*. 感谢JetBrains，为本开源项目免费提供全家桶的授权码，https://www.jetbrains.com/?from=android-js-ime  
+*. 感谢[qq输入法](http://qq.pinyin.cn/)![logo](screenshot/qq_wu_bi_input.png)提供五笔码表；
 
 # 截图 
 
