@@ -12,14 +12,13 @@
 
 # 感谢  
 
-*. 感谢JetBrains，为本开源项目免费提供全家桶的授权码，https://www.jetbrains.com/?from=android-js-ime  
+*. 感谢[JetBrains](https://www.jetbrains.com/?from=android-js-ime)![logo](screenshot/jetbrains.png)，为本开源项目免费提供全家桶的授权码    
 *. 感谢[qq输入法](http://qq.pinyin.cn/)![logo](screenshot/qq_wu_bi_input.png)提供五笔码表；
 
-# 截图 
+# 自己使用的键盘截图 
 
-![五笔](wu_bi.jpg)   
-![英文](en.jpg)   
-![符号](symbol.jpg)   
-![数字](number.jpg)   
-![语音输入](speech_to_text.jpg)   
+![五笔](screenshot/keyboard_wu_bi.jpg)   
+![英文](screenshot/keyboard_en.jpg)   
+![短语](screenshot/keyboard_quick_word.jpg)   
+![语音输入](screenshot/keyboard_speech.jpg)   
 
