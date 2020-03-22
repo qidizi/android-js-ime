@@ -1,6 +1,5 @@
 package qidizi.js_ime;
 
-import android.os.Handler;
 import android.os.SystemClock;
 import android.view.InputDevice;
 import android.view.KeyEvent;
@@ -106,12 +105,14 @@ class JsInterface {
     }
 
     @JavascriptInterface
-    public void reload() {
+    public void replace(final String url) {
         // 重新加载，比如载入html;因为这个类是运行在其它线程，需要操作ui要把处理扔给ui线程处理
+        // 使用js的location.replace ,会得到错误
+        // Not allowed to load local resource: file:///android_asset/index.html
         webView.post(new Runnable() {
             @Override
             public void run() {
-                context.reload_webview();
+                context.reload_webview(url);
             }
         });
     }

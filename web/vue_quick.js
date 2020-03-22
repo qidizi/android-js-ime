@@ -5,6 +5,8 @@ function vue_quick(name) {
         data() {
             return {
                 lines: '',
+                textarea_tip: '',
+                textarea_result: '',
                 show_editor: false,
                 show: false,
                 quick_input: localStorage.getItem(QUICK_INPUT_ITEM_NAME),
@@ -25,7 +27,6 @@ function vue_quick(name) {
                 let kbd = [
                     {
                         c: {label: '返回', fn: this.on_back},
-                        u: {label: '调整', fn: this.on_edit},
                     },
                     {
                         c: {
@@ -56,7 +57,14 @@ function vue_quick(name) {
                             fn() {
                                 java.send_key_press(android.KEYCODE_SPACE);
                             }
-                        }
+                        },
+                        u: {label: '调整', fn: this.on_edit},
+                        l: {
+                            label: "重载", fn() {
+                                location.replace('?' + +new Date);
+                            }
+                        },
+                        d: {label: '我的', fn: this.on_show_user_index_editor},
                     }
                 ];
                 let sides;
@@ -129,15 +137,34 @@ function vue_quick(name) {
             },
             on_edit() {
                 this.lines = localStorage.getItem(QUICK_INPUT_ITEM_NAME) || '';
+                this.textarea_tip = '说明   请剪出编辑，再贴回应用\n键面文字       上屏内容文字\n' +
+                    '键面文字2     上屏内容文字2\n';
                 this.show_editor = true;
+            },
+            on_show_user_index_editor() {
+                this.lines = '';
+                this.textarea_tip = '请输入你编写的键盘index.html绝对路径，支持http(s)与file等协议';
+                this.textarea_result = '当前键盘url：' + location.href;
+                this.show_editor = 'user_index';
             },
             on_save() {
                 // 保存
+                if ("user_index" === this.show_editor) {
+                    // 允许空的url，表示删除自定义index.html
+                    if (this.lines && !/^[a-z]{3,}:\/\/[\/\w\.\-]+(\?[^?]+)?(#[^#]+)?$/i.test(this.lines)) {
+                        this.textarea_result = '非法的url';
+                        return;
+                    }
+
+                    java.replace('file:///android_asset/index.html?user_index='
+                        + encodeURIComponent(this.lines) + '&r=' + +new Date);
+                } else {
+                    localStorage.setItem(QUICK_INPUT_ITEM_NAME, this.lines);
+                    this.quick_input = this.lines;
+                    this.lines = '';
+                }
+                this.textarea_result = '';
                 this.show_editor = false;
-                localStorage.setItem(QUICK_INPUT_ITEM_NAME, this.lines);
-                // 更新快捷键盘
-                this.quick_input = this.lines;
-                this.lines = '';
             },
             on_edit_cancel() {
                 this.show_editor = false;
@@ -157,9 +184,10 @@ function vue_quick(name) {
         <footer class="editor_box" v-show="show_editor">
             <textarea 
             class="quick_editor"
-             placeholder="说明   请剪出编辑，再贴回应用\n键面文字       上屏内容文字\n键面文字2     上屏内容文字2\n"
+             :placeholder="textarea_tip"
              v-model.trim="lines"
              ></textarea>
+             <p v-html="textarea_result" class="result"></p>
              <button class="cancel btn" @click.stop.prevent="on_edit_cancel">取消</button>
              <button class="apply btn" @click.stop.prevent="on_save">应用</button>
          </footer>

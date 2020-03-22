@@ -329,3 +329,7 @@ button.apply {
 .hide {
     display: none;
 }
+
+p.result{
+    font-size: 1.5rem;
+}

@@ -32,13 +32,10 @@ aadi 落荒而逃
 aady 落落大方
 aadc 工友
 aadu 落花有意
-aadn 慝
 aadw 萁
 aadn 葚
 aadm 花花太岁
 aadd 工大
-aade 蘛
-aadi 藄
 aadr 茙
 aaei 勤工助学
 aaeb 花花肠子
@@ -72,12 +69,9 @@ aah 芽
 aahw 工具
 aaht 芽
 aahh 工卡
-aahm 藖
 aahc 菣
 aahh 茝 茞
 aahi 工频
-aahl 藍
-aahm 虦
 aahy 蕥
 aais 葡萄酒
 aaib 莘莘学子
@@ -93,27 +87,20 @@ aajf 工时
 aajj 工日
 aajt 工蜂
 aajy 工蚁
-aajh 剗
 aak 戒
 aakk 工艺品
-aakg 蓳
-aakk 蓲
 aalt 工力
 aalf 盞
 aamq 戒网
 aamv 节节败退
 aamm 黄花岗
 aama 工贼
-aamf 蘳
-aamg 蘣
-aamv 蒆
 aamy 茿
 aan 苣
 aany 戒心
 aanf 苣
 aanr 草草收兵
 aanh 戒惧
-aans 葉
 aaog 工业
 aaoy 葡萄糖
 aaol 戒烟
@@ -158,7 +145,6 @@ aata 工长
 aatt 工笔
 aats 戒条
 aatm 式微
-aatn 蘙
 aaty 切切私语
 aau 芅
 aauq 工资
@@ -184,7 +170,6 @@ aawd 工段
 aawn 劳燕分飞
 aaws 欧共体
 aawu 茹苦含辛
-aawv 匶
 aaww 莁
 aaxj 医药费
 aaxx 花花绿绿
@@ -205,7 +190,6 @@ abad 萨斯
 abaq 菡萏
 abau 荫蔽
 abce 节能
-abci 藂
 abcu 菆
 abdw 节奏
 abdt 英联邦
@@ -213,17 +197,14 @@ abe 荫
 abef 荫
 abeu 蒸腾
 abet 节用
-aben 蘟
 abf 茸 芓
 abfc 节支
 abft 蒸煮
 abgq 节烈
 abgh 节下
-abgi 蔯
 abh 邛 卭
 abhh 节目
 abhk 节点
-abhg 匩
 abi 蒸
 abit 节省
 abio 蒸
@@ -237,7 +218,6 @@ abia 萨满
 abj 节
 abjj 节日
 abjn 节电
-abkm 藬
 ablt 节略
 abm 茁
 abmj 茁
@@ -250,13 +230,11 @@ abpr 攻子之盾
 abqn 蒸馏
 abqi 萨尔
 abqk 蒸锅
-abr 菰
 abrm 节制
 abrg 节后
 abrr 节拍
 abrn 节气
 abru 萨拉
-abry 菰
 abrk 节操
 absg 节本
 abtd 蒸笼
@@ -264,16 +242,13 @@ abtf 节选
 abtr 萨特
 abtv 节律
 abtg 蕯
-abti 蓀
 abu 萨
 abut 萨
 abue 节前
 abuf 茁壮
 abud 节减
 abug 薩
-abuj 蘵
 abuy 荫凉
-abv 匜
 abvx 萨姆
 abvi 节录
 abvv 节妇
@@ -282,8 +257,6 @@ abwy 节食
 abwt 节余
 abwn 节假
 abwh 欧阳修
-abwc 蔭
-abwt 蒢
 abxq 节约
 abyc 节育
 abye 节哀
@@ -297,22 +270,14 @@ acaq 苔藓
 acak 戒骄戒躁
 acaj 茅草
 acag 鞍马劳顿
-acak 匥
 acb 芭
 acbt 茅
-acbm 蓣
 acbj 芧
-acbl 蓩
-acbm 蕷
-acbo 鶜
-acbs 葇
 acck 茅台
 accc 欧巴桑
-acce 蔘
 acdp 斯巴达
 acdm 茅厕
 acdd 斯巴达克
-acep 蓪
 acfy 茅坑
 acfg 茎干
 acgt 戎马一生
@@ -320,7 +285,6 @@ acis 茅台酒 七台河
 ack 苔
 ackf 苔
 ackw 雅马哈
-acks 葈
 acmm 茅山
 acng 茅屋
 acnt 功能性
@@ -349,10 +313,8 @@ adad 萨克斯
 adah 藏龙卧虎
 adad 斯基
 adaa 藏匿
-adaw 蕻
 adal 苦功
 adai 菲薄
-adae 葳蕤
 adax 苦药
 adap 欺蒙
 adad 菲菲
@@ -386,7 +348,6 @@ adds 蒙太奇
 addm 甚而
 addt 匪帮
 addr 莽原
-addd 藞
 ade 戎
 adef 葫
 adej 苦胆
@@ -394,7 +355,6 @@ adeq 藏胞
 adec 基肥
 adeg 茂县
 adep 甚受
-adeu 萇
 adf 苦
 adfb 基地
 adfg 若干
@@ -445,8 +405,6 @@ adhd 葜
 adhx 藉此
 adha 欺瞒
 adhu 革故鼎新
-adht 蒧
-adhu 蘴
 adhv 蔧
 adi 藉
 adiv 苦涩
@@ -480,8 +438,6 @@ adkf 苦味
 adka 欺哄
 adkb 鄀
 adkg 期号
-adkj 蠚
-adkk 匲
 adkp 逽
 adl 苈
 adld 基因
@@ -501,7 +457,6 @@ admh 藉由
 admr 蔚成风气
 admu 欺罔
 admj 荋
-admt 蕆
 admy 項
 adn 茂
 adnf 基层
@@ -553,7 +508,6 @@ adrr 若有所失
 adrt 英雄气短
 adrb 藏拙
 adry 藏掖
-adri 蒝
 adsg 基本
 adsv 若要
 adsg 斟酌
@@ -579,7 +533,6 @@ adth 苦处
 adtc 藏私
 adtg 欺生
 adtf 基德
-adth 藶
 adtw 其奈我何
 adu 蕨 芖
 aduj 期间
@@ -602,7 +555,6 @@ advx 萨达姆
 advc 惹怒
 advb 甚好
 advt 藏娇
-advh 蕼
 adw 其
 adwu 其
 adwb 其他
@@ -620,26 +572,18 @@ adwg 苦命
 adwf 斟
 adwt 欺侮
 adww 欺人
-adwt 蓁
 adwi 苦大仇深
 adwa 戡
-adwi 綦
 adws 若何
 adwg 蒙大拿
-adwj 剘 萶 蜝
 adww 匧
 adwh 菶
-adwj 蟴
 adwt 尠
-adwn 惎
-adwd 碁
 adwq 夦
-adwe 朞
 adwf 卙
 adws 棊
 adww 莢 歁
 adwf 基佬
-adwy 諅
 adx 茏
 adxa 苦练
 adxg 基线
@@ -664,7 +608,6 @@ adyg 藏语
 adyu 若说
 adyo 苦恋
 adyk 勘误
-adyl 葢
 adyt 荗
 ae 菜
 aeai 散落
@@ -676,16 +619,13 @@ aean 菜蔬
 aeb 艿
 aebn 散了
 aebf 莩
-aebc 菔
 aebm 散出
 aebb 藤子
 aecb 萉
 aecl 萾
-aecn 薍
 aedm 散布
 aedh 散在
 aede 莫须有
-aedm 蕦
 aedn 散成
 aee 藐
 aeeq 藐
@@ -697,7 +637,6 @@ aefn 散场 菜场
 aefb 菜地
 aefg 菜干
 aefc 萲
-aefj 藸
 aeg 苴
 aega 散开
 aegr 其貌不扬
@@ -714,11 +653,9 @@ aeii 散水
 aein 菜汤
 aeio 七月流火
 aej 苚
-aejn 﨟
 aejs 菜果
 aekk 菜品
 aekf 菜叶
-aekx 莻
 aelf 菜园
 aelk 散架
 aell 菜田
@@ -736,7 +673,6 @@ aept 散客
 aepe 菜农
 aepw 菜窖
 aeph 蕣
-aept 薆
 aepu 蓫
 aeqy 菜鸟
 aeqd 菜肴
@@ -752,7 +688,6 @@ aers 散打
 aerg 散兵
 aerh 菜牛
 aerc 菜瓜
-aeri 蘨
 aerq 敬爱的
 aes 菜
 aesu 菜
@@ -766,17 +701,12 @@ aetd 散乱
 aetm 散射
 aetx 菜系
 aets 藤条
-aetg 蕤
 aetj 菜篮
-aetf 葄
-aeto 蔿
 aeu 藤
 aeuj 菜单
 aeui 藤
 aeuf 散装
-aeuc 虅
 aeud 散养
-aeul 蕂
 aev 荽
 aevn 菜刀
 aevf 荽 蓞
@@ -820,15 +750,7 @@ afae 鞴
 afad 甘苦
 afar 鞋匠
 afaa 落地式
-afac 韄
-afaf 鞾
-afai 韊
 afak 鞳
-afam 蕡
-afan 靾
-afao 韉
-afas 鞢
-afat 韈
 afb 邯
 afbb 鞋子 靴子 鞭子 靶子
 afbp 敬老院
@@ -840,9 +762,7 @@ afbk 革职
 afc 靶
 afcu 芸
 afcn 靶
-afcs 鞣
 afcn 鞍马
-afcu 芰
 afca 花鼓戏
 afcl 蓋
 afcy 靫
@@ -850,7 +770,6 @@ afd 甘 弍
 afdr 甘愿
 afdm 鞋面
 afdp 鞑
-afdj 薷
 afde 著有
 afdt 鞋帮
 afdf 落地有声
@@ -859,7 +778,6 @@ afdd 鞋套
 afdg 匹夫有责
 afee 某月
 afep 甘受
-afec 蘎
 afed 鞵
 afeg 靻
 afev 鞖 鞱
@@ -873,20 +791,16 @@ affk 甘露
 affa 巨无霸
 affs 甘霖
 affm 甘南
-afff 鞲 葑
 affn 靶场
 affu 蔡元培
 affy 苇塘
 affl 匹夫无罪
-affc 蕓
 affd 鞋城
 afff 茥
 affg 靯
 affh 靬
 affk 鞊
-affm 韇
 affp 韃
-affq 蕘
 afgg 某一
 afgo 东南亚
 afgf 甘于
@@ -905,7 +819,6 @@ afgw 鞆
 afhx 某些
 afhc 鞁
 afhh 鞐
-afhw 蒖
 afi 蒜
 afii 蒜
 afie 鞘
@@ -915,10 +828,6 @@ afim 甘油
 afin 蒜泥
 afii 花露水
 afiv 甘当
-afif 鞺
-afij 鞜 鞩
-afik 鞝
-afiq 鞉
 afit 勒沃
 afiu 苿
 afiy 莍
@@ -928,20 +837,9 @@ afjc 勒紧
 afjg 靼
 afjf 某时
 afjq 暮鼓晨钟
-afjf 鞸
-afjh 鞮
-afjl 鞰
-afjn 鞨
-afjo 韅
 afkh 鞋跟
-afkf 薹
-afkc 薣
 afke 鞙
 afkg 鞓
-afkk 虂 蘦
-afkm 鞼
-afkp 薳
-afkv 鞻
 afl 勒
 afln 勒
 aflt 劳动力
@@ -950,7 +848,6 @@ afll 某男
 aflh 某甲
 afld 鞇
 aflk 鞋架
-aflm 藚 匵
 afm 贰
 afmi 贰
 afmm 鞍山
@@ -968,8 +865,6 @@ afnm 恭喜发财
 afnn 鞭尸 著书
 afnd 甘居
 afnt 革履
-afnf 薵
-afnb 芌
 afnf 靵
 afog 鞋业
 afoq 鞭炮
@@ -993,15 +888,10 @@ afqm 鞍钢
 afqb 芜
 afqe 菱角
 afqb 芫
-afqy 鞫
-afqq 鞔
 afqw 莰
 afqq 墓志铭
 afqg 鞋印
-afqy 靮
-afqn 鞄
 afqu 荺
-afqy 韂
 afr 靳
 afrw 七十年代
 afrh 靳 某年
@@ -1011,9 +901,7 @@ afri 甘泉
 afrd 鞭挞
 afrn 劳教所
 afrt 莱索托
-afrf 鞞
 afrg 斯堪的纳维亚
-afru 鞡
 afs 某
 afsu 某 东南西北
 afsa 鞋柜
@@ -1023,7 +911,6 @@ afsf 靶标
 afsm 靶机
 afsd 东走西顾
 afsh 靪
-afsp 韆
 aft 著
 aftk 某种
 aftj 著
@@ -1039,9 +926,6 @@ afts 落地生根
 aftf 鞭毛
 aftd 甛
 aftj 藿香
-aftk 鞽
-afto 鞦
-aftx 荖
 afty 鞂
 afu 蔷
 afus 革新
@@ -1053,19 +937,10 @@ afug 甘美
 afur 蒜瓣
 afuv 鞭痕
 afux 茫无头绪
-afuc 蕔
 afuf 靽
-afug 鞧
-afuk 鞛
-afup 薘
-afuy 蓻
 afvi 甘肃
 afvv 某女
 afvs 芜杂
-afve 鞎
-afvk 鞀
-afvp 鞬
-afvy 靱 靭
 afw 鞭
 afwg 革命
 afww 某人
@@ -1087,11 +962,6 @@ afwy 藿
 afwd 七零八碎
 afws 甘休
 afwk 薔
-afwa 鞥
-afwc 藝 蕶
-afwk 鞈
-afwn 靲
-afwo 爇
 afwy 蓺
 afxx 蕾丝
 afxg 莎士比亚
@@ -1100,7 +970,6 @@ afxc 鞃
 afxh 靷
 afxi 菱纱
 afxl 靿
-afxt 鞿
 afyu 或者说
 afyq 鞋底
 afyd 黄土高原
@@ -1109,8 +978,6 @@ afyl 甘为
 afyy 著文
 afya 苇席
 afyb 鞟 鞹
-afye 蘾
-afyo 韀
 ag 七
 aga 荆
 agaj 荆
@@ -1124,17 +991,13 @@ agae 芋艿
 agav 莱切
 agaf 華
 agaj 荊 茾
-agao 鷨
 agaq 七区
 agaw 葬花
 agbk 甚于防川
 agbh 邼
-agbj 萅
 agbn 芚
 agco 世事难料
 agca 巧劲
-agcf 荎
-agcj 菿
 agd 匡 弌
 agdd 七大
 agdj 七百
@@ -1144,7 +1007,6 @@ agdc 七雄
 agdu 芒刺在背
 agdg 邪不压正
 agdt 艺不压身
-agdn 菾
 age 莆
 agee 七月
 ages 七彩
@@ -1160,7 +1022,6 @@ agfk 七喜
 agfj 芋
 agft 东正教
 agfi 匡救
-agfd 颟顸
 aggm 荆棘
 aggo 划不来
 aggd 七天
@@ -1173,7 +1034,6 @@ aggy 七班
 agh 廿
 aghg 廿
 aghk 七点
-agho 蔫
 aghh 艹
 aghg 
 aghh 卄
@@ -1184,28 +1044,14 @@ agig 苤
 agip 巧学
 agit 七海
 agiu 芣
-agj 蕙
 agjs 苹果
 agjt 七星
 agjm 巧遇
 agjn 蕙
 agjg 莫不是
-agjf 蓴
 agjg 荁
-agji 菄
 agjl 莱曼
-agjq 莄
-agk 蔌
 agkg 七号
-agkw 蔌
-agkg 菫
-agkh 蒚
-agkk 蘁
-agkl 葍
-agkm 藾
-agko 虉
-agkp 藗
-agku 荳
 aglf 共青团
 agll 莆田
 aglf 萧亚轩
@@ -1213,16 +1059,10 @@ aglk 共青团员
 agls 荆轲
 agln 巧思
 agld 莱恩
-aglg 薑
-agli 萰
 agln 劻
-agm 芾
-agmh 芾
-agmm 颟
 agmi 茦 蕀
 agmj 莿 蓸
 agmt 蓛
-agmu 蔶
 agmw 黃 苪
 agn 七 匚 匸
 agnn 巧
@@ -1245,14 +1085,8 @@ agqa 葬
 agqt 七夕
 agqc 七色
 agqi 戈尔
-agqg 薤
 agqh 苛政猛于虎
-agqe 薞
-agqf 塟
-agqj 茢
 agqm 莱钢
-agqr 薚
-agqt 蔜
 agrh 七年
 agrl 匪夷所思
 agrt 巧手
@@ -1286,13 +1120,7 @@ agud 葬送 芋头
 aguy 荆门
 aguw 荚
 agub 药到病除
-agv 萋
 agvi 巧妙
-agvv 萋
-agvl 葘
-agva 莖
-agvh 萐
-agvl 葝
 agwf 董事会
 agwh 七个
 agwt 七八
@@ -1302,8 +1130,6 @@ agwu 七位
 agwx 菁华
 agwy 葬仪
 agwa 七青八黄
-agwh 蕐
-agwq 薾
 agww 荆棘谷
 agx 荑
 agxw 荑
@@ -1315,18 +1141,13 @@ agyy 巧言
 agyf 巧计
 agyi 匤
 ah 牙
-aha 蘧
 ahaa 卧式
 ahat 牙医
 ahay 雅芳
 ahad 卧虎藏龙
 ahaq 雅苑
-ahap 苜蓿 蘧
-ahag 蔖
+ahap 苜蓿
 ahaj 萛
-ahal 蘆
-aham 萀
-ahan 藘
 ahbb 臣子
 ahcm 雅观
 ahdx 卧龙
@@ -1334,10 +1155,8 @@ ahdm 苫布
 ahdh 牙慧
 ahdd 牙套
 ahdg 牙石
-ahdi 繤
 ahdp 颐达
 ahdq 雅克
-ahdt 薉
 aheb 臣服
 ahf 芷 苜
 ahft 邪教 基督教
@@ -1358,17 +1177,13 @@ ahhw 牙齿
 ahha 雅虎
 ahhw 牙龈
 ahhg 欺上瞒下
-ahhh 蕋
 ahho 煕
-ahhs 蘃
-ahhy 匷
 ahi 菽
 ahiw 雅兴
 ahic 菽
 ahif 雅洁
 ahid 牙尖
 ahie 邪淫
-ahim 蘋
 ahir 荹
 ahiu 茮
 ahjg 雅量
@@ -1380,13 +1195,12 @@ ahkf 苫
 ahkm 赜
 ahkg 雅号
 ahkh 邪路
-ahkm 頤 賾
+ahkm 頤
 ahkn 巸
 ahkv 媐
 ahln 雅思
 ahlv 卧轨
 ahlg 卧车
-ahlo 蓾
 ahma 雅典
 ahmf 牙雕
 ahmg 欺上罔下
@@ -1395,31 +1209,12 @@ ahnh 卧 臣
 ahnm 牙刷
 ahna 臣民
 ahnn 工具书
-ahnq 覧 覽
 ahnm 賢
 ahnq 鋻
-ahnl 監 盬
-ahnm 贒
-ahnq 鍳
-ahnr 掔
-ahnb 孯
 ahnc 臤
-ahnd 硻
-ahne 腎
-ahnf 堅
-ahng 朢
-ahni 緊
-ahnj 蜸
 ahnm 頣
-ahnl 鹽
-ahnn 薡
 ahnk 臨
-ahnq 鑒
-ahnr 擥
-ahnu 竪 豎
-ahnv 婜
 ahnw 臥
-ahny 譼
 ahow 牙粉
 ahou 蔝
 ahpg 卧室
@@ -1430,8 +1225,6 @@ ahqg 卧铺
 ahqs 斯皮尔伯格
 ahqi 雅乐
 ahqb 莧
-ahqo 薒
-ahqy 萈
 ahrn 邪气
 ahry 熙攘
 ahsu 工具栏
@@ -1452,7 +1245,6 @@ ahtg 鸦
 ahtp 迓
 ahtm 卧射
 ahtk 熙和
-ahto 鴉
 ahuy 邪门
 ahuj 节目单
 ahuc 牙痛
@@ -1470,9 +1262,7 @@ ahwy 邪念
 ahwg 七上八下
 ahwd 臣僚 藈
 ahwf 牙祭
-ahx 茈
 ahxt 牙缝
-ahxb 茈
 ahxg 牙线
 ahxe 项目组
 ahyp 牙膏
@@ -1498,16 +1288,11 @@ aial 菠萝
 aiap 东营
 aiai 落落
 aiax 勤学苦练
-aiaf 茳
-aias 蕖
 aiaa 范式
 aiam 落英
 aiay 落荒
 aiag 薄葬
 aiai 萍萍
-aial 蘫
-aian 菃
-aiaw 葓
 aib 范
 aibb 范
 aibp 医学院 工学院
@@ -1519,7 +1304,6 @@ aicn 落马
 aicw 落难
 aicq 落汤鸡
 aicc 莫泊桑
-aick 菭
 aidn 落成
 aidm 东面
 aidg 荣誉感
@@ -1529,14 +1313,10 @@ aidj 东非
 aidr 黄雀在后
 aidd 落套
 aidt 东邦
-aie 菹
 aiea 薄膜
 aief 落脚
-aieg 菹
 aieq 薄脆
 aiee 东鹏
-aief 莦
-aiej 萷
 aiet 东胜
 aifb 落地
 aifm 东南
@@ -1551,7 +1331,6 @@ aify 荒淫无度
 aifl 苦海无边
 aift 薄雾
 aifa 东塔
-aift 蔆
 aifv 落雪
 aig 薄
 aigh 落下
@@ -1565,7 +1344,6 @@ aigs 黄粱一梦
 aiga 薄型
 aigu 荡平
 aigi 敬酒不吃吃罚酒
-aige 蔳
 aigg 藩王
 aih 菠
 aihk 落点
@@ -1594,10 +1372,8 @@ aije 东盟
 aijt 东临
 aijv 落照
 aijf 东里
-aijl 蕰 蘯
-aijr 蕩
+aijl 蕰
 aijs 落果
-aijy 蕅
 aik 藻
 aikh 萍踪 东路
 aikf 落叶
@@ -1610,7 +1386,6 @@ aild 范畴
 ailp 东边
 ailg 藩国
 ailh 东四
-aill 薀
 ailq 东软
 aimq 东风
 aimm 东山
@@ -1639,18 +1414,13 @@ aipf 暮光之城
 aipv 落案
 aipy 薄礼
 aipq 莐
-aiq 鸫
 aiqd 茫然
 aiqi 落锁
 aiqg 鸫
 aiqt 落水狗
 aiqf 藩镇
-aiqb 茪
-aiqn 萢
-air 蒎
 airg 落后
 airr 落魄
-aire 蒎
 aird 落拓
 airf 萡
 airi 东泉
@@ -1667,10 +1437,7 @@ aisy 汞柱
 aiss 黄粱梦
 aisq 蒲柳
 aisf 东村
-aisi 薸
-aisj 藫
 aiso 东楼
-aisu 莯
 aisw 落槌
 ait 落
 aitk 落
@@ -1686,7 +1453,6 @@ aitt 落笔
 aitx 落第
 aite 荡舟
 aitv 东魏
-aitd 萿
 aiu 汞
 aiux 东北
 aiuk 东部
@@ -1700,26 +1466,15 @@ aiut 东道
 aiui 薄冰
 aium 东端
 aius 黄粱美梦
-aiua 蓱
 aivv 荡妇
-aivs 蒅
-aivc 蓡 薓
-aivh 葏
-aivk 菬
-aivs 薻
 aivu 勤学好问
 aiwg 落伍 范例
 aiwm 东侧
 aiwd 斯洛伐克
 aiws 落体
 aiwf 范伟
-aiwg 虃
-aiwj 蕍
-aiwt 蒤
-aiwu 蒞
 aiww 落价
 aiwx 东华
-aiwy 匯
 aixu 薄弱
 aixg 东线
 aixt 萍乡 东乡
@@ -1735,14 +1490,11 @@ aiyn 落户
 aiyy 范文
 aiyn 茫
 aiyg 斯洛文尼亚
-aiye 蒗
 aiyw 落座
 aiyt 东施
 aiyb 东郭
 aiyj 落课
-aiyk 薃
 aiym 东市
-aiyq 蓅
 aj 划
 ajah 蓝牙
 ajaa 萌芽
@@ -1760,10 +1512,7 @@ ajam 草黄
 ajae 葛藤
 ajac 草茎
 ajad 莫斯 慕斯
-ajaf 蓽
-ajb 蕞
 ajbm 划出
-ajbc 蕞
 ajbb 茧子
 ajbw 蓝队
 ajce 莫能
@@ -1786,10 +1535,6 @@ ajdc 蓦
 ajdk 花里胡哨
 ajdw 暮春
 ajdo 草灰
-ajdb 鄚
-ajdc 驀
-ajdj 蟇
-ajdy 謩
 aje 萌
 ajef 萌
 ajey 莫及
@@ -1811,7 +1556,6 @@ ajfy 暮霭
 ajfm 草垛
 ajfh 鹊起
 ajft 蒙昧无知
-ajff 荲 蒔
 ajfp 莫过
 ajfv 蓝雪
 ajgd 蓝天
@@ -1826,8 +1570,6 @@ ajh 划
 ajhc 草皮
 ajhh 划上
 ajhk 攻坚战
-ajhc 皵
-ajhf 萺
 ajhx 蓝紫
 ajiq 蓝光
 ajib 蓄电池
@@ -1848,8 +1590,6 @@ ajjf 菖 昔时
 ajjy 暮景
 ajjb 草蜢
 ajje 黄晓明
-ajjh 剒
-ajjj 蕌
 ajjt 蓝星
 ajkf 草叶
 ajl 蔓
@@ -1863,10 +1603,6 @@ ajlf 蓝黑 蒀
 ajmh 草帽
 ajmm 花果山
 ajmd 草炭
-ajmh 躉
-ajmj 蠆
-ajml 勱
-ajmp 邁
 ajmt 划账
 ajmy 萬
 ajnt 萌发 莫属
@@ -1903,7 +1639,6 @@ ajqg 蓝鲸
 ajqh 蓝钻
 ajqm 莫负
 ajqt 蓝狐 蓝猫
-ajqu 茰
 ajrg 幕后
 ajrn 划拨
 ajrk 募捐
@@ -1921,10 +1656,8 @@ ajsv 莫要
 ajst 鹊桥
 ajsm 苹果机
 ajse 草棚
-ajsu 菒
 ajsc 黄果树
 ajsj 七星瓢虫
-ajsu 菓
 ajt 蓝
 ajtl 蓝
 ajth 蔓延 划算
@@ -1937,7 +1670,6 @@ ajtw 草签
 ajtd 草雉
 ajtk 草种
 ajtf 葃
-ajtg 虄
 ajtj 七里香
 ajtm 莫向
 ajts 蓝条
@@ -1953,12 +1685,9 @@ ajua 蓝瓶
 ajuf 蓝装
 ajui 蓝冰
 ajuj 草间
-ajv 郾
-ajvb 郾
 ajvk 莫如
 ajvj 鹊巢
 ajvd 匽
-ajvo 鶠
 ajwv 划分
 ajwy 募集
 ajww 草丛
@@ -1969,7 +1698,6 @@ ajwa 划时代
 ajwb 草创
 ajws 草体
 ajwg 蓝剑
-ajwo 鵲
 ajxg 划线
 ajxq 草纸
 ajxv 草绿
@@ -1994,7 +1722,6 @@ akad 勤苦
 akak 勤勤
 akb 葺
 akbf 葺
-akbt 蕺
 akd 叵 戓
 akdl 勤奋
 akde 或有
@@ -2004,36 +1731,18 @@ aket 或用
 akft 或者
 akfy 期中考试
 akfp 其味无穷
-akfw 歎
-akfe 艱
-akfi 菋
-akfk 囏
 akfm 莒南
-akfn 戁
-akfw 臡
-akfy 難 尀
 akg 或
 akgd 或
 akgl 勤
 akgn 惑
-akgf 勤于 堇
+akgf 勤于
 akgb 鄞
 akgq 觐
 akgh 勤政
-akgd 茣 戜
-akge 彧
 akgg 勤王
-akgn 懃
-akgq 覲
-akgr 斳
-akgt 藪
-akgv 蔞
-akgw 歏
 akh 匮
 akhm 匮 蒉
-akhk 蕗
-akhm 蕢 匱
-akhu 莡
 akin 苦口婆心
 akip 勤学
 akih 甚嚣尘上
@@ -2049,25 +1758,15 @@ akkn 萼
 akkm 颧
 akkf 莒
 akkg 鹳
-akkb 鄿
-akkj 剾
-akkn 甌
-akko 鷗
 akkw 歐
 akkb 酄
-akkc 敺 毆
-akkf 匰 蕇
 akkh 范跑跑
-akkj 飌
-akkk 虈 區
+akkk 區
 akkl 勸
 akkm 顴
 akkn 蕚
-akko 鸛
 akkq 觀
-akkr 蘄
 akkw 歡
-akky 雚
 aklj 莂
 aklt 勤力
 akm 莴
@@ -2097,7 +1796,6 @@ akwt 七嘴八舌
 akww 勤俭
 akwq 苦中作乐
 akwn 荶
-akwy 蓶
 akxa 勤练
 akyt 或许
 akya 苦口良药
@@ -2113,17 +1811,14 @@ alat 莲蓬
 alai 菌落
 alaq 苏区
 alaa 苏式
-alag 蔮
 alb 艻
 albu 苏联
 albb 茄子 莲子 苗子 匣子
 albx 世界卫生组织
-albi 蘻
 alce 功能
 alcm 世界观
 alcn 欧罗巴
 alck 莲台
-alcx 藣
 ald 茵
 aldi 功耗
 aldu 茵
@@ -2133,7 +1828,6 @@ aldn 蒽
 aldp 雅加达
 aldw 苏秦
 aldd 苏大
-aldj 蘮
 alet 功用
 alec 菌肥
 alf 苗
@@ -2142,14 +1836,12 @@ alfj 薯
 alfm 苏南
 alfp 功过
 alfg 劳力士
-alfe 薗
 alfj 蓒
 alfw 巭
 alfy 莲塘
 algm 苏珊
 alga 苏武
 algx 菌素
-alge 葨
 alhh 萝卜
 alif 功法
 alid 莲湖
@@ -2158,7 +1850,6 @@ alih 荔波
 alir 苏浙
 alit 苏澳
 aliy 荔湾
-alj 莗
 alk 匣
 alkf 茄
 alkm 功勋
@@ -2169,14 +1860,8 @@ allt 功力
 alla 苏轼
 allg 苗圃
 alll 荔
-allb 莮
-allf 蘲
-alli 虆
-alll 藟
-alls 蘽
 almy 苏丹
 almm 萝岗
-almu 蕒
 aln 功
 alnd 欺软怕硬
 alny 莲心
@@ -2189,18 +1874,10 @@ alpu 莲
 alpy 蔑视
 alpl 苏军
 alps 苦思冥想
-alpx 薨
 alps 苏宁
-alph 瞢
-alpn 甍
 alpr 花甲之年
-alpa 薎
-alpb 鄸
-alpc 蘉
-alpm 顭
 alpp 世界之窗
 alpq 夢
-alpu 蓮
 alq 萝
 alqk 功名
 alqu 萝
@@ -2208,7 +1885,6 @@ alqt 花团锦簇
 alqx 世界贸易组织
 alqg 鹋
 alqr 苏铁
-alqj 薥
 alrs 苏打
 alrj 蔪
 alsg 苏醒 世界杯
@@ -2234,15 +1910,13 @@ aluq 功效
 alud 苗头
 alux 苏北
 alup 恭贺新禧
-alub 蔨
 alv 匦
-alvv 匦 匭
+alvv 匦
 alw 苏
 alwu 苏
 alwt 苏俄
 alwl 蒕
 alwm 莔
-alwo 鶓
 alws 菌体
 alwu 苬
 alww 英国人
@@ -2251,7 +1925,6 @@ alxt 苏绣
 alxx 菌丝
 alxf 苗疆
 alxi 蔂
-alxy 蘿
 alyt 苏州
 alyx 功率
 alyj 功课
@@ -2261,7 +1934,6 @@ alyg 世界语
 alys 苗床
 alyw 莲座
 alye 苗裔
-alyj 藅
 am 贡
 amaw 黄花
 amaa 英式
@@ -2269,7 +1941,6 @@ amaq 黄芪
 amap 黄莺
 amaw 黄芩
 amay 茼蒿
-amae 蕽
 amb 芁
 ambn 黄了
 ambf 黄陵
@@ -2288,7 +1959,6 @@ amdl 黄历
 amdx 黄龙
 amda 黄碟
 amdd 黄磊
-amdo 鶧
 amea 巩膜
 ameb 英孚
 amef 蓇
@@ -2317,10 +1987,8 @@ amgw 黄珍
 amh 匝
 amhk 共同点 匝 萜
 amhv 节骨眼
-amhj 繭
 amhc 黄皮
 amhj 芇
-amhm 顢
 amis 黄河
 amii 黄沙
 amit 黄海
@@ -2339,7 +2007,6 @@ amjq 黄易
 amjg 世风日下
 amjs 黄果
 amja 黄蜡
-amjj 荝 萴
 amjm 荒山野岭
 amk 苘
 amkg 恐吓
@@ -2357,7 +2024,6 @@ ammd 花岗岩
 ammq 黄冈
 ammh 黄巾
 ammq 黄网
-ammv 蘡
 amnr 恐怕
 amnd 恐怖
 amnh 恐惧
@@ -2366,7 +2032,6 @@ amny 英尺
 amnk 萵
 amnn 黄书
 amnp 薖
-amnu 慐
 amog 黄精
 amos 黄灯
 amoo 牙周炎
@@ -2409,7 +2074,6 @@ amtf 黄毛
 amtd 功败垂成
 amtk 黄种
 amtg 贡生
-amtj 葻
 amu 贡 貢 貣
 amug 英美
 amup 黄帝
@@ -2417,7 +2081,6 @@ amuq 英姿
 amuj 黄疸
 amut 黄道
 amud 黄羊
-amun 菵
 amvv 雅典娜
 amvo 英灵
 amvj 黄巢
@@ -2435,7 +2098,6 @@ amwf 斢 黊
 amwg 黈
 amwk 黇
 amwn 黅
-amwo 鷬
 amwq 黆
 amwx 萞
 amxv 黄绿
@@ -2457,7 +2119,6 @@ amyt 黄州
 amyc 英译
 amys 黄麻
 amyb 聓
-amyf 鞏
 amyu 芃
 an 世
 ana 苠
@@ -2493,15 +2154,11 @@ anfn 藯
 anft 艺考
 anga 巨型
 angk 世事
-angn 戼
 anh 蔬
 anhh 世上
 anhq 蔬
 anhc 葭
-anhf 匨 莊 葿 蔣
-anhh 葦
-anhk 蘠
-anhn 苢
+anhf 莊 蔣
 anhp 蕸
 anht 荍
 ani 忒
@@ -2533,8 +2190,6 @@ anm 贳
 anmh 巨幅
 anmu 贳
 anmq 世风
-anml 勩 勚
-anmu 貰
 ann 蕊
 annn 蕊
 annd 甘心情愿
@@ -2542,12 +2197,9 @@ annt 警惕性
 annk 巨擘
 anng 世情
 annl 巨翼
-annb 乬 巪
-anns 蘂
 anpt 巨额
 anpe 世家
 anpg 巨富
-anpv 迣
 anpy 薄情寡义
 anqy 世贸
 anqe 巨蟹
@@ -2573,7 +2225,6 @@ antx 世系
 antj 鞭辟入里
 antd 黄发垂髫
 antg 苦尽甜来
-antn 荱
 antr 苾
 anu 芯
 anuj 世间
@@ -2583,7 +2234,6 @@ anut 世道
 anuw 七情六欲
 anuq 世交
 anum 巨商
-anud 荬
 anuc 巨痛
 anus 世尊
 anuy 著书立说
@@ -2592,12 +2242,10 @@ anul 巨兽
 anv 世
 anvf 艺妓
 anvo 巨灵
-anw 蓼
 anww 巨人 世人 艺人 世俗
 anwa 世代
 anwt 巨作
 anwm 劳民伤财
-anwe 蓼
 anwy 巨贪
 anwq 巨像
 anwv 世仇
@@ -2606,18 +2254,15 @@ anwi 苍翠欲滴
 anwg 巨剑
 anwu 芵
 anwx 世华
-anwy 藋
 anxn 世纪
 anxa 苦心经营
 anxl 巨细
-anxb 苨
 any 苡
 anyy 恐怖主义
 anyo 巨变
 anyu 荩
 anyw 苡
 anyh 攻心为上
-anye 蘹
 anyl 蔚为
 anyn 巨鹿
 anys 巨魔
@@ -2626,16 +2271,11 @@ ao 蒌
 aoaq 工业区
 aoaw 工业革命
 aods 营业厅
-aodm 蘱 薠
-aoec 蕿
-aogf 薱
 aojh 萤火虫
-aojf 蔊
 aokm 营业员
 aolf 工业园
 aoot 惹火烧身
 aoom 黄灿灿
-aooo 藀
 aoou 菼
 aopt 营业额
 aopu 蒾
@@ -2644,7 +2284,7 @@ aorn 营业所
 aorj 营业执照
 aosw 薪火相传
 aotu 营业税
-aou 苂 炗
+aou 苂
 aouk 营业部
 aov 蒌
 aovt 薮
@@ -2679,7 +2319,6 @@ apdn 荣成
 apdf 菪
 apdg 萤石 荣威
 apdh 荣丰
-apdi 藔
 apep 蒙受
 apee 花容月貌
 apej 荤腥
@@ -2697,7 +2336,6 @@ apfl 蔻
 apff 茔 蒄
 apfg 芝士
 apfi 萗
-apfr 藆
 apft 蔲
 apg 蒙
 apge 蒙
@@ -2710,9 +2348,6 @@ apgb 劳顿
 apgf 荢
 apgg 鹲
 apgh 萣
-apgm 薲
-apgn 藼 氋
-apgo 鸏
 apgw 蔩
 aphh 蒙上
 aphv 蒙眼
@@ -2742,7 +2377,6 @@ aplj 荤
 aplk 劳驾
 apll 蒙田
 apld 蒙恩
-aplj 葷
 apmh 营帐
 apmm 蒙山
 apmj 攻守同盟
@@ -2757,8 +2391,6 @@ apnn 菅
 apnf 茕
 apng 萦怀
 apnj 藌
-apnm 蔤
-apns 薴
 apo 荧
 apog 营业
 apou 荧
@@ -2819,7 +2451,6 @@ apug 黄宗羲
 apvf 营建
 apvq 甘之如饴
 apvf 荌
-apvo 藛
 apw 蓉
 apwk 蓉
 apwt 劳作
@@ -2833,7 +2464,6 @@ apwd 葖
 apwf 欧安会
 apwl 
 apwu 茓
-apwx 藭
 apwy 蒮
 apx 萦
 apxa 萦绕
@@ -2865,8 +2495,7 @@ aqan 警世
 aqar 茫然若失
 aqam 葱黄
 aqac 藓苔
-aqah 鬵 荈
-aqaj 蠶 朁
+aqaj 朁
 aqaq 兓
 aqay 茋
 aqb 苑
@@ -2879,7 +2508,6 @@ aqbb 荀子
 aqbw 警队
 aqbj 茒
 aqbn 葾
-aqbt 葼 蒭
 aqcf 戈尔巴乔夫
 aqcn 匹马
 aqcu 芶
@@ -2890,7 +2518,6 @@ aqdw 敬奉
 aqdk 黄钟大吕
 aqdc 区码
 aqdf 殴辱
-aqdh 莃
 aqdq 匹克
 aqdy 薝
 aqet 获胜
@@ -2956,7 +2583,6 @@ aqkr 擎
 aqkg 区号
 aqky 菟
 aqks 檠
-aqkc 驚
 aqkj 蟼
 aqkl 葂
 aqkn 憼
@@ -2978,8 +2604,6 @@ aqmm 花名册
 aqmq 警风
 aqma 欧典
 aqmp 欧迪
-aqmt 藑
-aqmu 萯
 aqn 苞
 aqnj 警惕
 aqnn 警局
@@ -2995,9 +2619,6 @@ aqoy 苞米
 aqol 敬烟
 aqow 芡粉
 aqod 蘚
-aqoj 薊
-aqot 蘇
-aqou 炁
 aqpw 警察
 aqpn 警官
 aqpy 敬礼
@@ -3006,8 +2627,6 @@ aqpu 芡实
 aqpv 苟安
 aqpg 欧宝
 aqph 帶
-aqpn 慸
-aqpp 遰
 aqq 欧
 aqqw 欧
 aqqk 警钟
@@ -3042,7 +2661,6 @@ aqsj 警棍
 aqsa 警械
 aqsw 警枪
 aqsr 七色板
-aqsc 蔱
 aqsg 切尔西
 aqst 艾格
 aqt 获
@@ -3065,10 +2683,7 @@ aqtn 莸
 aqto 获释 荻
 aqtk 警种
 aqtd 匹敌
-aqtf 莥
-aqtg 蕕
 aqth 欧版
-aqtj 蕏
 aqtp 功名利禄
 aqtu 欧科
 aqu 艾 芕
@@ -3084,7 +2699,6 @@ aquo 欧普
 aqux 瓯北
 aqv 匹 旡 兂
 aqvx 欧姆
-aqvf 萏
 aqw 芡
 aqwv 区分
 aqwf 基金会
@@ -3099,8 +2713,6 @@ aqwy 匿名信
 aqwx 欧化
 aqwg 苟合
 aqwh 敬候
-aqwo 鴄
-aqwe 蕵
 aqwo 鴱 鴎
 aqws 欧体
 aqwt 殴伤
@@ -3121,9 +2733,6 @@ aqym 区市
 aqyn 警讯
 aqya 艾诺
 aqyg 敬语
-aqyi 匛
-aqyj 藰
-aqyl 蒥
 aqyo 黄昏恋
 ar 匠
 arae 芹菜
@@ -3133,26 +2742,19 @@ arad 菲拉斯
 arbb 药罐子
 arc 葩
 arcb 葩
-arch 萚
-arcy 苽 蓏
 ard 菝
 ardc 菝
 ardt 薄技在身
-areo 蘤
 arf 苩
 arfl 苍白无力
 arfw 荴
 argm 甘拜下风
 argl 落拓不羁
 argf 茊 葟
-argh 蓵
-argk 茩
-argy 蒱
 ari 茱
 ariu 茱
 arii 暮气沉沉
 aric 散兵游勇
-aris 薬
 arit 莏
 ariu 葲
 arj 芹
@@ -3160,16 +2762,10 @@ arjr 英年早逝
 ark 匠
 arkk 警报器 散热器
 arle 荡气回肠
-arlf 蘀
-arlo 蕪
-armf 菗
-armw 蒛
 arny 匠心
-arnb 芞
 arpf 世乒赛
 arpu 菦
 arqc 蒐
-arqn 菢
 arqy 菂
 arrw 颐指气使
 arrp 萨拉热窝
@@ -3206,7 +2802,6 @@ asaw 苦丁茶
 asar 莺歌燕舞
 asad 苯基
 asaj 茜草
-asak 藲
 asas 茜茜
 asca 黄梅戏
 asdm 基本原则
@@ -3219,8 +2814,6 @@ asfi 苛求
 asfu 东西南北
 asff 蓕 荰
 asfg 黄梅雨
-asfi 蔈
-asfn 薽
 asg 苯
 asgf 苯
 asgo 蘸
@@ -3228,10 +2821,7 @@ asgm 苛责
 asgh 苛政
 asgg 苯环
 asgf 莤
-asgn 蓜
-ash 葙
 ashh 基本上
-ashf 葙
 ashw 蒲松龄
 asif 基本法
 asia 蘸满
@@ -3272,7 +2862,6 @@ asuf 英格兰 苏格兰
 asug 艺术美
 asuf 花木兰
 asvy 基本建设
-asvf 葽
 asw 菘
 aswc 菘
 aswt 若要人不知
@@ -3309,22 +2898,13 @@ atdi 医
 atdj 荞
 atdn 翳
 atds 雅各布森
-atdg 醫
-atdh 瞖
-atdo 鷖
 atdy 瑿
 atdc 殹
 atdg 鹥
 atdh 莑
 atdi 繄
 atdk 蕎
-atdm 贀
-atdn 悘
-atdo 黳
 atdu 芺
-atdv 嫛
-atdw 毉
-atdy 薙
 ate 莠
 atet 医用
 atem 蓝筹股
@@ -3346,7 +2926,6 @@ atff 工程款
 atfg 医士
 atfh 蓗
 atfn 芼
-atft 薐
 atg 董
 atgf 董
 atgk 董事
@@ -3359,18 +2938,14 @@ atgt 荞麦
 atgk 攻速
 atgj 医理
 atgf 苼 菙
-atgl 蘍
-atgo 薫
 atgy 翘班
 ath 蓰
 athk 攻占
 athq 鸦片战争
 athw 翘盼
 athh 蓰
-atha 匴
 athf 苲
 athj 董卓
-athn 蒠
 athp 莚
 atip 医学
 atic 医治
@@ -3457,9 +3032,7 @@ attu 切身利益
 atty 攻入
 attr 斯科特
 attd 蓬乱
-attg 蘒
 attk 艾利和
-attt 蕧
 atub 医疗
 atud 攻关 期待着
 atuu 黄毛丫头
@@ -3468,7 +3041,6 @@ atuq 花生酱
 atug 医病
 atuf 萪
 atuh 苸
-atut 蕛
 atuu 苳
 atv 萎
 atvf 萎
@@ -3498,7 +3070,6 @@ atys 萎靡
 atyy 医方 工程设计 功利主义
 atyt 萎谢
 atyn 翘望
-atya 藊
 atyj 翘课
 au 燕
 auab 菩萨
@@ -3515,12 +3086,10 @@ auce 蓘
 aucq 萒
 audt 茁壮成长
 audy 卧病在床
-auda 蒫
 audb 菤
 audw 蕲春
 aueg 花前月下
 auec 藙
-aued 蘢
 auee 花颜月貌
 auef 蕑
 auej 葥
@@ -3539,11 +3108,9 @@ augf 东半球
 augu 邪门歪道
 auge 燕瘦环肥
 augn 莫逆于心
-augi 蘭
 augo 蓔
 augv 葁
 auhh 工资卡
-auht 虁
 auii 薪水
 auik 共产党员
 auip 共产党
@@ -3564,7 +3131,6 @@ aukk 营养品
 aukb 酀 蔀
 auke 蔉
 aukf 蔄
-auko 鷰
 aukq 莌
 aukv 嬊
 aulw 工商界
@@ -3577,12 +3143,10 @@ aumm 燕山
 aumd 蔐
 aumk 蔏
 aump 藡
-aumv 虌
 aunn 工商局
 aunt 翘首以待
 aung 欺善怕恶
 aunh 翘首以盼
-aunu 蕄
 auoy 薏米
 auog 工商业
 auon 英姿焕发
@@ -3600,19 +3164,15 @@ auqq 薪金
 auqu 茭
 auqh 巧立名目
 auqi 燕尔
-auqk 蒟
-auqm 薋
 auqn 薪饷
 aurj 菩提
 aurr 茭白
 aurn 苍颜白发
-aurc 藱
 aus 薪
 ausg 薪酬
 ausr 薪
 aust 基辛格
 ausy 项背相望
-ausq 藽
 ausu 菜单栏
 aut 蒺
 aute 苏门答腊
@@ -3622,18 +3182,13 @@ auuq 薪资
 auud 英姿飒爽
 auui 范冰冰
 auuj 工资单
-auv 蒹
-auvo 蒹
 auvj 燕巢
 auvf 菨 蔅
 auvv 蒂娜
-auw 蔺
-auwy 蔺
 auwk 匹兹堡
 auwd 薪俸
 auwn 世道人心
 auww 东北人
-auwy 藺
 auxj 医疗费
 auxe 花拳绣腿
 auxb 苝
@@ -3652,12 +3207,9 @@ avay 若即若离
 avae 切菜
 avaa 勤杂工
 avaw 切花
-avaf 蕁
 avb 艽 芀
 avbw 切除
 avco 巧妇难为无米之炊
-avcb 莭
-avcq 蔇
 avd 菇
 avdn 切成
 avdu 切磋
@@ -3687,7 +3239,6 @@ avgh 切下
 avhw 切盼 切齿
 avhk 切点
 avhc 蓃
-avhh 蕭
 avhl 藎
 avi 萧
 avij 萧
@@ -3841,8 +3392,6 @@ awfg 苏伊士
 awfr 茶垢
 awff 芢
 awfm 苍南
-awfv 虋
-awfw 藇
 awg 葵
 awgd 苍天 葵
 awgk 共事 花束
@@ -3857,14 +3406,10 @@ awgh 花下
 awgy 花斑
 awgj 萮
 awgk 匼
-awga 葊 菕 蘥
-awge 蒨
-awgj 剳 薈 匬
+awgj 剳 匬
 awgk 荅
 awgm 花刺
-awgt 蘞
 awgu 茌平
-awgw 蘝 薟 匳
 awh 莜
 awhh 花上
 awhw 茶具
@@ -3926,7 +3471,6 @@ awlh 花甲
 awlf 茶园
 awld 共轭
 awlm 共轴
-awlj 輂
 awmg 共同
 awms 花朵
 awmt 茶几
@@ -3941,7 +3485,6 @@ awny 花心
 awnu 恭
 awnt 共性
 awnb 孽
-awns 蘖
 awny 苍翠
 awna 花展
 awnd 共居
@@ -3949,8 +3492,6 @@ awnw 苟全性命
 awnh 蒒
 awnd 葔
 awng 孽情
-awnh 躠 蘬
-awno 糵
 awnu 花屏
 awow 花粉
 awos 花灯
@@ -4032,7 +3573,6 @@ awtt 著作等身
 awty 花簇
 awtq 恭称
 awtf 莋
-awto 鷋
 awu 共
 awuf 荷兰
 awur 花瓣
@@ -4055,11 +3595,9 @@ awvb 芬
 awvk 花絮
 awvg 蔡妍
 awvf 共建
-awvo 蔦
 awvc 葠
 awve 花姐
 awvl 葐
-awvo 鳶
 awvp 花嫁
 awvs 棻
 awvt 巫妖
@@ -4080,10 +3618,6 @@ awwg 鹀
 awwc 巫颂
 awwf 莝
 awwg 葅
-awwo 鵐
-awwp 遳
-awwq 覡
-awwt 蓌
 awx 花
 awxb 花
 awxj 花费
@@ -4099,7 +3633,6 @@ awxu 荏弱
 awxb 芲
 awxc 蕟
 awxt 花乡
-awxx 蒊
 awy 蕉
 awyb 共享
 awyk 共识
@@ -4118,14 +3651,10 @@ awyl 共为
 awyd 共庆
 awyy 共议
 awye 花衣
-awyj 劐
 awyp 茶亭
-awyc 蒦
 awyf 茶庄
-awyg 隿
 awyk 蒼 莟
 awyn 菍 共赢
-awyv 舊
 awyx 孽畜
 ax 药
 axa 荭
@@ -4134,7 +3663,6 @@ axaj 药草
 axaf 荭
 axaw 药茶
 axaf 葒
-axay 虇
 axb 芎
 axbb 菟丝子
 axbf 葞
@@ -4143,21 +3671,16 @@ axcu 苰
 axdg 药厂
 axet 药用
 axeu 药膳
-axec 藧
-axeu 蒃
 axf 荮
 axfu 荮
 axfc 苏维埃
 axfd 世纪城
-axfm 蘏
-axfu 葤
 axg 莼
 axga 薄弱环节
 axgj 药理
 axgg 药王
 axgn 莼
 axgk 药囊
-axgn 蒓
 axgu 苺
 axhw 药具
 axht 苐
@@ -4171,18 +3694,14 @@ axj 蕴
 axjl 蕴
 axjt 药监
 axjg 药量
-axjc 蘰
 axjj 茀
-axjl 藴
 axkk 药品
 axkf 药味
 axkj 蔃
 axlg 蒋经国
 axlt 药力
 axlb 苭
-axll 蘊
 axma 药典
-axmw 蒳
 axnt 药性
 axog 药业
 axow 药粉
@@ -4195,8 +3714,6 @@ axqk 药名
 axqg 药铺
 axqj 莱比锡
 axqn 药饵
-axqc 蕝
-axqy 葯
 axrm 药罐
 axra 药皂
 axrs 藥
@@ -4212,12 +3729,8 @@ axtr 药物
 axth 药片
 axts 药箱
 axtr 芗
-axtb 薌
-axth 薿
 axtj 药香
 axtm 蘔
-axtp 蘕
-axtu 蔠
 axuq 药效
 axua 药瓶
 axut 藏经阁
@@ -4228,14 +3741,12 @@ axuv 药妆
 axvy 药丸
 axwy 蕴含
 axwg 药盒
-axwv 蒶
 axx 芘
 axxj 药费
 axxh 药引
 axxb 芘
 axxr 蒈
 axxf 荜
-axxi 蕬
 axxu 茲
 axyh 药店
 axyj 药剂
@@ -4243,7 +3754,6 @@ axyn 药房
 axyy 药方
 axyp 药膏
 axyl 药库
-axys 虊
 ay 芳
 aya 蔗
 ayav 蘑菇
@@ -4274,15 +3784,12 @@ aydc 蔚为大观
 aydn 蓭
 aydq 斯诺克
 ayed 蓄须
-ayec 蘐
 ayfn 菜市场
 ayfb 荒地
 ayfy 功高震主
 ayfh 荒坡
 ayfc 芳魂
 ayft 荒诞无稽
-ayfd 藁城
-ayfj 藷
 aygr 萎靡不振
 aygj 莫衷一是
 aygf 卧床不起
@@ -4306,22 +3813,16 @@ ayjg 药剂师
 ayjj 荠
 ayjc 黄庭坚
 ayjf 萕
-ayjn 藹
 ayk 蓑
 ayky 节哀顺变
-ayke 蓑
 aykh 芳踪
-ayke 蘘
 aylw 共享软件
 aylf 荒置
 aylt 蓄力
 aym 蒿
 aymm 荒山
 aymk 蒿
-ayms 藁
 aymb 苀
-aymc 蔎
-aymt 藳
 aymv 匟
 aymw 藃
 ayn 芒
@@ -4332,24 +3833,16 @@ aynr 芦
 ayna 匾
 aynt 蓄发
 aynh 荒疏
-ayno 薦 藨
-ayna 萹
-aync 蔰
-ayne 菺
-aynf 薼
 aynn 莣
-ayno 蘪
 aynw 荄
 aynx 蔍
 ayoy 蔗糖
 ayoc 芳烃
-ayp 葶
 aypt 匾额
 aypw 芳容
 ayps 葶
 aypf 东方神起 荒寒
 aypn 芝麻官
-aypx 薧
 ayqt 花旗银行
 ayqy 荒岛
 ayqk 芳名
@@ -4367,8 +3860,6 @@ aysd 蘑 蘼
 aysf 荒村
 aysg 芳醇
 aysk 英文歌
-aysr 藦
-ayss 蔴
 ayt 蔟
 aytj 芳香
 ayth 英文版
@@ -4377,8 +3868,6 @@ aytd 蔟
 aytk 蓄积
 aytt 芦笙
 aytg 工读生
-aytb 葹
-ayth 蔙
 ayto 蒍
 aytx 英语系
 ayu 芠
@@ -4397,10 +3886,6 @@ ayve 莨
 ayvt 巧言如簧
 ayvb 蓈
 ayve 蓢
-ayvf 薺
-ayvg 虀
-ayvk 蓎
-ayvw 菮
 ayw 萃
 aywf 萃
 aywu 菸
@@ -4410,12 +3895,10 @@ aywn 荒僻
 aywq 巧言令色
 aywy 芳邻
 aywg 草率从事
-aywf 蓙
 ayx 蓄
 ayxl 蓄
 ayxa 东方红
 ayxw 节衣缩食
-ayxy 蕹
 ayxq 七言绝句
 ayyn 荒谬
 ayyv 荒唐
@@ -4435,7 +3918,6 @@ badw 阿勒泰
 badf 陈辰
 badg 陈威
 badh 陈艳
-badw 陿
 baet 陈胜
 bafc 陈云
 bafw 陈规
@@ -4457,8 +3939,6 @@ baid 陈涛
 baje 陈明
 baja 陈晓
 bajc 陈坚
-bajv 隁
-bakg 聝
 bakh 陈忠
 balt 陈力
 bano 聚苯乙烯
@@ -4475,7 +3955,6 @@ baru 隔靴搔痒
 barq 陈欣
 basy 陈述
 basg 陈醋
-bat 聀
 bati 孤芳自赏
 batj 陈香
 baue 陈毅
@@ -4509,10 +3988,6 @@ bbbb 子
 bbbi 子孙
 bbbb 子子孙孙
 bbbf 孨 聶
-bbbj 孴
-bbbm 顳
-bbc 陬
-bbcy 陬
 bbdw 子孙万代
 bbel 子爵
 bbff 出出进进 孤孤零零
@@ -4587,7 +4062,6 @@ bcai 聚落
 bcbm 取出
 bcbc 聚聚
 bcbg 聂耳
-bcbh 郰
 bcc 聂
 bccu 聂
 bccm 颞

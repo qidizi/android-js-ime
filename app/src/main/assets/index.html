@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport'
+          content='width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0'>
+    <title>引导页面</title>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            display: block;
+            min-height: 100px;
+            word-break: break-word;
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+<div id="app">loading...</div>
+<script>
+    // 可以通过 file:///android_asset/index.html?user_index=新首页 方式来修改
+    // 用户首页，留空表示删除
+    let set_user_index = 'user_index=';
+    let user_index_key = 'user_index';
+    location.search.indexOf(set_user_index) > -1
+    && localStorage.setItem(user_index_key, location.search.replace(/^[^=]+=|&[^&]+$/, ''));
+    let user_index = localStorage.getItem(user_index_key);
+    const default_index = 'http://js-ime.qidizi.com/android-js-ime/web/index.html';
+    location.replace(
+        /^[a-z]{3,}:\/\/[\/\w\.\-]+(\?[^?]+)?(#[^#]+)?$/i.test(user_index) ?
+            user_index : default_index
+    );
+</script>
+</body>
+</html>

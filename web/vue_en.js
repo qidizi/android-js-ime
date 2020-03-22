@@ -253,12 +253,7 @@ function vue_en(name) {
                         "u": {"label": "F5", code: android.KEYCODE_F5}
                     },
                     {
-                        "c": {"label": "R"}, "u": {"label": "F4", code: android.KEYCODE_F4},
-                        d: {
-                            label: "重载", fn() {
-                                java.reload();
-                            }
-                        }
+                        "c": {"label": "R"}, "u": {"label": "F4", code: android.KEYCODE_F4}
                     },
                     {
                         "c": {"label": "E"},

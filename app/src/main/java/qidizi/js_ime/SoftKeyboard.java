@@ -19,7 +19,6 @@ package qidizi.js_ime;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.inputmethodservice.InputMethodService;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -28,24 +27,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.*;
-import android.widget.Toast;
 import org.json.JSONObject;
-
-import java.io.File;
 
 public class SoftKeyboard extends InputMethodService {
     // java方法提供给js的命名空间
     private final static String JS_NAME = "JAVA";
-    // web文件目录
-    final static String PUBLIC_DIR = "web";
-    // sdcard若存在该文件（用户自定义html），优先使用
-    private final static String USER_HTML = PUBLIC_DIR + "/user.html";
-    // 内置默认html
-    final static String DEFAULT_HTML = PUBLIC_DIR + "/index.html";
-    // 加载html出错提示html
-    private final static String ERROR_HTML = PUBLIC_DIR + "/error.html";
-    // 访问assets目录下的web文件使用的协议
-    private final static String ASSET_PROTO = "file:///android_asset/";
+    private static String index_html = "file:///android_asset/index.html";
     private WebView webView = null;
 
     @Override
@@ -116,42 +103,11 @@ public class SoftKeyboard extends InputMethodService {
         return webView;
     }
 
-    private String get_user_html_path() {
-        // 检测用户自定义html是否存在
-        // 路径是/storage/emulated/0/Android/data/qidizi.js_ime/files
-        File sd_dir = this.getExternalFilesDir(null);
-
-        if (null == sd_dir) {
-            return null;
-        }
-
-        final File user_html = new File(sd_dir, USER_HTML);
-
-        if (user_html.exists()) {
-            // 优先使用用户的文件
-            return "file://" + user_html.getAbsolutePath();
-        }
-        return null;
-    }
-
     @SuppressLint({"SetJavaScriptEnabled", "JavascriptInterface", "AddJavascriptInterface"})
     private void create_webview() {
         // 防止重复创建，以内存换html启动时间
         if (null != webView) return;
-        final String url, user_html;
-        String tmp = get_user_html_path();
-
-        if (null != tmp) {
-            // 优先使用用户html
-            url = tmp;
-            user_html = tmp;
-        } else {
-            url = ASSET_PROTO + DEFAULT_HTML;
-            user_html = "";
-        }
-
         webView = new WebView(this);
-
         WebSettings webSettings = webView.getSettings();
         // 要允许，否则无法加入js等
         webSettings.setAllowFileAccessFromFileURLs(true);
@@ -187,46 +143,50 @@ public class SoftKeyboard extends InputMethodService {
         webView.setBackgroundColor(Color.TRANSPARENT);
         WebView.setWebContentsDebuggingEnabled(true);//允许调试web
 
-        final SoftKeyboard ct = this;
-        webView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-                // 总是弹出给用户，防止自定义时空白页不知道原因
-                SoftKeyboard.emit_js_str(
-                        webView,
-                        "console_log",
-                        consoleMessage.lineNumber() + "#" + consoleMessage.message()
-                );
-                return super.onConsoleMessage(consoleMessage);
-            }
-        });
+//        webView.setWebChromeClient(new WebChromeClient() {
+//            @Override
+//            public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+//                // 总是弹出给用户，防止自定义时空白页不知道原因
+//                SoftKeyboard.emit_js_str(
+//                        webView,
+//                        "console_log",
+//                        consoleMessage.lineNumber() + "#" + consoleMessage.message()
+//                );
+//                return super.onConsoleMessage(consoleMessage);
+//            }
+//        });
 
         webView.setWebViewClient(new WebViewClient() {
-
             @Override
-            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                super.onReceivedError(view, request, error);
-                Uri.Builder b = new Uri.Builder();
-
-                if (Build.VERSION.SDK_INT < 23) {
-                    b.appendQueryParameter("error_code", "0");
-                    b.appendQueryParameter("error_msg", "无法加载html");
-                } else {
-                    b.appendQueryParameter("error_code", error.getErrorCode() + "");
-                    b.appendQueryParameter("error_msg", error.getDescription().toString());
-                }
-
-                if (Build.VERSION.SDK_INT < 21)
-                    b.appendQueryParameter("error_url", webView.getUrl() + "#real_url=unknown");
-                else
-                    b.appendQueryParameter("error_url", request.getUrl().toString());
-
-                b.appendQueryParameter("default_path", ASSET_PROTO + DEFAULT_HTML);
-                b.appendQueryParameter("user_path", user_html);
-                String url = ASSET_PROTO + ERROR_HTML + "?" + b.toString();
-                Log.e("WebView.onReceivedError", url);
-                webView.loadUrl(url);
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                // 允许使用 location.replace(); 否则将从日志中看到下面的错误
+                // W/cr_AwContentsClient: Denied starting an intent without a user gesture, URI
+                return false;
             }
+
+//
+//            @Override
+//            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+//                super.onReceivedError(view, request, error);
+//                Uri.Builder b = new Uri.Builder();
+//
+//                if (Build.VERSION.SDK_INT < 23) {
+//                    b.appendQueryParameter("error_code", "0");
+//                    b.appendQueryParameter("error_msg", "无法加载html");
+//                } else {
+//                    b.appendQueryParameter("error_code", error.getErrorCode() + "");
+//                    b.appendQueryParameter("error_msg", error.getDescription().toString());
+//                }
+//
+//                if (Build.VERSION.SDK_INT < 21)
+//                    b.appendQueryParameter("error_url", webView.getUrl() + "#real_url=unknown");
+//                else
+//                    b.appendQueryParameter("error_url", request.getUrl().toString());
+//
+//
+//                webView.loadUrl("javascript:document.write('aaaa');");
+//
+//            }
         });
         // webview内部不允许通过触摸或是物理键盘切换焦点
         webView.setFocusable(false);
@@ -235,19 +195,12 @@ public class SoftKeyboard extends InputMethodService {
         // "Failed to load module script: The server responded with a non-JavaScript MIME type of "".
         // Strict MIME type checking is enforced for module scripts per HTML spec.",
         // source: file:///android_asset/web/index.js?1569008605055 (0)
-        webView.loadUrl(url);
+        webView.loadUrl(index_html);
     }
 
-    void reload_webview() {
+    void reload_webview(String url) {
         // 重新走：优先使用存在的自定义html，否则使用默认
         if (null == webView) return;
-
-        String url = get_user_html_path();
-
-        if (null == url) {
-            // 优先使用用户html
-            url = ASSET_PROTO + DEFAULT_HTML;
-        }
 
         webView.loadUrl(url);
     }
