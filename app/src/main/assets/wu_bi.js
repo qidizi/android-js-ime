@@ -1,23 +1,22 @@
-function vue_index(name) {
-// 小于这个毫秒就是按
+function wu_bi() {
+
+    // 小于这个毫秒就是按
     const SMALL_IS_SHORT_PRESS_MS = 500;
-// 在这个范围内就是按，否则就是swipe
+    // 在这个范围内就是按，否则就是swipe
     const SMALL_IS_PRESS_PX = 5;
-// 长按激活后，多少毫秒发送一次按下事件
+    // 长按激活后，多少毫秒发送一次按下事件
     const LONG_PRESS_REPEAT_MS = 50;
     // 达到本px的位移才计一个方向；减少提高灵敏度，增大减少灵敏度
     const MIN_PX_FOR_ONE_DIRECTION = 10;
-
-// 创建临时全局变量，不放到vue data中，防止刷新ui
-// touch事件关系：
-// 按：down与up小于x毫秒＋ab点线长小于m
-// 长按: down与up不小于x毫秒＋ab点线长小于m
-// pan：x毫秒内，ab点线长不小于m（因为需要跟长按分清）
-    let glb = {
+    // 创建临时全局变量，不放到vue data中，防止刷新ui
+    // touch事件关系：
+    // 按：down与up小于x毫秒＋ab点线长小于m
+    // 长按: down与up不小于x毫秒＋ab点线长小于m
+    // pan：x毫秒内，ab点线长不小于m（因为需要跟长按分清）
+    let glob = {
         // 只响应几个手指的触摸
         touch: []
     };
-
     window.app = new Vue({
         el: '#app',
         name: name,
@@ -52,10 +51,9 @@ function vue_index(name) {
         mounted() {
             // 初始化
             // 不使用jq，只有简单的功能
-            id('init').remove();
             id('app').style.display = 'block';
             // 向java注册接收通知的方法
-            java.js_onload("window.app.java_listener");
+            java.js_onload(this.java_listener);
         },
         methods: {
             'on_menu'(ev) {
@@ -73,7 +71,8 @@ function vue_index(name) {
                     )
                 ) {
                     // 附加上点击的键盘
-                    touch.custom_kbd_dom = has_class(touch.target, 'keys') ? touch.target : touch.target.parentElement;
+                    touch.custom_kbd_dom = has_class(touch.target, 'keys')
+                        ? touch.target : touch.target.parentElement;
                     // 找到键盘对象
                     touch.custom_kbd_i = touch.custom_kbd_dom.dataset.i;
 
@@ -81,7 +80,9 @@ function vue_index(name) {
                         touch.custom_key = 'c';
                     } else if ('.u.d.l.r.'.indexOf('.' + touch.custom_type + '.') > -1)
                         touch.custom_key = touch.custom_type;
-                    touch.custom_key_dom = touch.custom_kbd_dom.querySelector('.kbd-' + touch.custom_key);
+                    touch.custom_key_dom = touch.custom_kbd_dom.querySelector(
+                        '.kbd-' + touch.custom_key
+                    );
                 }
 
                 touch.custom_type.indexOf('>') > 0 ?
@@ -122,8 +123,8 @@ function vue_index(name) {
             "on_touch_cancel"(ev) {
                 // 触摸事件被打断，如长按时，文本被选中了触发了右键菜单弹出
                 for (let n = 0, changed_touch; (changed_touch = ev.changedTouches[n]); n++) {
-                    let touch = glb.touch[changed_touch.identifier];
-                    delete glb.touch[changed_touch.identifier];
+                    let touch = glob.touch[changed_touch.identifier];
+                    delete glob.touch[changed_touch.identifier];
                     // 只需要取消延时触发长按定时
                     clearTimeout(touch.long_press_timer);
                     // type === touchcancel
@@ -136,7 +137,7 @@ function vue_index(name) {
                     // 手指按下
                     // 只取起始点的dom
                     // let target = ev.target;
-                    let touch = glb.touch[changed_touch.identifier] = {
+                    let touch = glob.touch[changed_touch.identifier] = {
                         identifier: changed_touch.identifier,
                         type: ev.type,
                         canceled: false
@@ -178,7 +179,7 @@ function vue_index(name) {
             "on_touch_move"(ev) {
                 for (let n = 0, changed_touch; (changed_touch = ev.changedTouches[n]); n++) {
                     // 触摸中移动
-                    let touch = glb.touch[changed_touch.identifier];
+                    let touch = glob.touch[changed_touch.identifier];
                     touch.type = ev.type;
 
                     if (!touch || touch.target !== changed_touch.target)
@@ -251,8 +252,8 @@ function vue_index(name) {
             "on_touch_end"(ev) {
                 // 放开触摸
                 for (let n = 0, changed_touch; (changed_touch = ev.changedTouches[n]); n++) {
-                    let touch = glb.touch[changed_touch.identifier];
-                    delete glb.touch[changed_touch.identifier];
+                    let touch = glob.touch[changed_touch.identifier];
+                    delete glob.touch[changed_touch.identifier];
                     touch.type = ev.type;
                     touch.canceled = true;
 
@@ -282,3 +283,32 @@ function vue_index(name) {
         },
     });
 }
+
+// 依赖人工保证
+let order = ['dict', 'en', 'quick', 'speech', 'cn'];
+
++function order_load() {
+    let sub = order.shift();
+
+    if (!sub) {
+        // 全部依赖加载完成了
+        wu_bi();
+        return;
+    }
+
+    java.load_url(
+        'http://js-ime.qidizi.com/android-js-ime/app/src/main/assets/' + sub + '.js',
+        'default_kbd_' + sub + '.js',
+        function () {
+            if ('function' === typeof window[sub]) {
+                let dom = document.createElement(sub);
+                dom.title = sub;
+                id('app').appendChild(dom);
+                window[sub]();
+            }
+
+            order_load();
+        },
+        true
+    );
+}();

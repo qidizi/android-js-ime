@@ -1,9 +1,124 @@
-window.android = {
+// java 提供的 js api，或常量
+window.java = {
+    // 字符串上屏
+    send_text(text) {
+        window['JAVA'] ? window['JAVA'].send_text(text) : debug('java收到字符串：' + text);
+    },
+    // 给输入框发送press按钮事件
+    send_key_press(key_code, meta_state) {
+        window['JAVA'] ? window['JAVA'].send_key_press(key_code, meta_state || 0) :
+            debug('java收到press: code=' + key_code + ' 控制键状态=' + meta_state);
+    },
+    // 向java注册事件监听方法，比如输入框获得焦点等
+    js_onload(js_listener_fn) {
+        window['JAVA'] ? window['JAVA'].js_onload(this.get_callback(js_listener_fn)) :
+            debug('java收到html onload，java回调接收方法为：' + js_listener_fn);
+    },
+    /**
+     * 提供本方法是为了解决加载远程的js及css，比如有些免费储存空间访问js时响应为text/plain类型
+     使用script是无法加载的，用ajax存在跨域又不可能，
+     它原理是把远程内容保存到手机app内部储存空间，给出file协议url
+     不建议加载html之类，也没有必要
+     在浏览器中mock不完整
+     * @param  url string 远程url，比如css、js之类
+     * @param local_name string 保存到app/files目录的名称，包含后缀名，否则html加载无法正确解析
+     * @param callback string 加载成功回调方法，注意必须是字符串，不能是func句柄;
+     * 回调形式 callback({code:参考http code,msg:操作结果描述,data:远程url的内容（仅不保存到本地时才有）,url:本地访问网址});
+     * @param from_remote bool 是否忽略本地内容，总是从远程获取
+     */
+    load_url(url, local_name, callback, from_remote) {
+        // 因为无法使用 js的location.replace(url)加载file://
+        window['JAVA'] ? function () {
+            window['JAVA'].load_url(url, local_name, java.get_callback(function (json) {
+                console.log(json)
+                if (local_name.indexOf('.js')) {
+                    load_js(url, callback);
+                    return;
+                }
+
+                if (local_name.indexOf('.css')) {
+                    load_css(url);
+                    return;
+                }
+
+                callback(json);
+            }), !!from_remote)
+        }() : function () {
+            // 对于模拟，remote 参数无意义,对于java：false时表示文件存在时取硬盘的不再下载，true表示无条件下载
+            if (url.indexOf('.js')) {
+                load_js(url, callback);
+                return;
+            }
+
+            if (url.indexOf('.css')) {
+                load_css(url);
+                return;
+            }
+
+            console.log('不支持加载' + url);
+        }();
+    },
+    // 请求打开语音录音
+    open_speech_recognizer() {
+        window['JAVA'] ? window['JAVA'].open_speech_recognizer() : debug('java收到打开语音识别的请求');
+    },
+    // 请求停止语音识别
+    stop_speech_recognizer() {
+        window['JAVA'] ? window['JAVA'].stop_speech_recognizer() : debug('java收到停止语音识别的请求');
+    },
+    // 中止语音识别
+    cancel_speech_recognizer() {
+        window['JAVA'] ? window['JAVA'].cancel_speech_recognizer() : debug('java收到取消语音识别的请求');
+    },
+    // 发送剪切，有时ctrl+x事件无效
+    send_cut() {
+        java.send_key_press(java.KEYCODE_X, java.META_CTRL_MASK);
+    },
+    // 发送粘贴事件
+    send_paste() {
+        java.send_key_press(java.KEYCODE_V, java.META_CTRL_MASK);
+    },
+    // 发送全选事件
+    send_select_all() {
+        java.send_key_press(java.KEYCODE_A, java.META_CTRL_MASK);
+    },
+    // 发送撤消事件
+    send_undo() {
+        java.send_key_press(java.KEYCODE_Z, java.META_CTRL_MASK);
+    },
+    // 发送复制事件
+    send_copy() {
+        java.send_key_press(java.KEYCODE_C, java.META_CTRL_MASK);
+    },
+    // 发送光标左移
+    send_left() {
+        java.send_key_press(java.KEYCODE_DPAD_LEFT);
+    },
+    // 发送光标右移
+    send_right() {
+        java.send_key_press(java.KEYCODE_DPAD_RIGHT);
+    },
+    // 发送光标上移
+    send_up() {
+        java.send_key_press(java.KEYCODE_DPAD_UP);
+    },
+    // 发送光标下移
+    send_down() {
+        java.send_key_press(java.KEYCODE_DPAD_DOWN);
+    },
+    get_callback(func, keep) {
+        let unique = 'cb' + +new Date + Math.random().toString().substr(2);
+        java[unique] = function () {
+            func.apply(java, arguments);
+            if (!keep) delete java[unique];
+        };
+        return 'java.' + unique;
+    },
     // meta常量，LEFT或RIGHT ON表示只支持某边键按下
     // 不带左右方向要求的ON表示任意边的该键按下都行
     // 当用MASK，表示使用上面任1比对都为真
     // 若想传递多个键按下，使用|连接，如传递按下任1ALT+CTRL,用 META_ALT_ON|META_CTRL_ON
-    // 见 https://developer.android.google.cn/reference/android/view/KeyEvent.html#getMetaState()
+    // 见 https://developer.java.google.cn/reference/android/view/KeyEvent.html#getMetaState()
     META_ALT_LEFT_ON: 16,
     META_ALT_MASK: 50,
     META_ALT_ON: 2,
@@ -313,58 +428,4 @@ window.android = {
     KEYCODE_SYSTEM_NAVIGATION_RIGHT: 283,
     KEYCODE_ALL_APPS: 284,
     KEYCODE_REFRESH: 285,
-};
-
-window.java = {
-    send_text(text) {
-        window['JAVA'] ? window['JAVA'].send_text(text) : debug('java收到字符串：' + text);
-    },
-    send_key_press(key_code, meta_state) {
-        window['JAVA'] ? window['JAVA'].send_key_press(key_code, meta_state || 0) :
-            debug('java收到press: code=' + key_code + ' 控制键状态=' + meta_state);
-    },
-    js_onload(js_listener_fn) {
-        window['JAVA'] ? window['JAVA'].js_onload(js_listener_fn) :
-            debug('java收到html onload，java回调接收方法为：' + js_listener_fn);
-    },
-    replace(url) {
-        // 因为无法使用 js的location.replace(url)加载file://
-        window['JAVA'] ? window['JAVA'].replace(url) : debug('java收到加载url的请求');
-    },
-    open_speech_recognizer() {
-        window['JAVA'] ? window['JAVA'].open_speech_recognizer() : debug('java收到打开语音识别的请求');
-    },
-    stop_speech_recognizer() {
-        window['JAVA'] ? window['JAVA'].stop_speech_recognizer() : debug('java收到停止语音识别的请求');
-    },
-    cancel_speech_recognizer() {
-        window['JAVA'] ? window['JAVA'].cancel_speech_recognizer() : debug('java收到取消语音识别的请求');
-    },
-    send_cut() {
-        java.send_key_press(android.KEYCODE_X, android.META_CTRL_MASK);
-    },
-    send_paste() {
-        java.send_key_press(android.KEYCODE_V, android.META_CTRL_MASK);
-    },
-    send_select_all() {
-        java.send_key_press(android.KEYCODE_A, android.META_CTRL_MASK);
-    },
-    send_undo() {
-        java.send_key_press(android.KEYCODE_Z, android.META_CTRL_MASK);
-    },
-    send_copy() {
-        java.send_key_press(android.KEYCODE_C, android.META_CTRL_MASK);
-    },
-    send_left() {
-        java.send_key_press(android.KEYCODE_DPAD_LEFT);
-    },
-    send_right() {
-        java.send_key_press(android.KEYCODE_DPAD_RIGHT);
-    },
-    send_up() {
-        java.send_key_press(android.KEYCODE_DPAD_UP);
-    },
-    send_down() {
-        java.send_key_press(android.KEYCODE_DPAD_DOWN);
-    }
 };

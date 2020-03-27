@@ -1,6 +1,5 @@
-// vue_组件名做文件名和方法名规则，以方便自动加载
-function vue_en(name) {
-    Vue.component(name, {
+function en() {
+    Vue.component('en', {
         mounted() {
             this.$on(['0-u>d', 'show'], this.on_show);
             this.$on('hide', this.on_hide);
@@ -47,7 +46,7 @@ function vue_en(name) {
                     } else if (kbd_obj.text)
                         java.send_text(kbd_obj.text);
                     else if (/^[A-Z]$/.test(kbd_obj.label)) {
-                        java.send_key_press(android['KEYCODE_' + kbd_obj.label], this.get_meta_state());
+                        java.send_key_press(java['KEYCODE_' + kbd_obj.label], this.get_meta_state());
                     } else
                         java.send_text(kbd_obj.label);
                     this.clear_meta(kbd_obj.code);
@@ -58,25 +57,25 @@ function vue_en(name) {
                 let state = 0;
                 // 任何已经按下的控制键，在使用一次后自动恢复
                 if (this.meta_down('shift')) {
-                    state |= android.META_SHIFT_MASK;
+                    state |= java.META_SHIFT_MASK;
                 }
 
                 if (this.meta_down('ctrl')) {
-                    state |= android.META_CTRL_MASK;
+                    state |= java.META_CTRL_MASK;
                 }
 
                 if (this.meta_down('alt')) {
-                    state |= android.META_ALT_MASK;
+                    state |= java.META_ALT_MASK;
                 }
 
                 if (this.meta_down('meta')) {
-                    state |= android.META_META_MASK;
+                    state |= java.META_META_MASK;
                 }
 
                 return state;
             },
             meta_down(meta, val) {
-                let which = 'meta_down_' + (isNaN(meta) ? android['KEYCODE_' + meta.toUpperCase() + '_LEFT'] : meta);
+                let which = 'meta_down_' + (isNaN(meta) ? java['KEYCODE_' + meta.toUpperCase() + '_LEFT'] : meta);
                 if (2 === arguments.length)
                     return this[which] = val;
 
@@ -85,23 +84,23 @@ function vue_en(name) {
             clear_meta(code) {
                 if (!this.is_meta_code(code)) {
                     // 不是按控制键，就清除,shift不清除，让用户自行控制
-                    this['meta_down_' + android.KEYCODE_META_LEFT] = false;
-                    this['meta_down_' + android.KEYCODE_ALT_LEFT] = false;
-                    this['meta_down_' + android.KEYCODE_CTRL_LEFT] = false;
+                    this['meta_down_' + java.KEYCODE_META_LEFT] = false;
+                    this['meta_down_' + java.KEYCODE_ALT_LEFT] = false;
+                    this['meta_down_' + java.KEYCODE_CTRL_LEFT] = false;
                     return true;
                 }
                 return false;
             },
             is_meta_code(code) {
                 switch (code) {
-                    case android.KEYCODE_SHIFT_LEFT:
-                    case android.KEYCODE_SHIFT_RIGHT:
-                    case android.KEYCODE_ALT_LEFT:
-                    case android.KEYCODE_ALT_RIGHT:
-                    case android.KEYCODE_CTRL_LEFT:
-                    case android.KEYCODE_CTRL_RIGHT:
-                    case android.KEYCODE_META_LEFT:
-                    case android.KEYCODE_META_RIGHT:
+                    case java.KEYCODE_SHIFT_LEFT:
+                    case java.KEYCODE_SHIFT_RIGHT:
+                    case java.KEYCODE_ALT_LEFT:
+                    case java.KEYCODE_ALT_RIGHT:
+                    case java.KEYCODE_CTRL_LEFT:
+                    case java.KEYCODE_CTRL_RIGHT:
+                    case java.KEYCODE_META_LEFT:
+                    case java.KEYCODE_META_RIGHT:
                         return true;
                 }
 
@@ -124,7 +123,7 @@ function vue_en(name) {
                 show: false,
                 kbd: [
                     {
-                        "c": {"label": "⏎", code: android.KEYCODE_ENTER},
+                        "c": {"label": "⏎", code: java.KEYCODE_ENTER},
                         "cls": "kbd_150"
                     },
                     {
@@ -133,7 +132,7 @@ function vue_en(name) {
                     },
                     {"c": {"label": "."}},
                     {
-                        "c": {"label": "␣", code: android.KEYCODE_SPACE},
+                        "c": {"label": "␣", code: java.KEYCODE_SPACE},
                         "cls": "kbd_150"
                     },
                     {
@@ -166,14 +165,14 @@ function vue_en(name) {
                     },
                     {
                         "c": {
-                            "label": " 🄰", code: android.KEYCODE_SHIFT_LEFT
+                            "label": " 🄰", code: java.KEYCODE_SHIFT_LEFT
                         },
-                        u: {label: 'Ctrl', code: android.KEYCODE_CTRL_LEFT},
-                        r: {label: 'Alt', code: android.KEYCODE_ALT_LEFT},
+                        u: {label: 'Ctrl', code: java.KEYCODE_CTRL_LEFT},
+                        r: {label: 'Alt', code: java.KEYCODE_ALT_LEFT},
                     },
                     {
-                        "c": {"label": "⌫", code: android.KEYCODE_DEL},
-                        "u": {"label": "⌦", code: android.KEYCODE_FORWARD_DEL},
+                        "c": {"label": "⌫", code: java.KEYCODE_DEL},
+                        "u": {"label": "⌦", code: java.KEYCODE_FORWARD_DEL},
                         "cls": "kbd_bs_w"
                     },
                     {"c": {"label": ","}},
@@ -234,40 +233,40 @@ function vue_en(name) {
                     },
                     {
                         "c": {"label": "P"},
-                        "u": {"label": "F10", code: android.KEYCODE_F10}
+                        "u": {"label": "F10", code: java.KEYCODE_F10}
                     },
                     {
                         "c": {"label": "O"},
-                        "u": {"label": "F9", code: android.KEYCODE_F9},
+                        "u": {"label": "F9", code: java.KEYCODE_F9},
                         "l": {"label": "-"},
                         "r": {"label": "="}
                     },
-                    {"c": {"label": "I"}, "u": {"label": "F8", code: android.KEYCODE_F8}},
+                    {"c": {"label": "I"}, "u": {"label": "F8", code: java.KEYCODE_F8}},
                     {
                         "c": {"label": "U"},
-                        "u": {"label": "F7", code: android.KEYCODE_F7}
+                        "u": {"label": "F7", code: java.KEYCODE_F7}
                     },
-                    {"c": {"label": "Y"}, "u": {"label": "F6", code: android.KEYCODE_F6}},
+                    {"c": {"label": "Y"}, "u": {"label": "F6", code: java.KEYCODE_F6}},
                     {
                         "c": {"label": "T"},
-                        "u": {"label": "F5", code: android.KEYCODE_F5}
+                        "u": {"label": "F5", code: java.KEYCODE_F5}
                     },
                     {
-                        "c": {"label": "R"}, "u": {"label": "F4", code: android.KEYCODE_F4}
+                        "c": {"label": "R"}, "u": {"label": "F4", code: java.KEYCODE_F4}
                     },
                     {
                         "c": {"label": "E"},
-                        "u": {"label": "F3", code: android.KEYCODE_F3}
+                        "u": {"label": "F3", code: java.KEYCODE_F3}
                     },
                     {
                         "c": {"label": "W"},
-                        "u": {"label": "F2", code: android.KEYCODE_F2},
-                        "d": {"label": "F12", code: android.KEYCODE_F12}
+                        "u": {"label": "F2", code: java.KEYCODE_F2},
+                        "d": {"label": "F12", code: java.KEYCODE_F12}
                     },
                     {
                         "c": {"label": "Q"},
-                        "u": {"label": "F1", code: android.KEYCODE_F1},
-                        "d": {"label": "F11", code: android.KEYCODE_F11}
+                        "u": {"label": "F1", code: java.KEYCODE_F1},
+                        "d": {"label": "F11", code: java.KEYCODE_F11}
                     },
                     {"c": {"label": 0}, "u": {"label": ")"}},
                     {
@@ -301,7 +300,7 @@ function vue_en(name) {
                         "r": {"label": "\""},
                         "d": {
                             "label": "⇥", fn() {
-                                java.send_key_press(android.KEYCODE_TAB, android.META_SHIFT_MASK);
+                                java.send_key_press(java.KEYCODE_TAB, java.META_SHIFT_MASK);
                             }
                         }
                     },
@@ -311,23 +310,24 @@ function vue_en(name) {
                         "r": {"label": ">"},
                         "d": {
                             "label": "⇥", fn() {
-                                java.send_key_press(android.KEYCODE_TAB);
+                                java.send_key_press(java.KEYCODE_TAB);
                             }
                         }
                     },
                     {
                         "c": {"label": 1},
                         "u": {"label": "!"},
-                        "d": {"label": "Esc", code: android.KEYCODE_ESCAPE}
+                        "d": {"label": "Esc", code: java.KEYCODE_ESCAPE}
                     }
                 ]
             };
             // TODO 所有的meta key总是使用left，不要使用right，因为一边足够
-            data['meta_down_' + android.KEYCODE_SHIFT_LEFT] = false;
-            data['meta_down_' + android.KEYCODE_ALT_LEFT] = false;
-            data['meta_down_' + android.KEYCODE_CTRL_LEFT] = false;
-            data['meta_down_' + android.KEYCODE_META_LEFT] = false;
+            data['meta_down_' + java.KEYCODE_SHIFT_LEFT] = false;
+            data['meta_down_' + java.KEYCODE_ALT_LEFT] = false;
+            data['meta_down_' + java.KEYCODE_CTRL_LEFT] = false;
+            data['meta_down_' + java.KEYCODE_META_LEFT] = false;
             return data;
         }
     });
 }
+

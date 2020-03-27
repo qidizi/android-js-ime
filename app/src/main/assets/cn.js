@@ -1,39 +1,36 @@
-// 码表中码词之间分隔符
-const WU_BI_KEY_WORD_SEPARATE = ' ';
-// 码表中2组kw之间分隔
-const WU_BI_KEY_WORD_GROUP_SEPARATE = '\n';
-// 这个词库建议从qq五笔中导出它的系统词库
-ajax('vue_wu_bi_dict.txt?' + +new Date, function (str) {
-    window.vue_wu_bi_dict = {};
-    let start = 0;
-    for (let i = 'a'.charCodeAt(0); i <= 'z'.charCodeAt(0); i++) {
-        let char = String.fromCharCode(i);
-
-        if ('y' === char) {
-            vue_wu_bi_dict[char] = str.substring(start).trim();
-            break;
-        }
-
-        let next_char = str.indexOf(
-            WU_BI_KEY_WORD_GROUP_SEPARATE + String.fromCharCode(i + 1)
-        );
-        vue_wu_bi_dict[char] = str.substring(start, next_char + 1).trim();
-        start = next_char + 1;
-    }
-});
-
-function vue_wu_bi(name) {
-// 匹配中文，候选框只显示前面x个
-    const CANDIDATE_LIMIT = 10;
-
-    Vue.component(name, {
+// 必须与文件名相同
+function cn() {
+    Vue.component('cn', {
         mounted() {
+            // 这个词库建议从qq五笔中导出它的系统词库
+            this.dict = {};
+            let start = 0;
+            for (let i = 'a'.charCodeAt(0); i <= 'z'.charCodeAt(0); i++) {
+                let char = String.fromCharCode(i);
+                let next_char = DICT.indexOf(
+                    this.WU_BI_KEY_WORD_GROUP_SEPARATE + String.fromCharCode(i + 1)
+                );
+                this.dict[char] = DICT.substring(start, next_char + 1).trim();
+                start = next_char + 1;
+
+                if ('z' === char) {
+                    break;
+                }
+            }
+            // 释放内存
+            DICT = null;
             this.$on(['0-d>u', 'show'], this.on_show);
             this.$on('hide', this.on_hide);
             this.$on('touch', this.on_touch);
             //this.$root.$emit('register_default', this, this.show = true);
         },
         methods: {
+            // 匹配中文，候选框只显示前面x个
+            CANDIDATE_LIMIT: 10,
+            // 码表中码词之间分隔符
+            WU_BI_KEY_WORD_SEPARATE: ' ',
+            // 码表中2组kw之间分隔
+            WU_BI_KEY_WORD_GROUP_SEPARATE: '\n',
             on_show() {
                 // 不支持从其它键盘返回
                 this.$root.$emit('child_show', this, true);
@@ -70,7 +67,7 @@ function vue_wu_bi(name) {
             wu_bi_code(code_or_label) {
                 let keys = this.keys;
 
-                if (code_or_label === android.KEYCODE_DEL) {
+                if (code_or_label === java.KEYCODE_DEL) {
                     // 向左删除
                     if (!keys) {
                         // 没有键码，直接向系统发送删除事件
@@ -85,7 +82,7 @@ function vue_wu_bi(name) {
                         this.keyboard_reset();
                         return;
                     }
-                } else if (code_or_label === android.KEYCODE_SPACE) {
+                } else if (code_or_label === java.KEYCODE_SPACE) {
                     if (this.candidates.length) {
                         // 有候选,首个上屏
                         let cd = this.candidates[0];
@@ -97,7 +94,7 @@ function vue_wu_bi(name) {
                     // 重置
                     this.keyboard_reset();
                     return;
-                } else if (code_or_label === android.KEYCODE_ENTER) {
+                } else if (code_or_label === java.KEYCODE_ENTER) {
                     if (keys.length) {
                         // 有缓存键码，键码上屏
                         java.send_text(keys);
@@ -108,11 +105,11 @@ function vue_wu_bi(name) {
                     this.keyboard_reset();
                     return;
                 } else if (
-                    code_or_label === android.KEYCODE_DPAD_LEFT ||
-                    code_or_label === android.KEYCODE_DPAD_RIGHT ||
-                    code_or_label === android.KEYCODE_DPAD_UP ||
-                    code_or_label === android.KEYCODE_DPAD_DOWN ||
-                    code_or_label === android.KEYCODE_FORWARD_DEL
+                    code_or_label === java.KEYCODE_DPAD_LEFT ||
+                    code_or_label === java.KEYCODE_DPAD_RIGHT ||
+                    code_or_label === java.KEYCODE_DPAD_UP ||
+                    code_or_label === java.KEYCODE_DPAD_DOWN ||
+                    code_or_label === java.KEYCODE_FORWARD_DEL
                 ) {
                     java.send_key_press(code_or_label);
                     return;
@@ -134,20 +131,20 @@ function vue_wu_bi(name) {
                 }
 
                 let match_words = [];
-                let words = WU_BI_KEY_WORD_GROUP_SEPARATE + vue_wu_bi_dict[keys[0]];
+                let words = this.WU_BI_KEY_WORD_GROUP_SEPARATE + this.dict[keys[0]];
                 //let start_time = +new Date;
                 // 大概意思是只取前n个以该码开头的匹配
                 // 注意词库并不一定是按key的顺序排序，所以，顺序的key并不会出现在顺排位置，而是按词频来排序
                 let reg = new RegExp(
-                    WU_BI_KEY_WORD_GROUP_SEPARATE + keys
-                    + '[^' + WU_BI_KEY_WORD_GROUP_SEPARATE + ']+',
+                    this.WU_BI_KEY_WORD_GROUP_SEPARATE + keys
+                    + '[^' + this.WU_BI_KEY_WORD_GROUP_SEPARATE + ']+',
                     'g'
                 );
                 // 注意使用的词库是支持单行多义，如： kkkk 口 咒骂
-                let kw, limit = CANDIDATE_LIMIT;
+                let kw, limit = this.CANDIDATE_LIMIT;
 
                 while (limit-- > 0 && (kw = reg.exec(words))) {
-                    kw = kw[0].trim().split(WU_BI_KEY_WORD_SEPARATE);
+                    kw = kw[0].trim().split(this.WU_BI_KEY_WORD_SEPARATE);
 
                     for (let i = 1; i < kw.length; i++)
                         match_words.push({keys: kw[0], words: kw[i]});
@@ -172,7 +169,7 @@ function vue_wu_bi(name) {
                 // 五笔键盘长按事件
 
                 switch (code) {
-                    case android.KEYCODE_DEL:
+                    case java.KEYCODE_DEL:
                         // 长按立刻
                         if (this.keys) {
                             this.keyboard_reset();
@@ -181,7 +178,7 @@ function vue_wu_bi(name) {
 
                         java.send_key_press(code);
                         break;
-                    case android.KEYCODE_SPACE:
+                    case java.KEYCODE_SPACE:
                         if (this.candidates && this.candidates.length) {
                             java.send_text(this.candidates[0].words);
                             this.keyboard_reset();
@@ -190,7 +187,7 @@ function vue_wu_bi(name) {
 
                         java.send_key_press(code);
                         break;
-                    case android.KEYCODE_ENTER:
+                    case java.KEYCODE_ENTER:
                         if (this.keys) {
                             java.send_text(this.keys);
                             this.keyboard_reset();
@@ -249,7 +246,7 @@ function vue_wu_bi(name) {
                 keys: '',
                 show: false,
                 kbd: [
-                    {"c": {"label": "⏎", code: android.KEYCODE_ENTER}, "cls": "kbd_150"},
+                    {"c": {"label": "⏎", code: java.KEYCODE_ENTER}, "cls": "kbd_150"},
                     {"c": {"label": "？"}},
                     {
                         "c": {"label": "。"},
@@ -263,16 +260,16 @@ function vue_wu_bi(name) {
                         "u": {"label": "《"}
                     },
                     {
-                        "c": {"label": "␣", code: android.KEYCODE_SPACE},
+                        "c": {"label": "␣", code: java.KEYCODE_SPACE},
                         "cls": "kbd_150"
                     },
-                    {"c": {"label": "⇨", code: android.KEYCODE_DPAD_RIGHT}},
-                    {"c": {"label": "⇩", code: android.KEYCODE_DPAD_DOWN}},
-                    {"c": {"label": "⇧", code: android.KEYCODE_DPAD_UP}},
-                    {"c": {"label": "⇦", code: android.KEYCODE_DPAD_LEFT}},
+                    {"c": {"label": "⇨", code: java.KEYCODE_DPAD_RIGHT}},
+                    {"c": {"label": "⇩", code: java.KEYCODE_DPAD_DOWN}},
+                    {"c": {"label": "⇧", code: java.KEYCODE_DPAD_UP}},
+                    {"c": {"label": "⇦", code: java.KEYCODE_DPAD_LEFT}},
                     {
-                        "c": {"label": "⌫", code: android.KEYCODE_DEL},
-                        "u": {"label": "⌦", code: android.KEYCODE_FORWARD_DEL},
+                        "c": {"label": "⌫", code: java.KEYCODE_DEL},
+                        "u": {"label": "⌦", code: java.KEYCODE_FORWARD_DEL},
                         d: {
                             label: "清码", fn() {
                                 this.keyboard_reset();

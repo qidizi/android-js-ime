@@ -1,3 +1,4 @@
+let DICT = `
 a 工 戈
 aa 式
 aaa 工
@@ -88997,3 +88998,4 @@ yyyc 广袤
 yyyn 言词
 yyyy 文言
 yyyf 譶
+`;

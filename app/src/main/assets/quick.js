@@ -1,7 +1,5 @@
-function vue_quick(name) {
-// 快捷短语保存在localStorage的key
-    const QUICK_INPUT_ITEM_NAME = 'quick_input_list';
-    Vue.component(name, {
+function quick() {
+    Vue.component('quick', {
         data() {
             return {
                 lines: '',
@@ -9,7 +7,7 @@ function vue_quick(name) {
                 textarea_result: '',
                 show_editor: false,
                 show: false,
-                quick_input: localStorage.getItem(QUICK_INPUT_ITEM_NAME),
+                quick_input: localStorage.getItem(this.QUICK_INPUT_ITEM_NAME),
                 kbd: []
             };
         },
@@ -21,6 +19,8 @@ function vue_quick(name) {
             //this.$root.$emit('register_default', this, this.show = true);
         },
         computed: {
+            // 快捷短语保存在localStorage的key
+            QUICK_INPUT_ITEM_NAME: 'quick_input_list',
             quick_input_parse() {
                 // 注意需要自行赋值，不是return
 
@@ -31,7 +31,7 @@ function vue_quick(name) {
                     {
                         c: {
                             label: '撤消', fn() {
-                                java.send_key_press(android.KEYCODE_Z, android.META_CTRL_MASK);
+                                java.send_key_press(java.KEYCODE_Z, java.META_CTRL_MASK);
                             }
                         },
                     },
@@ -39,7 +39,7 @@ function vue_quick(name) {
                         c: {
                             label: '⏎',
                             fn() {
-                                java.send_key_press(android.KEYCODE_ENTER);
+                                java.send_key_press(java.KEYCODE_ENTER);
                             }
                         }
                     },
@@ -47,7 +47,7 @@ function vue_quick(name) {
                         c: {
                             label: '⌫',
                             fn() {
-                                java.send_key_press(android.KEYCODE_DEL);
+                                java.send_key_press(java.KEYCODE_DEL);
                             }
                         }
                     },
@@ -55,7 +55,7 @@ function vue_quick(name) {
                         c: {
                             label: '␣',
                             fn() {
-                                java.send_key_press(android.KEYCODE_SPACE);
+                                java.send_key_press(java.KEYCODE_SPACE);
                             }
                         },
                         u: {label: '调整', fn: this.on_edit},
@@ -136,7 +136,7 @@ function vue_quick(name) {
                 this.on_hide();
             },
             on_edit() {
-                this.lines = localStorage.getItem(QUICK_INPUT_ITEM_NAME) || '';
+                this.lines = localStorage.getItem(this.QUICK_INPUT_ITEM_NAME) || '';
                 this.textarea_tip = '说明   请剪出编辑，再贴回应用\n键面文字       上屏内容文字\n' +
                     '键面文字2     上屏内容文字2\n';
                 this.show_editor = true;
@@ -159,7 +159,7 @@ function vue_quick(name) {
                     java.replace('file:///android_asset/index.html?user_index='
                         + encodeURIComponent(this.lines) + '&r=' + +new Date);
                 } else {
-                    localStorage.setItem(QUICK_INPUT_ITEM_NAME, this.lines);
+                    localStorage.setItem(this.QUICK_INPUT_ITEM_NAME, this.lines);
                     this.quick_input = this.lines;
                     this.lines = '';
                 }
@@ -202,6 +202,5 @@ function vue_quick(name) {
         </kbd>
 `
 
-    })
-    ;
+    });
 }
