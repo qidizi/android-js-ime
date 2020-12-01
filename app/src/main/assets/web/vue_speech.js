@@ -50,12 +50,11 @@ function vue_speech(name) {
             });
             this.$on('0-l>r', this.on_show);
             this.$on('hide', this.on_hide);
-            // this.$root.$emit('register_default', this, this.show = true);
         },
         methods: {
             on_show() {
                 // 不能从其它键盘返回到本键盘
-                this.$root.$emit('child_show', this, false);
+                this.$root.$emit('child_show', this);
                 this.text = TIP;
                 this.show = true;
                 this.result_cls = '';
@@ -71,7 +70,8 @@ function vue_speech(name) {
                 }
             },
             on_back() {
-                this.$root.$emit('back', this);
+                // 本身触发关闭
+                this.$root.$emit('child_hide', this);
                 this.on_hide();
             },
             'speech_recognizer'() {
@@ -111,7 +111,7 @@ function vue_speech(name) {
             },
         },
         template: `
-    <kbd class="` + name + ` kbd" v-show="show">
+    <kbd id="${name}" class="${name} kbd" v-show="show">
         <button @click="on_commit_text" class="apply btn">上屏</button>
         <button @click="on_enter" class="btn cancel">⏎</button>
         <button @click="on_del" class="btn cancel">⌫</button>

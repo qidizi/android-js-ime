@@ -15,48 +15,14 @@ function vue_quick(name) {
             // 加载快捷短语
             this.$on('0-r>l', this.on_show);
             this.$on('hide', this.on_hide);
-            this.$on('touch', this.on_touch);
-            //this.$root.$emit('register_default', this, this.show = true);
+            this.$on('touch.' + name, this.on_touch);
         },
         computed: {
             quick_input_parse() {
                 // 注意需要自行赋值，不是return
-
                 let kbd = [
                     {
-                        c: {label: '返回', fn: this.on_back},
-                        u: {label: '调整', fn: this.on_edit},
-                    },
-                    {
-                        c: {
-                            label: '撤消', fn() {
-                                java.send_key_press(android.KEYCODE_Z, android.META_CTRL_MASK);
-                            }
-                        },
-                    },
-                    {
-                        c: {
-                            label: '⏎',
-                            fn() {
-                                java.send_key_press(android.KEYCODE_ENTER);
-                            }
-                        }
-                    },
-                    {
-                        c: {
-                            label: '⌫',
-                            fn() {
-                                java.send_key_press(android.KEYCODE_DEL);
-                            }
-                        }
-                    },
-                    {
-                        c: {
-                            label: '␣',
-                            fn() {
-                                java.send_key_press(android.KEYCODE_SPACE);
-                            }
-                        }
+                        d: {label: '调整', fn: this.on_edit},
                     }
                 ];
                 let sides;
@@ -75,7 +41,13 @@ function vue_quick(name) {
                     while (true) {
                         if (!sides || !sides.length) {
                             kbd.push({});
-                            sides = 'c,u,r,d,l'.split(',');
+                            sides = 'c,l,r,u';
+
+                            // 给首个key预留下为编辑
+                            if (kbd.length > 1)
+                                sides += 'd';
+
+                            sides = sides.split(',');
                         }
 
                         let cell = kbd.length % max_cell;
@@ -105,6 +77,7 @@ function vue_quick(name) {
                     let kbd_obj = this.kbd[ev.custom_kbd_i][ev.custom_key];
                     if (!kbd_obj) return;
                     ev.custom_kbd_obj = kbd_obj;
+
                     // 优先fn
                     if (kbd_obj.fn)
                         kbd_obj.fn.call(this, ev);
@@ -116,15 +89,17 @@ function vue_quick(name) {
             },
             on_show() {
                 // 不支持从其它键盘返回
-                this.$root.$emit('child_show', this, false);
+                this.$root.$emit('child_show', this);
                 this.show = true;
             },
             on_hide() {
+                // 收到其它组件通知的隐藏
                 this.show_editor = false;
                 this.show = false;
             },
-            on_back() {
-                this.$root.$emit('back', this);
+            on_close() {
+                // 本身触发的隐藏
+                this.$root.$emit('child_hide', this);
                 this.on_hide();
             },
             on_edit() {
@@ -152,7 +127,7 @@ function vue_quick(name) {
             },
         },
         template: `
-        <kbd class="` + name + ` kbd" v-show="show">
+        <kbd id="${name}" class="${name} kbd" v-show="show">
         
         <footer class="editor_box" v-show="show_editor">
             <textarea 
@@ -164,7 +139,7 @@ function vue_quick(name) {
              <button class="apply btn" @click.stop.prevent="on_save">应用</button>
          </footer>
          
-            <kbd  :class="kv.cls + ' keys'" :data-i="i"  v-for="(kv,i) in quick_input_parse" >
+            <kbd  :class="(kv.cls||'') + ' keys'" :data-i="i"  v-for="(kv,i) in quick_input_parse" >
                 <kbd :class="get_key_class('c',kv)" v-if="kv.c">{{kv.c.label}}</kbd>
                 <kbd :class="get_key_class('u',kv)" v-if="kv.u">{{kv.u.label}}</kbd>
                 <kbd :class="get_key_class('d',kv)" v-if="kv.d">{{kv.d.label}}</kbd>

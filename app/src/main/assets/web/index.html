@@ -2,10 +2,30 @@
 <html lang="en">
 <head>
     <script>
+        // 独立出来，防止其它js出错
+        function debug() {
+            //console.log.apply(console, arguments);
+            let dom = document.getElementById('debug_box');
+            if (!dom) return;
+            dom.style.display = 'block';
+            let str = [];
+
+            for (let i = 0; i < arguments.length; i++) {
+                let type = Object.prototype.toString.call(arguments[i]).toLowerCase().substr(8).replace(']', '');
+                str.push('[' + type + ']' + JSON.stringify(arguments[i]));
+            }
+
+            dom.prepend(str.join('\t'), document.createElement('br'));
+        }
+
+        window.addEventListener('error', function (ev) {
+            debug.call(window, 'js异常：' + ev.message + ' @ ' + ev.filename + ' ' + ev.lineno + ':' + ev.colno);
+        });
+    </script>
+    <script>
         // 直接在这里追加自定义模块即可
         let vue_components = [
             'vue_wu_bi',
-            'vue_en',
             'vue_quick',
             "vue_speech"
         ];
@@ -51,25 +71,6 @@
             });
             return match_count === cls.length;
         }
-
-        // 独立出来，防止其它js出错
-        function debug() {
-            //console.log.apply(console, arguments);
-            let dom = id('debug_box');
-            dom.style.display = 'block';
-            let str = [];
-
-            for (let i = 0; i < arguments.length; i++) {
-                let type = Object.prototype.toString.call(arguments[i]).toLowerCase().substr(8).replace(']', '');
-                str.push('[' + type + ']' + JSON.stringify(arguments[i]));
-            }
-
-            dom.prepend(str.join('\t'), document.createElement('br'));
-        }
-
-        window.addEventListener('error', function (ev) {
-            debug.call(window, 'js异常：' + ev.message + ' @ ' + ev.filename + ' ' + ev.lineno + ':' + ev.colno);
-        });
     </script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport"
@@ -94,7 +95,17 @@
         // source: file:///android_asset/web/index.js?1569008605055 (0)
         // 键盘来的浏览器userAgent添加了自定义标志 js_ime
         // 放置vue自定义组件标签
-        let vue_html = '';
+        let vue_html = `
+    <kbd id="vue_en" class="vue_en kbd" >
+        <kbd :class="(kv.cls||'') + ' keys'" :data-i="i" v-for="(kv,i) in kbd">
+            <kbd :class="get_key_class('c',kv)" v-if="kv.c">{{kv.c.label}}</kbd>
+            <kbd :class="get_key_class('u',kv)" v-if="kv.u">{{kv.u.label}}</kbd>
+            <kbd :class="get_key_class('d',kv)" v-if="kv.d">{{kv.d.label}}</kbd>
+            <kbd :class="get_key_class('l',kv)" v-if="kv.l">{{kv.l.label}}</kbd>
+            <kbd :class="get_key_class('r',kv)" v-if="kv.r">{{kv.r.label}}</kbd>
+        </kbd>
+    </kbd>
+        `;
         vue_components.forEach(function (v, i) {
             vue_html += '<' + v + '>' + '</' + v + '>';
         });
@@ -124,7 +135,7 @@
         ]
             .concat(vue_components);
         // 最后才初始index
-        vue_components.push('vue_index');
+        vue_components.push('vue_en');
         vue_components.forEach(function (name) {
             load_js(name, on_load);
         });
