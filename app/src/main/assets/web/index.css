@@ -59,6 +59,14 @@ main {
     position: relative;
 }
 
+kbd.is_en_1 {
+    text-transform: lowercase;
+}
+
+kbd.is_en_0 {
+    text-transform: uppercase;
+}
+
 kbd.kbd {
     width: 100%;
     margin: 0;
@@ -72,9 +80,9 @@ kbd.kbd {
     321
     来显示
     */
-    flex-wrap: wrap-reverse; /*遇右边换行,且上下倒过来,编写顺序首个会放在右下角*/
-    flex-direction: row-reverse; /*起点在右侧*/
-    justify-content: space-evenly; /*按剩余空间平分*/
+    flex-wrap: wrap; /*遇右边换行,且上下倒过来,编写顺序首个会放在右下角*/
+    /*flex-direction: row-reverse; !*起点在右侧*!*/
+    justify-content: flex-end; /*按剩余空间平分*/
 }
 
 kbd.kbd > kbd.keys {

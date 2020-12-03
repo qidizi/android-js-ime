@@ -20,15 +20,12 @@ function vue_quick(name) {
         computed: {
             quick_input_parse() {
                 // 注意需要自行赋值，不是return
-                let kbd = [
-                    {
-                        d: {label: '调整', fn: this.on_edit},
-                    }
-                ];
+                let kbd = [];
                 let sides;
                 let max_cell = 10;
                 // 倒着追加，保证底行（首先右边）是满
-                let lines = (this.quick_input || '').split('\n');
+                let lines = (this.quick_input || '').trim().split('\n');
+                lines.unshift('调整 自定方法');
                 //for (let i = 1; i < location.search.replace('?', ''); i++) lines.push(i + ' ' + i);
                 lines.forEach(function (line, i) {
                     line = line.trim();
@@ -41,21 +38,16 @@ function vue_quick(name) {
                     while (true) {
                         if (!sides || !sides.length) {
                             kbd.push({});
-                            sides = 'c,l,r,u';
-
-                            // 给首个key预留下为编辑
-                            if (kbd.length > 1)
-                                sides += 'd';
-
-                            sides = sides.split(',');
+                            sides = 'c,u,r,l,d'.split(',');
                         }
 
                         let cell = kbd.length % max_cell;
 
                         if (
-                            // 会出现次个l空，然后左边只有一个c，因为flex布局无法处理
-                            (i >= lines.length - 1 && cell > 7 && 'l' === sides[0]) || // 最后一个如果大于7就不放左侧
-                            (1 === cell && 'r' === sides[0]) || // 最右侧，不能放r
+                            // 首行不放上
+                            (kbd.length < 11 && 'u' === sides[0]) ||
+                            // 首列不放右(因右对齐
+                            (1 === cell && 'r' === sides[0]) ||
                             (0 === cell && "l" === sides[0]) || // 右侧不能放l
                             (kbd.length <= max_cell && 'd' === sides[0]) // 底行，不能放d
                         ) {
@@ -63,7 +55,14 @@ function vue_quick(name) {
                             continue;
                         }
 
-                        kbd[kbd.length - 1][sides.shift()] = {label: display, text: text};
+                        let key = {label: display, text: text}
+
+                        if (0 === i) {
+                            delete key.text;
+                            key.fn = this.on_edit;
+                        }
+
+                        kbd[kbd.length - 1][sides.shift()] = key;
                         return;
                     }
                 });

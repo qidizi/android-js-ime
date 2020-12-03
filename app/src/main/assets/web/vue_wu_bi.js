@@ -101,62 +101,43 @@ function vue_wu_bi(name) {
                     }
                     this.keyboard_reset();
                     return;
-                } else if (
-                    code_or_label === android.KEYCODE_DPAD_LEFT ||
-                    code_or_label === android.KEYCODE_DPAD_RIGHT ||
-                    code_or_label === android.KEYCODE_DPAD_UP ||
-                    code_or_label === android.KEYCODE_DPAD_DOWN ||
-                    code_or_label === android.KEYCODE_FORWARD_DEL
-                ) {
-                    java.send_key_press(code_or_label);
-                    return;
                 } else {
                     // 全是英文,追加
-                    if (keys && !this.candidates.length) {
-                        // 前面的码已经没有匹配了，忽略本key
-                        return;
-                    }
-
                     keys += code_or_label;
                 }
 
                 // 开始匹配码表和显示候选
-
-                if (keys.length > 4) {
-                    // 不允许输入超过4码
-                    return;
-                }
-
                 let match_words = [];
-                let words = WU_BI_KEY_WORD_GROUP_SEPARATE + vue_wu_bi_dict[keys[0]];
-                //let start_time = +new Date;
-                // 大概意思是只取前n个以该码开头的匹配
-                // 注意词库并不一定是按key的顺序排序，所以，顺序的key并不会出现在顺排位置，而是按词频来排序
-                let reg = new RegExp(
-                    WU_BI_KEY_WORD_GROUP_SEPARATE + keys
-                    + '[^' + WU_BI_KEY_WORD_GROUP_SEPARATE + ']+',
-                    'g'
-                );
-                // 注意使用的词库是支持单行多义，如： kkkk 口 咒骂
-                let kw, limit = CANDIDATE_LIMIT;
 
-                while (limit-- > 0 && (kw = reg.exec(words))) {
-                    kw = kw[0].trim().split(WU_BI_KEY_WORD_SEPARATE);
+                // 已经无匹配的,就不需要再匹配了
+                if (
+                    !(
+                        // 无码了
+                        !keys.length
+                        ||
+                        // 无候选,且还加码
+                        (this.keys.length && keys.length > this.keys.length && !this.candidates.length)
+                    )
+                ) {
+                    let words = WU_BI_KEY_WORD_GROUP_SEPARATE + vue_wu_bi_dict[keys[0]];
+                    //let start_time = +new Date;
+                    // 大概意思是只取前n个以该码开头的匹配
+                    // 注意词库并不一定是按key的顺序排序，所以，顺序的key并不会出现在顺排位置，而是按词频来排序
+                    let reg = new RegExp(
+                        WU_BI_KEY_WORD_GROUP_SEPARATE + keys
+                        + '[^' + WU_BI_KEY_WORD_GROUP_SEPARATE + ']+',
+                        'g'
+                    );
+                    // 注意使用的词库是支持单行多义，如： kkkk 口 咒骂
+                    let kw, limit = CANDIDATE_LIMIT;
 
-                    for (let i = 1; i < kw.length; i++)
-                        match_words.push({keys: kw[0], words: kw[i]});
-                }
+                    while (limit-- > 0 && (kw = reg.exec(words))) {
+                        kw = kw[0].trim().split(WU_BI_KEY_WORD_SEPARATE);
 
-                if (!match_words.length) {
-                    // 如果继续加码，没有匹配了，不接受输入；另一种处理方案是可以清空；
-                    return;
-                }
+                        for (let i = 1; i < kw.length; i++)
+                            match_words.push({keys: kw[0], words: kw[i]});
+                    }
 
-                if (1 === match_words.length) {
-                    // 唯一，自动上屏
-                    java.send_text(match_words[0].words);
-                    this.keyboard_reset();
-                    return;
                 }
 
                 this.keys = keys;
@@ -216,13 +197,28 @@ function vue_wu_bi(name) {
         template: `            
         <kbd id="${name}" class="${name} kbd" v-show="show">
             <header class="candidates">
-                <samp v-for="(t,i) in candidates"
-                 @click.stop.prevent="choice_candidate(t.words)">
-                    <sup>
-                        <mark>{{keys}}</mark>{{t.keys.substr(keys.length)}}
-                    </sup>
-                    <sub>{{t.words}}</sub>
-                </samp>
+                <template v-if="candidates.length">
+                    
+                    <samp v-for="(t,i) in candidates"
+                     @click.stop.prevent="choice_candidate(t.words)">
+                        <sup>
+                            <mark>{{keys}}</mark>{{t.keys.substr(keys.length)}}
+                        </sup>
+                        <sub>{{t.words}}</sub>
+                    </samp>
+                    
+                </template>
+                <template v-else>
+                    
+                    <samp 
+                     @click.stop.prevent="choice_candidate(keys)">
+                        <sup>
+                            <mark>{{keys}}</mark>
+                        </sup>
+                        <sub></sub>
+                    </samp>
+                    
+                </template>
             </header>
         </kbd>
     `,
