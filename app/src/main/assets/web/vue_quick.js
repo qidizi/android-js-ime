@@ -21,6 +21,7 @@ function vue_quick(name) {
             quick_input_parse() {
                 // 注意需要自行赋值，不是return
                 let kbd = [];
+                let _this = this;
                 let sides;
                 let max_cell = 10;
                 // 倒着追加，保证底行（首先右边）是满
@@ -59,7 +60,7 @@ function vue_quick(name) {
 
                         if (0 === i) {
                             delete key.text;
-                            key.fn = this.on_edit;
+                            key.fn = _this.on_edit;
                         }
 
                         kbd[kbd.length - 1][sides.shift()] = key;
