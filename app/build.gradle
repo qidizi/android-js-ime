@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.3"
     defaultConfig {
         // 如果这个不正确aide会提示R找不到。as正常不影响
         applicationId "qidizi.js_ime"
@@ -25,14 +25,14 @@ android {
             //  KEY_ALIAS_NAME=key的别名
             //  KEY_ALIAS_PASS=别名的密码
 
-            InputStream inputStream = file('../../apk-private-properties/private.properties').newDataInputStream()
+            InputStream inputStream = file('/Users/qidizi/my.linux/apk-private-properties/private.properties').newDataInputStream()
             properties.load(inputStream)
 
             //签名key文件
-            storeFile file(properties.getProperty('KEY_PATH'))
-            storePassword properties.getProperty('KEY_PASS')
-            keyAlias properties.getProperty('KEY_ALIAS_NAME')
-            keyPassword properties.getProperty('KEY_ALIAS_PASS')
+            //storeFile file(properties.getProperty('KEY_PATH'))
+            //storePassword properties.getProperty('KEY_PASS')
+           // keyAlias properties.getProperty('KEY_ALIAS_NAME')
+            //keyPassword properties.getProperty('KEY_ALIAS_PASS')
         }
     }
 
@@ -46,20 +46,20 @@ android {
 
             // 禁止idea提示 Cannot infer arguments types
             //noinspection GroovyAssignabilityCheck
-            signingConfig signingConfigs.release
+            //signingConfig signingConfigs.release
         }
 
         debug {
             //noinspection GroovyAssignabilityCheck
-            signingConfig signingConfigs.release
+            //signingConfig signingConfigs.release
         }
     }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     // testImplementation 'junit:junit:4.12'
     //  androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
     // androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'

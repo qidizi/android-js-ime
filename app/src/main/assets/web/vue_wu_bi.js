@@ -28,7 +28,7 @@ function vue_wu_bi(name) {
 
     Vue.component(name, {
         mounted() {
-            this.$on('0-d>u', this.on_show);
+            this.$root.$on('0-d>u', this.on_show);
             this.$on('hide', this.on_hide);
         },
         methods: {

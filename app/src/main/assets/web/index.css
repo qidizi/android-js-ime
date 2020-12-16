@@ -35,6 +35,7 @@ html, body {
 }
 
 html {
+    background: black;
     /*如果不设置背景色，就能透明看到窗口后面内容*/
     font-size: 62.5%;
 }
@@ -130,11 +131,11 @@ kbd.kbd > kbd.kbd_z_margin_left {
 }
 
 kbd.kbd > kbd.kbd_f {
-    background-color: black;
+    background-color: #bb86fc;
 }
 
 kbd.kbd > kbd.kbd_j {
-    background-color: black;
+    background-color: #bb86fc;
 }
 
 kbd.kbd > kbd.keys > kbd {
@@ -302,44 +303,10 @@ button.apply {
 }
 
 .vue_speech {
-    display: block;
-    width: 100%;
-    text-align: center;
-    font-size: 1rem;
-}
-
-.vue_speech .speech_result {
-    padding: 20px;
-    text-align: center;
-    width: 100%;
-    min-height: 100px;
-    display: block;
-    overflow: auto;
-    color: blue;
-    font-size: 1.5rem;
-    outline: none;
-    margin: 0;
-    line-height: 200%;
-    border-radius: 500px;
-    word-break: break-all;
-    white-space: normal;
-    height: auto;
-    background: white;
-    border: 1px solid;
-}
-
-
-.vue_speech input.fail {
-    color: red;
-}
-
-.vue_speech input.process {
-    color: blue;
-}
-
-.vue_speech input.success {
-    color: green;
-    text-align: left;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
 }
 
 kbd.vue_en {

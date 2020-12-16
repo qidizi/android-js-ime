@@ -13,9 +13,9 @@ function vue_quick(name) {
         },
         mounted() {
             // 加载快捷短语
-            this.$on('0-r>l', this.on_show);
+            this.$root.$on('0-r>l', this.on_show);
             this.$on('hide', this.on_hide);
-            this.$on('touch.' + name, this.on_touch);
+            this.$root.$on('touch.' + name, this.on_touch);
         },
         computed: {
             quick_input_parse() {

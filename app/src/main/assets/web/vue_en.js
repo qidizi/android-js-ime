@@ -85,13 +85,11 @@ function vue_en(name) {
 
                 let is_gesture = touch.custom_type.indexOf('>') > 0;
                 // 通知自己和子模块
-                this.$children.concat([this]).forEach(function (vm) {
-                    // 发送手势，不是touch；多指触摸时建议只监听0这个手势;类似于0-l>r>d,1->r->d>l
-                    is_gesture ?
-                        vm.$emit(touch.identifier + '-' + touch.custom_type, touch) :
-                        // 点或长按,其它只发送给当前显示的键盘
-                        vm.$emit('touch.' + name, touch);
-                });
+                // 发送手势，不是touch；多指触摸时建议只监听0这个手势;类似于0-l>r>d,1->r->d>l
+                is_gesture ?
+                    this.$emit(touch.identifier + '-' + touch.custom_type, touch) :
+                    // 点或长按,其它只发送给当前显示的键盘
+                    this.$emit('touch.' + name, touch);
             },
             on_touch_en(ev) {
                 // 英文面板必须有key
@@ -384,6 +382,7 @@ function vue_en(name) {
             }
         },
         data() {
+            let _t = this;
             let data = {
                 // 几个控制键是否被按下
                 shift_down: false,
@@ -524,7 +523,10 @@ function vue_en(name) {
                         "c": {"label": "F"},
                         "cls": "kbd_f"
                     },
-                    {"c": {"label": "G"}},
+                    {
+                        "u": {"label": "Esc", code: android.KEYCODE_ESCAPE},
+                        "c": {"label": "G"}
+                    },
                     {"c": {"label": "H"}},
                     {
                         "c": {"label": "J"},
@@ -670,7 +672,11 @@ function vue_en(name) {
                         }
                     },
                     {
-                        "u": {"label": "Esc", code: android.KEYCODE_ESCAPE},
+                        "u": {
+                            "label": "语音", fn: function () {
+                                _t.$emit('speech_show');
+                            }
+                        },
                         "c": {"label": "␣", code: android.KEYCODE_SPACE},
                         "cls": "kbd_20"
                     },
