@@ -151,7 +151,8 @@ function vue_en(name) {
                 if ('console_log' === what) {
                     debug(info.text);
                 }
-
+                 
+               // debug(what, info);
                 this.$children.forEach(function (vm) {
                     vm.$emit(what, info);
                 });
@@ -404,13 +405,15 @@ function vue_en(name) {
                 default_uid: null,
                 only_en: 1,
                 kbd: [
-                    {
+                    {//
                         "c": {"label": 1},
-                        "d": {"label": "F1", code: android.KEYCODE_F1}
+                        "d": {"label": "F1", code: android.KEYCODE_F1},
+                        "u": {"label": "F12", code: android.KEYCODE_F12}
                     },
                     {
                         "c": {"label": 2},
-                        "d": {"label": "F2", code: android.KEYCODE_F2}
+                        "d": {"label": "F2", code: android.KEYCODE_F2},
+                        "u": {"label": "F11", code: android.KEYCODE_F11},
                     },
                     {
                         "c": {"label": 3},
@@ -450,14 +453,12 @@ function vue_en(name) {
                         "d": {"label": "F10", code: android.KEYCODE_F10}
                     },
                     {
-                        "c": {"label": "Q"},
-                        "u": {"label": "F12", code: android.KEYCODE_F12}
+                        "c": {"label": "Q"}
                     },
                     {
                         "c": {"label": "W"},
-                        "l": {"label": "（"},
-                        "r": {"label": "）"},
-                        "u": {"label": "F11", code: android.KEYCODE_F11},
+                        "l": {"label": "【"},
+                        "r": {"label": "】"},
                     },
                     {
                         "c": {"label": "E"},
@@ -466,32 +467,47 @@ function vue_en(name) {
                         "d": {"label": "/"},
                     },
                     {
-                        "l": {"label": "〔"},
-                        "r": {"label": "〕"},
                         "c": {"label": "R"},
-                        "d": {"label": "___"},
+                        u: {label: '！'},
+                        d: {label: '，'},
+                        l: {label: '“'},
+                        r: {label: '”'}
                     },
                     {
                         "c": {"label": "T"},
-                        "l": {"label": "【"},
-                        "r": {"label": "】"},
+                        "l": {"label": "（"},
+                        "r": {"label": "）"},
+                        "d": {"label": "；"},
+                        "u": {"label": "："},
                     },
                     {
-                        "c": {"label": "Y"}
+                        "c": {"label": "Y"},
+                        u: {label: '？'},
+                        l: {label: '‘'},
+                        d: {label: '。'},
+                        r: {label: '’'}
                     },
                     {
-                        "c": {"label": "U"}
+                        "c": {"label": "U"},
+                        "u": {"label": "——"},
+                        "l": {"label": "「"},
+                        "r": {"label": "」"},
+                        "d": {"label": "___"}
                     },
                     {
-                        "c": {"label": "I"}
+                        "c": {"label": "I"},
+                        "u": {"label": "……"},
+                        "l": {"label": "『"},
+                        "r": {"label": "』"},
+                        "d": {"label": "、"},
                     },
                     {
-                        "c": {"label": "O"}
+                        "c": {"label": "O"},
+                        "l": {"label": "〔"},
+                        "r": {"label": "〕"}
                     },
                     {
-                        "c": {"label": "P"},
-                        u: {label: 'Ctrl', code: android.KEYCODE_CTRL_LEFT},
-                        d: {label: 'Alt', code: android.KEYCODE_ALT_LEFT}
+                        "c": {"label": "P"}
                     },
                     {
                         cls: 'kbd_a_margin_left'
@@ -499,38 +515,24 @@ function vue_en(name) {
                     {
                         "c": {"label": "A"},
                         "d": {"label": "-"},
-                        "r": {"label": "·"},
-                        u: {
-                            label: '全选', fn() {
-                                java.send_select_all();
-                            }
-                        }
+                        "r": {"label": "·"}
                     },
                     {
-                        "c": {"label": "S"},
-                        "d": {"label": "……"},
-                        "l": {"label": "『"},
-                        "r": {"label": "』"},
+                        "c": {"label": "S"}
 
                     },
                     {
                         "c": {"label": "D"},
-                        "d": {"label": "——"},
-                        "l": {"label": "「"},
-                        "r": {"label": "」"}
+                        r: {
+                            label: '撤消',
+                            fn() {
+                                java.send_undo();
+                            }
+                        }
                     },
                     {
                         "c": {"label": "F"},
-                        "cls": "kbd_f"
-                    },
-                    {
-                        "u": {"label": "Esc", code: android.KEYCODE_ESCAPE},
-                        "c": {"label": "G"}
-                    },
-                    {"c": {"label": "H"}},
-                    {
-                        "c": {"label": "J"},
-                        "cls": "kbd_j",
+                        "cls": "kbd_f",
                         d: {
                             label: '粘贴', fn() {
                                 java.send_paste();
@@ -548,25 +550,30 @@ function vue_en(name) {
                             }
                         },
                         r: {
-                            label: '撤消',
-                            fn() {
-                                java.send_undo();
+                            label: '全选', fn() {
+                                java.send_select_all();
                             }
                         }
                     },
                     {
-                        "c": {"label": "K"},
-                        "u": {"label": "&"},
-                        "l": {"label": "["},
-                        "r": {"label": "]"},
-                        "d": {"label": "`"}
+                        "u": {"label": "Esc", code: android.KEYCODE_ESCAPE},
+                        "c": {"label": "G"},
                     },
                     {
-                        "c": {"label": "L"},
-                        "u": {"label": "\\"},
-                        "r": {"label": "|"},
-                        "d": {"label": "#"},
-                        "l": {"label": "_"}
+                        "c": {"label": "H"},
+                        u: {label: 'Ctrl', code: android.KEYCODE_CTRL_LEFT},
+                        d: {label: 'Alt', code: android.KEYCODE_ALT_LEFT},
+                        
+                    },
+                    {
+                        "c": {"label": "J"},
+                        "cls": "kbd_j"
+                    },
+                    {
+                        "c": {"label": "K"}
+                    },
+                    {
+                        "c": {"label": "L"}
                     },
                     {
                         "c": {
@@ -579,50 +586,50 @@ function vue_en(name) {
                     },
                     {
                         "c": {"label": "Z"},
-                        u: {label: '？'},
-                        l: {label: '‘'},
-                        d: {label: '。'},
-                        r: {label: '’'}
+                        "u": {"label": "^"},
                     },
                     {
                         "c": {"label": "X"},
-                        u: {label: '！'},
-                        d: {label: '，'},
-                        l: {label: '“'},
-                        r: {label: '”'}
+                        "l": {"label": ":"},
+                        "r": {"label": ";"}
                     },
                     {
                         "c": {"label": "C"},
-                        "r": {"label": "、"},
-                        "d": {"label": "；"},
-                        "u": {"label": "："},
+                        "u": {"label": "\\"},
+                        "r": {"label": "|"},
+                        "d": {"label": "#"},
+                        "l": {"label": "_"}
                     },
                     {
-                        "c": {"label": "V"}
+                        "c": {"label": "V"},
+                        "u": {"label": "&"},
+                        "l": {"label": "["},
+                        "r": {"label": "]"},
+                        "d": {"label": "`"}
                     },
                     {
                         "c": {"label": "B"},
-                        "u": {"label": "^"},
+                        "u": {"label": '"'},
                         "l": {"label": "{"},
                         "r": {"label": "}"},
                         "d": {"label": "$"}
                     },
-                    {
-                        "u": {"label": "!"},
+                    {                                                
+                        u: {"label": "'"},
                         "c": {"label": "N"},
                         "l": {"label": "<"},
                         "r": {"label": ">"},
                         "d": {"label": "~"}
                     },
                     {
-                        "u": {"label": "*"},
+                        "u": {"label": "%"},
                         "c": {"label": "M"},
                         "l": {"label": "("},
                         "d": {"label": "@"},
                         "r": {"label": ")"}
                     },
                     {
-                        "u": {"label": "%"},
+                        "u": {"label": "*"},                        
                         "c": {"label": "/"},
                         "l": {"label": "+"},
                         "r": {"label": "-"},
@@ -633,15 +640,15 @@ function vue_en(name) {
                         "u": {"label": "⌦", code: android.KEYCODE_FORWARD_DEL},
                         "cls": "kbd_15"
                     },
-                    {
+                    {//
                         "c": {
                             "label": "⇦", fn() {
                                 java.send_left();
                             }
                         },
                         "u": {
-                            "label": "⇥", fn() {
-                                java.send_key_press(android.KEYCODE_TAB);
+                            "label": "⇤", fn() {
+                                java.send_key_press(android.KEYCODE_TAB, android.META_SHIFT_MASK);
                             }
                         }
                     },
@@ -667,7 +674,7 @@ function vue_en(name) {
                         },
                         "u": {
                             "label": "⇥", fn() {
-                                java.send_key_press(android.KEYCODE_TAB, android.META_SHIFT_MASK);
+                                java.send_key_press(android.KEYCODE_TAB);
                             }
                         }
                     },
@@ -681,15 +688,13 @@ function vue_en(name) {
                         "cls": "kbd_20"
                     },
                     {
-                        "l": {"label": "'"},
-                        "r": {"label": '"'},
-                        "c": {"label": ","}
+                        
+                        "c": {"label": ","},
+                        "u": {"label": "!"},
                     },
                     {
                         u: {label: '?'},
                         "c": {"label": "."},
-                        "r": {"label": ":"},
-                        "l": {"label": ";"}
                     },
                     {
                         "c": {"label": "⏎", code: android.KEYCODE_ENTER},

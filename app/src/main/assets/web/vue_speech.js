@@ -1,45 +1,32 @@
 /** 语音转文本组件 **/
 function vue_speech(name) {
-    const WAIT_TIP = '请稍候...';
-    const TIP = '请开始说话...';
-    const LISTEN_TIP = '^_^ Hi，准备好了，请说话...说完点我开始识别';
-    // 准备好
-    const READY = 1;
-    // 准备中
-    const READYING = 2;
-    // 聆听中
-    const LISTENING = 3;
-    // 识别中
-    const RECOGNIZING = 4;
-    let status = READY;
     Vue.component(name, {
         data() {
             return {
-                tip: TIP,
+                tip: '',
                 text: '',
                 show: false
             };
         },
         mounted() {
             this.$on('speech_recognizer_on_listening', function () {
-                status = LISTENING;
-                this.tip = LISTEN_TIP;
+                this.tip = '请讲话...';
             });
             this.$on('speech_recognizer_on_error', function (obj) {
                 // 变成已经准备好，可以重试
-                status = READY;
-                this.tip = '^_^ 点我重试，原因：' + obj.text;
+                this.tip = '请重试，原因：' + obj.text;
             });
             this.$on('speech_recognizer_on_recognizing', function () {
-                status = RECOGNIZING;
-                this.tip = WAIT_TIP;
+                this.tip = '识别中...';
+            });
+            this.$on('speech_recognizer_on_tip', function (obj) {
+                this.tip = obj.text;
             });
             this.$on('speech_recognizer_on_result', function (obj) {
                 // 返回语音结果
-                status = READY;
-
+                
                 if (obj) {
-                    this.tip = '识别完成,点击文字上屏或重新识别。';
+                    this.tip = '识别完成';
                     this.text = obj.text;
                     return;
                 }
@@ -54,31 +41,15 @@ function vue_speech(name) {
                 // 不能从其它键盘返回到本键盘
                 this.$root.$emit('child_show', this);
                 this.show = true;
-                status = READY;
-                this.speech_recognizer();
+                this.tip = "请稍候...";   
+                this.text = '';
+                java.open_speech_recognizer();
             },
             on_hide() {
                 this.text = '';
                 this.show = false;
-
-                if (READY !== status) {
                     // 要停止聆听
-                    java.cancel_speech_recognizer();
-                }
-            },
-            'speech_recognizer'() {
-                switch (status) {
-                    case READY:
-                        this.tip = WAIT_TIP;
-                        this.text = '';
-                        status = READYING;
-                        java.open_speech_recognizer();
-                        break;
-                    case LISTENING:
-                        java.stop_speech_recognizer();
-                        this.tip = WAIT_TIP;
-                        break;
-                }
+                java.cancel_speech_recognizer();                
             },
             'on_commit_text'() {
                 java.send_text(this.text);

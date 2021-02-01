@@ -1,5 +1,5 @@
 /*@font-face TODO 在安卓24模拟器上可以加载，但是在27或以上都不能加载*/
-@font-face {
+/*@font-face {
     font-family: "Menlo Bold";
     src: url("./Menlo-Bold.ttf") format("truetype");
 }
@@ -13,10 +13,11 @@
     font-family: "Menlo Italic";
     src: url("./Menlo-Italic.ttf") format("truetype");
 }
-
+*/
 @font-face {
-    font-family: "Menlo Regular";
-    src: url("./Menlo-Regular.ttf") format("truetype");
+    font-family: "menlo";
+    src: url('./Menlo-Regular.ttf') /*format("truetype")*/;
+    font-weight: normal;
 }
 
 html, body {
@@ -43,7 +44,7 @@ html {
 body {
     /*在某些版本的案卓高度为0*/
     min-height: 2rem;
-    font-family: "Menlo Bold", monospace;
+    font-family: menlo, monospace;
     display: block;
     font-size: 0; /*与block配合，忽略html中空格*/
     background-color: rgba(0, 0, 0, 0.1);
@@ -93,7 +94,7 @@ kbd.kbd > kbd.keys {
     overflow: hidden;
     cursor: pointer;
     position: relative;
-    height: 4rem;
+    height: 5rem;
     width: 10vw;
     display: inline-block;
     padding: 0px;
