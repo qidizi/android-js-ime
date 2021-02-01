@@ -15,12 +15,13 @@ import android.view.*;
 import android.view.inputmethod.*;
 import android.webkit.*;
 import androidx.annotation.*;
+
 import java.io.*;
 import java.util.*;
+
 import org.json.*;
 
-public class SoftKeyboard extends InputMethodService 
-{
+public class SoftKeyboard extends InputMethodService {
     static String js_listener = null;
     // java方法提供给js的命名空间
     private final static String JS_NAME = "JAVA";
@@ -38,8 +39,7 @@ public class SoftKeyboard extends InputMethodService
     private Intent speechIntent = null;
     private SpeechRecognizer speech_recognizer = null;
 
-    private void send_key_event(int action, int key_code, int repeat, int meta_state)
-    {
+    private void send_key_event(int action, int key_code, int repeat, int meta_state) {
         // 向当前绑定到键盘的应用发送键盘事件
         InputConnection ic = getCurrentInputConnection();
         long down_time = SystemClock.uptimeMillis();
@@ -76,18 +76,18 @@ public class SoftKeyboard extends InputMethodService
         // 表示击键来自键盘，还有屏幕触摸，游戏柄之类
         int source = InputDevice.SOURCE_KEYBOARD;
         KeyEvent ke = new KeyEvent(
-            down_time,
-            event_happen_time,
-            action,
-            key_code,
-            // 像按下后，第几次自动发送的按下事件，比如给某些长按下只当一次处理的程序使用，那么它就可以只使用0这个后面都忽视
-            // 还有就是多个按键事件的事件数
-            repeat,
-            meta_state,
-            device_id,
-            scan_code,
-            flags,
-            source
+                down_time,
+                event_happen_time,
+                action,
+                key_code,
+                // 像按下后，第几次自动发送的按下事件，比如给某些长按下只当一次处理的程序使用，那么它就可以只使用0这个后面都忽视
+                // 还有就是多个按键事件的事件数
+                repeat,
+                meta_state,
+                device_id,
+                scan_code,
+                flags,
+                source
         );
         ic.sendKeyEvent(ke);
     }
@@ -106,8 +106,7 @@ public class SoftKeyboard extends InputMethodService
     //    }
 
     @JavascriptInterface
-    public void send_key_press(int key_code, int meta_state)
-    {
+    public void send_key_press(int key_code, int meta_state) {
         // 不熟悉的人可能很难做到按合理逻辑处理好down与up成对出现问题，最后导致出现意外效果，
         // 所以，建议只给web提供这个即可
         send_key_event(KeyEvent.ACTION_DOWN, key_code, 0, meta_state);
@@ -115,8 +114,7 @@ public class SoftKeyboard extends InputMethodService
     }
 
     @JavascriptInterface
-    public void send_text(String text)
-    {
+    public void send_text(String text) {
         // 发送的是字符串，非android支持的KEYCODE
         InputConnection ic = getCurrentInputConnection();
         if (ic == null) return;
@@ -127,16 +125,14 @@ public class SoftKeyboard extends InputMethodService
     }
 
     @JavascriptInterface
-    public void reload()
-    {
+    public void reload() {
         // 重新加载，比如载入html;因为这个类是运行在其它线程，需要操作ui要把处理扔给ui线程处理
         webView.post(new Runnable() {
-                @Override
-                public void run()
-                {
-                    reload_webview();
-                }
-            });
+            @Override
+            public void run() {
+                reload_webview();
+            }
+        });
     }
 
     /**
@@ -145,82 +141,72 @@ public class SoftKeyboard extends InputMethodService
      * @param js_listener_fn js function name
      */
     @JavascriptInterface
-    public void js_onload(String js_listener_fn)
-    {
+    public void js_onload(String js_listener_fn) {
         js_listener = js_listener_fn;
     }
 
     @JavascriptInterface
-    public void stop_speech_recognizer()
-    {
+    public void stop_speech_recognizer() {
         if (null == speech_recognizer) return;
 
         Handler mainHandler = new Handler(getMainLooper());
         Runnable myRunnable = new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 speech_recognizer.stopListening();
             }
         };
         mainHandler.post(myRunnable);
     }
-    
+
     @JavascriptInterface
-    public void cancel_speech_recognizer()
-    {
+    public void cancel_speech_recognizer() {
         if (null == speech_recognizer) return;
 
         Handler mainHandler = new Handler(getMainLooper());
         Runnable myRunnable = new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 speech_recognizer.cancel();
             }
         };
         mainHandler.post(myRunnable);
     }
-    
+
     @JavascriptInterface
-    public void open_speech_recognizer()
-    {        
+    public void open_speech_recognizer() {
         Handler mainHandler = new Handler(getMainLooper());
         Runnable myRunnable = new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
-            public void run()
-            {                
+            public void run() {
                 if (null == speech_recognizer)
                     create_speech_recognizer();
 
-                if (null == speech_recognizer)
-                {
+                if (null == speech_recognizer) {
                     SoftKeyboard.emit_js_str(webView,
-                                             "speech_recognizer_on_error", "无法创建语音识别服务");
+                            "speech_recognizer_on_error", "无法创建语音识别服务");
                     return;
                 }
 
                 if (null == speechIntent) create_intent();
-                Log.e("qidizi", "gggg");
 
                 // 小米9设置语音输入为小爱同学时，会出现无法绑定的异常，需要去掉勾选成讯飞语记才能使用；
-                // 且没有错误提示  
+                // 且没有错误提示
 
-                speech_recognizer.startListening(speechIntent);                      
-                SoftKeyboard.emit_js_str(webView, 
-                                         "speech_recognizer_on_tip", "启动监听...");            
+                speech_recognizer.startListening(speechIntent);
+                SoftKeyboard.emit_js_str(webView,
+                        "speech_recognizer_on_tip", "启动监听...");
             }
         };
         mainHandler.post(myRunnable);
     }
 
-    private void create_intent()
-    {
+    private void create_intent() {
         speechIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         // 识别结束用途，如网络查找，可能要提炼关键字
         speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                              RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         // 不支持边说边识别，只能说完再识别
         speechIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, false);
         // 只要一个识别结果
@@ -228,153 +214,135 @@ public class SoftKeyboard extends InputMethodService
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private void create_speech_recognizer()
-    {
-        // 语音到文本，必须运行在main thread中
-        if (!SpeechRecognizer.isRecognitionAvailable(this))
-        {
-            SoftKeyboard.emit_js_str(webView,
-                                     "speech_recognizer_on_error", "无语音识别服务,请安装讯飞语记");
-            return;
-        }       
+    private void create_speech_recognizer() {
+        ComponentName xf_recognition = null;
 
-        // 查找当前系统的内置使用的语音识别服务.就算从设置语言输入法-语音修改都不影响
-        String voice_component = Settings.Secure.getString(getContentResolver(),
-                                                           "voice_recognition_service");
+        // 查找得到的 "可用的" 语音识别服务
+        List<ResolveInfo> list = getPackageManager().queryIntentServices(
+                new Intent(RecognitionService.SERVICE_INTERFACE), PackageManager.MATCH_ALL
+        );
 
-        Log.e("qidizi", "voice_recognition_service : " + voice_component);
-
-        if (TextUtils.isEmpty(voice_component))
-        {
-            SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_error", "系统未检测到语音识别组件");
-            return;
-        }
-
-        ComponentName component = ComponentName.unflattenFromString(voice_component);
-
-        if (null == component)
-        {
+        if (0 == list.size()) {
             SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_error",
-                                     "无法使用语音识别组件： " + voice_component);
+                    "没有可用的语音识别组件");
             return;
         }
 
-        speech_recognizer = SpeechRecognizer.createSpeechRecognizer(this);
-        speech_recognizer.setRecognitionListener(new RecognitionListener() {           
+        for (ResolveInfo info : list) {
+            if (
+                    "com.iflytek.vflynote".equals(info.serviceInfo.packageName)
+                            &&
+                            "com.iflytek.iatservice.SpeechService".equals(info.serviceInfo.name)
+            ) {
+                continue;
+            }
 
-                @Override
-                public void onResults(Bundle results)
-                {
-                    ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-                    String result = "";
+            xf_recognition = new ComponentName(info.serviceInfo.packageName, info.serviceInfo.name);
+            // Log.e("qidizi", info.serviceInfo.packageName + "/" + info.serviceInfo.name);
+        }
 
-                    if (null != matches && matches.size() > 0)
-                    {
-                        // 识别出文字，异步通知给js
-                        result = matches.get(0);
-                    }
+        speech_recognizer = SpeechRecognizer.createSpeechRecognizer(this, xf_recognition);
+        speech_recognizer.setRecognitionListener(new RecognitionListener() {
 
-                    SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_result", result);
+            @Override
+            public void onResults(Bundle results) {
+                ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                String result = "";
+
+                if (null != matches && matches.size() > 0) {
+                    // 识别出文字，异步通知给js
+                    result = matches.get(0);
                 }
 
+                SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_result", result);
+            }
 
-                @Override
-                public void onError(int i)
-                {
-                    String error;
-                    switch (i)
-                    {
-                        case SpeechRecognizer.ERROR_AUDIO:
-                            error = "录制异常";
-                            break;
-                        case SpeechRecognizer.ERROR_CLIENT:
-                            error = "tts组件异常";
-                            break;
-                        case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
-                            error = "请授予录音权限";
-                            break;
-                        case SpeechRecognizer.ERROR_NETWORK:
-                            error = "tts网络异常";
-                            break;
-                        case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
-                            error = "tts网络超时";
-                            break;
-                        case SpeechRecognizer.ERROR_NO_MATCH:
-                            error = "无法识别";
-                            break;
-                        case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
-                            error = "tts正被使用，请稍候";
-                            break;
-                        case SpeechRecognizer.ERROR_SERVER:
-                            error = "tts服务异常";
-                            break;
-                        case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
-                            error = "等待语音输入超时";
-                            break;
-                        default:
-                            error = "未明错误代号：" + i;
-                            break;
-                    }
-                    // 如小米9，设置语音识别为小爱同学时，收不到这个错误： 11059-11059/qidizi.js_ime E/SpeechRecognizer: bind to recognition service failed
-                    Log.e("qidizi", "出错了（" + error + "）");
-                    SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_error", "出错了（" + error + "）");
-                }
 
-                @Override
-                public void onPartialResults(Bundle bundle)
-                {
-                    // 必须重写
-                    // SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_tip", "部分识别...");
+            @Override
+            public void onError(int i) {
+                String error;
+                switch (i) {
+                    case SpeechRecognizer.ERROR_AUDIO:
+                        error = "录制异常";
+                        break;
+                    case SpeechRecognizer.ERROR_CLIENT:
+                        error = "tts组件异常";
+                        break;
+                    case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
+                        error = "请授予录音权限";
+                        break;
+                    case SpeechRecognizer.ERROR_NETWORK:
+                        error = "tts网络异常";
+                        break;
+                    case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
+                        error = "tts网络超时";
+                        break;
+                    case SpeechRecognizer.ERROR_NO_MATCH:
+                        error = "无法识别";
+                        break;
+                    case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
+                        error = "tts正被使用，请稍候";
+                        break;
+                    case SpeechRecognizer.ERROR_SERVER:
+                        error = "tts服务异常";
+                        break;
+                    case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
+                        error = "等待语音输入超时";
+                        break;
+                    default:
+                        error = "未明错误代号：" + i;
+                        break;
                 }
+                // 如小米9，设置语音识别为小爱同学时，收不到这个错误： 11059-11059/qidizi.js_ime E/SpeechRecognizer: bind to recognition service failed
+                Log.e("qidizi", "出错了（" + error + "）");
+                SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_error", "出错了（" + error + "）");
+            }
 
-                @Override
-                public void onEvent(int i, Bundle bundle)
-                {
-                    // 必须重写
-                    Log.e("qidizi", "onEvent（" + i + "）");   
-                }
+            @Override
+            public void onPartialResults(Bundle bundle) {
+                // 必须重写
+                // SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_tip", "部分识别...");
+            }
 
-                @Override
-                public void onBufferReceived(byte[] bytes)
-                {
-                    // 必须重写
-                    Log.e("qidizi", "onBufferReceived " + bytes.length); 
-                }
+            @Override
+            public void onEvent(int i, Bundle bundle) {
+                // 必须重写
+                Log.e("qidizi", "onEvent（" + i + "）");
+            }
 
-                @Override
-                public void onEndOfSpeech()
-                {
-                    SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_recognizing", "识别中...");
-                }
+            @Override
+            public void onBufferReceived(byte[] bytes) {
+                // 必须重写
+                Log.e("qidizi", "onBufferReceived " + bytes.length);
+            }
 
-                @Override
-                public void onBeginningOfSpeech()
-                {
-                    // 必须重写
-                    SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_tip", "监听到声音...");
-                }
+            @Override
+            public void onEndOfSpeech() {
+                SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_recognizing", "识别中...");
+            }
 
-                @Override
-                public void onRmsChanged(float v)
-                {
-                    // 必须重写
-                    Log.e("qidizi", "onRmsChanged " + v); 
-                }
+            @Override
+            public void onBeginningOfSpeech() {
+                // 必须重写
+                SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_tip", "监听到声音...");
+            }
 
-                @Override
-                public void onReadyForSpeech(Bundle bundle)
-                {
-                    SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_listening", "请说话...");
-                }
-        });                                  
+            @Override
+            public void onRmsChanged(float v) {
+                // 必须重写
+                Log.e("qidizi", "onRmsChanged " + v);
+            }
+
+            @Override
+            public void onReadyForSpeech(Bundle bundle) {
+                SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_listening", "请说话...");
+            }
+        });
     }
 
-    
-    
 
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         // 必须调用super
         super.onCreate();
     }
@@ -383,32 +351,27 @@ public class SoftKeyboard extends InputMethodService
      * 跟踪调用顺序
      */
     @SuppressWarnings("unused")
-    static void method_call_order_debug()
-    {
+    static void method_call_order_debug() {
         // if (true) return;// 暂停测试
         // 换行前要有内容，否则idea中logcat显示时不换行
         StringBuilder str = new StringBuilder(" \n");
 
-        try
-        {
+        try {
             StackTraceElement[] prev_method = Thread.currentThread().getStackTrace();
             String to = "";
 
             // 0～2都是没用信息 ->0#getThreadStackTrace:-2->1#getStackTrace:1720->2#print_method:227
-            for (int i = 3; i <= 4 && i < prev_method.length; i++)
-            {
+            for (int i = 3; i <= 4 && i < prev_method.length; i++) {
                 str.append(to)
-                    .append(prev_method[i].getMethodName())
-                    .append(" ")
-                    .append(i)
-                    .append("#")
-                    .append(prev_method[i].getLineNumber())
-                    ;
+                        .append(prev_method[i].getMethodName())
+                        .append(" ")
+                        .append(i)
+                        .append("#")
+                        .append(prev_method[i].getLineNumber())
+                ;
                 to = " <- ";
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             str.append("异常").append(e.getMessage());
         }
         Log.e("StackTrace", str.toString());
@@ -419,8 +382,7 @@ public class SoftKeyboard extends InputMethodService
      * 方法用于用户界面初始化，主要用于service运行过程中配置信息发生改变的情况（横竖屏转换等）。
      */
     @Override
-    public void onInitializeInterface()
-    {
+    public void onInitializeInterface() {
         super.onInitializeInterface();
         create_webview();
     }
@@ -435,10 +397,8 @@ public class SoftKeyboard extends InputMethodService
      * @return View
      */
     @Override
-    public View onCreateInputView()
-    {
-        if (null != webView && null != webView.getParent())
-        {
+    public View onCreateInputView() {
+        if (null != webView && null != webView.getParent()) {
             // 可能会重复添加，比如屏幕翻转时会出现；目前不想重新创建webview
             // 防止出现 java.lang.IllegalStateException:
             // The specified child already has a parent.
@@ -449,21 +409,18 @@ public class SoftKeyboard extends InputMethodService
         return webView;
     }
 
-    private String get_user_html_path()
-    {
+    private String get_user_html_path() {
         // 检测用户自定义html是否存在
         // 路径是/storage/emulated/0/Android/data/qidizi.js_ime/files
         File sd_dir = this.getExternalFilesDir(null);
 
-        if (null == sd_dir)
-        {
+        if (null == sd_dir) {
             return null;
         }
 
         final File user_html = new File(sd_dir, USER_HTML);
 
-        if (user_html.exists())
-        {
+        if (user_html.exists()) {
             // 优先使用用户的文件
             return "file://" + user_html.getAbsolutePath();
         }
@@ -471,21 +428,17 @@ public class SoftKeyboard extends InputMethodService
     }
 
     @SuppressLint({"SetJavaScriptEnabled", "JavascriptInterface", "AddJavascriptInterface"})
-    private void create_webview()
-    {
+    private void create_webview() {
         // 防止重复创建，以内存换html启动时间
         if (null != webView) return;
         final String url, user_html;
         String tmp = get_user_html_path();
 
-        if (null != tmp)
-        {
+        if (null != tmp) {
             // 优先使用用户html
             url = tmp;
             user_html = tmp;
-        }
-        else
-        {
+        } else {
             url = ASSET_PROTO + DEFAULT_HTML;
             user_html = "";
         }
@@ -503,11 +456,11 @@ public class SoftKeyboard extends InputMethodService
         webSettings.setUserAgentString(webSettings.getUserAgentString() + " in_android js_ime");
 
         if (Build.VERSION.SDK_INT >= 26)
-        // 检查网址是否安全
+            // 检查网址是否安全
             webSettings.setSafeBrowsingEnabled(false);
 
         if (Build.VERSION.SDK_INT >= 21)
-        // http+https是否允许
+            // http+https是否允许
             webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
         // web允许执行js
@@ -528,50 +481,45 @@ public class SoftKeyboard extends InputMethodService
         WebView.setWebContentsDebuggingEnabled(true);//允许调试web
 
         webView.setWebChromeClient(new WebChromeClient() {
-                @Override
-                public boolean onConsoleMessage(ConsoleMessage consoleMessage)
-                {
-                    // 总是弹出给用户，防止自定义时空白页不知道原因
-                    SoftKeyboard.emit_js_str(
+            @Override
+            public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+                // 总是弹出给用户，防止自定义时空白页不知道原因
+                SoftKeyboard.emit_js_str(
                         webView,
                         "console_log",
                         consoleMessage.lineNumber() + "#" + consoleMessage.message()
-                    );
-                    return super.onConsoleMessage(consoleMessage);
-                }
+                );
+                return super.onConsoleMessage(consoleMessage);
+            }
         });
 
         webView.setWebViewClient(new WebViewClient() {
 
-                @Override
-                public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error)
-                {
-                    super.onReceivedError(view, request, error);
-                    Uri.Builder b = new Uri.Builder();
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                Uri.Builder b = new Uri.Builder();
 
-                    if (Build.VERSION.SDK_INT < 23)
-                    {
-                        b.appendQueryParameter("error_code", "0");
-                        b.appendQueryParameter("error_msg", "无法加载html");
-                    }
-                    else
-                    {
-                        b.appendQueryParameter("error_code", error.getErrorCode() + "");
-                        b.appendQueryParameter("error_msg", error.getDescription().toString());
-                    }
-
-                    if (Build.VERSION.SDK_INT < 21)
-                        b.appendQueryParameter("error_url", webView.getUrl() + "#real_url=unknown");
-                    else
-                        b.appendQueryParameter("error_url", request.getUrl().toString());
-
-                    b.appendQueryParameter("default_path", ASSET_PROTO + DEFAULT_HTML);
-                    b.appendQueryParameter("user_path", user_html);
-                    String url = ASSET_PROTO + ERROR_HTML + "?" + b.toString();
-                    Log.e("WebView.onReceivedError", url);
-                    webView.loadUrl(url);
+                if (Build.VERSION.SDK_INT < 23) {
+                    b.appendQueryParameter("error_code", "0");
+                    b.appendQueryParameter("error_msg", "无法加载html");
+                } else {
+                    b.appendQueryParameter("error_code", error.getErrorCode() + "");
+                    b.appendQueryParameter("error_msg", error.getDescription().toString());
                 }
-            });
+
+                if (Build.VERSION.SDK_INT < 21)
+                    b.appendQueryParameter("error_url", webView.getUrl() + "#real_url=unknown");
+                else
+                    b.appendQueryParameter("error_url", request.getUrl().toString());
+
+                b.appendQueryParameter("default_path", ASSET_PROTO + DEFAULT_HTML);
+                b.appendQueryParameter("user_path", user_html);
+                String url = ASSET_PROTO + ERROR_HTML + "?" + b.toString();
+                Log.e("WebView.onReceivedError", url);
+                webView.loadUrl(url);
+            }
+        });
         // webview内部不允许通过触摸或是物理键盘切换焦点
         webView.setFocusable(false);
         // logcat要设置成info级别才能看到异常，像：
@@ -582,15 +530,13 @@ public class SoftKeyboard extends InputMethodService
         webView.loadUrl(url);
     }
 
-    void reload_webview()
-    {
+    void reload_webview() {
         // 重新走：优先使用存在的自定义html，否则使用默认
         if (null == webView) return;
 
         String url = get_user_html_path();
 
-        if (null == url)
-        {
+        if (null == url) {
             // 优先使用用户html
             url = ASSET_PROTO + DEFAULT_HTML;
         }
@@ -607,17 +553,14 @@ public class SoftKeyboard extends InputMethodService
      * @param restarting 是否重新启动
      */
     @Override
-    public void onStartInputView(EditorInfo info, boolean restarting)
-    {
+    public void onStartInputView(EditorInfo info, boolean restarting) {
         super.onStartInputView(info, restarting);
         // 给web通知当前绑定的输入框信息，如可输入类型
         emit_js(info, restarting);
     }
 
-    private void destroy_webview()
-    {
-        if (webView != null)
-        {
+    private void destroy_webview() {
+        if (webView != null) {
             // 这样处理防止有内存问题
             // 因为本方法运行在其它线程，不能直接调用webview的方法，否则将引起
             // java.lang.Throwable: A WebView method was called on thread 'JavaBridge'.
@@ -626,79 +569,68 @@ public class SoftKeyboard extends InputMethodService
             // 如切换到其它输入法再切回来，webview被destroy但是JsInterface并没有重置
             js_listener = null;
             webView.post(new Runnable() {
-                    @Override
-                    public void run()
-                    {
-                        webView.loadUrl("about:blank");
-                        webView.clearHistory();
-                        ((ViewGroup) webView.getParent()).removeView(webView);
-                        webView.destroy();
-                        webView = null;
-                    }
-                });
+                @Override
+                public void run() {
+                    webView.loadUrl("about:blank");
+                    webView.clearHistory();
+                    ((ViewGroup) webView.getParent()).removeView(webView);
+                    webView.destroy();
+                    webView = null;
+                }
+            });
         }
     }
 
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         destroy_webview();
         super.onDestroy();
     }
 
-    private void emit_js(EditorInfo info, boolean restarting)
-    {
+    private void emit_js(EditorInfo info, boolean restarting) {
         // 把输入框信息传递给web
         JSONObject js = new JSONObject();
         String str = null;
         String type = "text";
 
-        switch (info.inputType & EditorInfo.TYPE_MASK_CLASS)
-        {
+        switch (info.inputType & EditorInfo.TYPE_MASK_CLASS) {
             case EditorInfo.TYPE_CLASS_NUMBER:
             case EditorInfo.TYPE_CLASS_DATETIME:
             case EditorInfo.TYPE_CLASS_PHONE:
                 type = "number";
         }
 
-        try
-        {
+        try {
             js.put("inputType", type);
             js.put("restarting", restarting);
             str = js.toString();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         emit_js(
-            webView,
-            Thread.currentThread().getStackTrace()[3].getMethodName(),
-            str
+                webView,
+                Thread.currentThread().getStackTrace()[3].getMethodName(),
+                str
         );
     }
 
-    static void emit_js_str(WebView wv, @SuppressWarnings("SameParameterValue") String event_type, String str)
-    {
+    static void emit_js_str(WebView wv, @SuppressWarnings("SameParameterValue") String event_type, String str) {
         // 给web发送参数为字符串的通知
         JSONObject js = new JSONObject();
 
-        try
-        {
+        try {
             js.put("text", str);
             str = js.toString();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         emit_js(
-            wv,
-            event_type,
-            str
+                wv,
+                event_type,
+                str
         );
     }
 
@@ -708,30 +640,27 @@ public class SoftKeyboard extends InputMethodService
      * @param event_type  事件类型
      * @param json_encode 事件数据
      */
-    private static void emit_js(final WebView webView, final String event_type, final String json_encode)
-    {
+    private static void emit_js(final WebView webView, final String event_type, final String json_encode) {
         // 如果web并没有向java注册接听者，不通知
         if (null == js_listener) return;
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run()
-                {
-                    String js = js_listener +
+            @Override
+            public void run() {
+                String js = js_listener +
                         ".call(" + SoftKeyboard.JS_NAME
                         + ",'" + event_type + "'";
-                    if (null != json_encode) js += "," + json_encode;
-                    js += ")";
-                    webView.evaluateJavascript(
+                if (null != json_encode) js += "," + json_encode;
+                js += ")";
+                webView.evaluateJavascript(
                         js,
                         new ValueCallback<String>() {
                             @Override
-                            public void onReceiveValue(String str)
-                            {
+                            public void onReceiveValue(String str) {
                             }
                         }
-                    );
-                }
-            });
+                );
+            }
+        });
     }
 }
