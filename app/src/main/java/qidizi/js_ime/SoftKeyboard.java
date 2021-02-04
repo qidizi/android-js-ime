@@ -10,8 +10,9 @@ import android.os.*;
 import android.provider.*;
 import android.speech.*;
 import android.text.*;
-import android.util.*;
 import android.view.*;
+import android.util.Log;
+import android.util.Base64;
 import android.view.inputmethod.*;
 import android.webkit.*;
 import androidx.annotation.*;
@@ -20,6 +21,7 @@ import java.io.*;
 import java.util.*;
 
 import org.json.*;
+import android.widget.*;
 
 public class SoftKeyboard extends InputMethodService {
     static String js_listener = null;
@@ -432,6 +434,7 @@ public class SoftKeyboard extends InputMethodService {
         // 防止重复创建，以内存换html启动时间
         if (null != webView) return;
         final String url, user_html;
+	    final SoftKeyboard skb = this;
         String tmp = get_user_html_path();
 
         if (null != tmp) {
@@ -498,26 +501,10 @@ public class SoftKeyboard extends InputMethodService {
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
-                Uri.Builder b = new Uri.Builder();
-
-                if (Build.VERSION.SDK_INT < 23) {
-                    b.appendQueryParameter("error_code", "0");
-                    b.appendQueryParameter("error_msg", "无法加载html");
-                } else {
-                    b.appendQueryParameter("error_code", error.getErrorCode() + "");
-                    b.appendQueryParameter("error_msg", error.getDescription().toString());
-                }
-
-                if (Build.VERSION.SDK_INT < 21)
-                    b.appendQueryParameter("error_url", webView.getUrl() + "#real_url=unknown");
-                else
-                    b.appendQueryParameter("error_url", request.getUrl().toString());
-
-                b.appendQueryParameter("default_path", ASSET_PROTO + DEFAULT_HTML);
-                b.appendQueryParameter("user_path", user_html);
-                String url = ASSET_PROTO + ERROR_HTML + "?" + b.toString();
-                Log.e("WebView.onReceivedError", url);
-                webView.loadUrl(url);
+		//String msg = error.getDescription().toString() + "\n\n";
+                //msg += request.getUrl();                  
+                //msg = Base64.encodeToString(msg.getBytes(), Base64.NO_PADDING);
+                //view.loadData(msg, "text/plain", "base64");
             }
         });
         // webview内部不允许通过触摸或是物理键盘切换焦点
@@ -647,11 +634,13 @@ public class SoftKeyboard extends InputMethodService {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                String js = js_listener +
-                        ".call(" + SoftKeyboard.JS_NAME
-                        + ",'" + event_type + "'";
-                if (null != json_encode) js += "," + json_encode;
-                js += ")";
+                String js = "if ('function' === typeof " + js_listener + ") {\n" 
+			+ js_listener +  ".call(" 
+			+ JS_NAME
+                        + ",'" + event_type + "'"
+                        + "," + (null == json_encode ? "null": json_encode)
+                        + ");\n"
+	                + "}";
                 webView.evaluateJavascript(
                         js,
                         new ValueCallback<String>() {

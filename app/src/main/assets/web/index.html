@@ -97,13 +97,19 @@
         // 放置vue自定义组件标签
         let vue_html = `
     <kbd id="vue_en" :class="'vue_en kbd is_en_' + only_en" >
-        <kbd :class="(kv.cls||'') + ' keys'" :data-i="i" v-for="(kv,i) in kbd">
+      <template v-for="(kv,i) in kbd">
+        
+         <kbd v-if="kv" :class="(kv.cls||'') + ' keys'" :data-i="i">
             <kbd :class="get_key_class('c',kv)" v-if="kv.c">{{kv.c.label}}</kbd>
             <kbd :class="get_key_class('u',kv)" v-if="kv.u">{{kv.u.label}}</kbd>
             <kbd :class="get_key_class('d',kv)" v-if="kv.d">{{kv.d.label}}</kbd>
             <kbd :class="get_key_class('l',kv)" v-if="kv.l">{{kv.l.label}}</kbd>
             <kbd :class="get_key_class('r',kv)" v-if="kv.r">{{kv.r.label}}</kbd>
-        </kbd>
+         </kbd>
+         
+         <div v-else class="wrap_flex"></div>
+  
+      </template>
     </kbd>
         `;
         vue_components.forEach(function (v, i) {

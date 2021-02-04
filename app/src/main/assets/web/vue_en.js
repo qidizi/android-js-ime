@@ -452,6 +452,7 @@ function vue_en(name) {
                         "c": {"label": 0},
                         "d": {"label": "F10", code: android.KEYCODE_F10}
                     },
+                    0,
                     {
                         "c": {"label": "Q"}
                     },
@@ -509,9 +510,7 @@ function vue_en(name) {
                     {
                         "c": {"label": "P"}
                     },
-                    {
-                        cls: 'kbd_a_margin_left'
-                    },
+                    0,
                     {
                         "c": {"label": "A"},
                         "d": {"label": "-"},
@@ -575,14 +574,12 @@ function vue_en(name) {
                     {
                         "c": {"label": "L"}
                     },
+                    0,
                     {
                         "c": {
                             "label": " 🄰", code: android.KEYCODE_SHIFT_LEFT
                         },
                         cls: 'kbd_l_margin_right'
-                    },
-                    {
-                        cls: 'kbd_z_margin_left'
                     },
                     {
                         "c": {"label": "Z"},
@@ -635,6 +632,7 @@ function vue_en(name) {
                         "r": {"label": "-"},
                         "d": {"label": "="},
                     },
+                    0,
                     {
                         "c": {"label": "⌫", code: android.KEYCODE_DEL},
                         "u": {"label": "⌦", code: android.KEYCODE_FORWARD_DEL},

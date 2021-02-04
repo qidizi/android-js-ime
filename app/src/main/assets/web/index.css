@@ -1,53 +1,32 @@
-/*@font-face TODO 在安卓24模拟器上可以加载，但是在27或以上都不能加载*/
-/*@font-face {
-    font-family: "Menlo Bold";
-    src: url("./Menlo-Bold.ttf") format("truetype");
-}
-
-@font-face {
-    font-family: "Menlo Bold Italic";
-    src: url("./Menlo-BoldItalic.ttf") format("truetype");
-}
-
-@font-face {
-    font-family: "Menlo Italic";
-    src: url("./Menlo-Italic.ttf") format("truetype");
-}
+/*
+配色工具 
+https://material.io/resources/color/#!/?view.left=1&view.right=0&secondary.color=f9f9f9&primary.color=212121
 */
+
 @font-face {
     font-family: "menlo";
     src: url('./Menlo-Regular.ttf') /*format("truetype")*/;
-    font-weight: normal;
 }
 
 html, body {
-    display: block;
-    width: 100%;
-    /*注意当前高度为由内容顶起来的，所以，不能设置％比。可以使用固定的px值*/
-    height: auto;
-    overflow: auto;
-    padding: 0;
-    margin: 0;
+    display: block;    
     background: transparent;
 }
 
 * {
     box-sizing: border-box;
+    padding: 0;
+    margin: 0;
 }
 
 html {
-    background: black;
     /*如果不设置背景色，就能透明看到窗口后面内容*/
     font-size: 62.5%;
 }
 
 body {
-    /*在某些版本的案卓高度为0*/
-    min-height: 2rem;
+    /*在某些版本的案卓高度为0*/    
     font-family: menlo, monospace;
-    display: block;
-    font-size: 0; /*与block配合，忽略html中空格*/
-    background-color: rgba(0, 0, 0, 0.1);
     /*禁用选择文字，防止长按触发，会中断touch事件*/
     user-select: none;
 
@@ -56,8 +35,6 @@ body {
 main {
     display: block;
     margin: 0 auto;
-    width: 100%;
-    min-height: 200px;
     position: relative;
 }
 
@@ -73,33 +50,32 @@ kbd.kbd {
     width: 100%;
     margin: 0;
     padding: 0;
-    display: inline-flex;
     text-align: center;
-    white-space: normal;
-    /*
-    达成123456编写顺序按
-    654
-    321
-    来显示
-    */
-    flex-wrap: wrap; /*遇右边换行,且上下倒过来,编写顺序首个会放在右下角*/
-    /*flex-direction: row-reverse; !*起点在右侧*!*/
-    justify-content: flex-end; /*按剩余空间平分*/
+    
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+}
+
+div.wrap_flex{
+  flex-basis: 100%;
 }
 
 kbd.kbd > kbd.keys {
-    background-color: rgba(255,255,255,0.1);
-    color: white;
-    border-radius: 0px;
+    background-color: #212121;
+    color: rgba(255,255,255,0.54);
+    border-radius: 8px;
     overflow: hidden;
     cursor: pointer;
     position: relative;
-    height: 5rem;
-    width: 10vw;
+    height: 50px;
+    width: 8vw;
     display: inline-block;
     padding: 0px;
-    margin: 0;
-    border: 1px dotted darkgray;
+    margin: 1vw;
+    /*border: 5px solid rgba(255,255,255,0.1);*/
 }
 
 kbd.kbd > kbd.kbd_150 {
@@ -115,20 +91,6 @@ kbd.kbd > kbd.kbd_15 {
 kbd.kbd > kbd.kbd_20 {
     /*9.1/2+9/100/11+9.1*/
     width: 20vw;
-}
-
-kbd.kbd > kbd.kbd_a_margin_left {
-    background-color: red;
-    width: 1vw;
-}
-
-kbd.kbd > kbd.kbd_l_margin_right {
-    width: 9vw;
-}
-
-kbd.kbd > kbd.kbd_z_margin_left {
-    background-color: red;
-    width: 5vw;
 }
 
 kbd.kbd > kbd.kbd_f {
