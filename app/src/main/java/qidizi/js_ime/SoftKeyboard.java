@@ -1,27 +1,33 @@
 package qidizi.js_ime;
 
-import android.annotation.*;
-import android.content.*;
-import android.content.pm.*;
-import android.graphics.*;
-import android.inputmethodservice.*;
-import android.net.*;
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.Color;
+import android.inputmethodservice.InputMethodService;
 import android.os.*;
-import android.provider.*;
-import android.speech.*;
-import android.text.*;
-import android.view.*;
+import android.speech.RecognitionListener;
+import android.speech.RecognitionService;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.util.Log;
-import android.util.Base64;
-import android.view.inputmethod.*;
+import android.view.InputDevice;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
 import android.webkit.*;
-import androidx.annotation.*;
+import android.widget.Toast;
+import androidx.annotation.RequiresApi;
+import org.json.JSONObject;
 
-import java.io.*;
-import java.util.*;
-
-import org.json.*;
-import android.widget.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SoftKeyboard extends InputMethodService {
     static String js_listener = null;
@@ -29,12 +35,8 @@ public class SoftKeyboard extends InputMethodService {
     private final static String JS_NAME = "JAVA";
     // web文件目录
     final static String PUBLIC_DIR = "web";
-    // sdcard若存在该文件（用户自定义html），优先使用
-    private final static String USER_HTML = PUBLIC_DIR + "/user.html";
     // 内置默认html
     final static String DEFAULT_HTML = PUBLIC_DIR + "/index.html";
-    // 加载html出错提示html
-    private final static String ERROR_HTML = PUBLIC_DIR + "/error.html";
     // 访问assets目录下的web文件使用的协议
     private final static String ASSET_PROTO = "file:///android_asset/";
     private WebView webView = null;
@@ -177,6 +179,17 @@ public class SoftKeyboard extends InputMethodService {
 
     @JavascriptInterface
     public void open_speech_recognizer() {
+        if (!can_use_internet()) {
+            SoftKeyboard.emit_js_str(webView,
+                    "speech_recognizer_on_error", "请授予本输入法网络权限才能使用语音识别功能");
+            return;
+        }
+
+        if (PackageManager.PERMISSION_DENIED == checkCallingOrSelfPermission(Manifest.permission.RECORD_AUDIO)) {
+            SoftKeyboard.emit_js_str(webView,
+                    "speech_recognizer_on_error", "请授予本输入法录音权限才能使用语音识别功能");
+        }
+
         Handler mainHandler = new Handler(getMainLooper());
         Runnable myRunnable = new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.M)
@@ -349,36 +362,6 @@ public class SoftKeyboard extends InputMethodService {
         super.onCreate();
     }
 
-    /**
-     * 跟踪调用顺序
-     */
-    @SuppressWarnings("unused")
-    static void method_call_order_debug() {
-        // if (true) return;// 暂停测试
-        // 换行前要有内容，否则idea中logcat显示时不换行
-        StringBuilder str = new StringBuilder(" \n");
-
-        try {
-            StackTraceElement[] prev_method = Thread.currentThread().getStackTrace();
-            String to = "";
-
-            // 0～2都是没用信息 ->0#getThreadStackTrace:-2->1#getStackTrace:1720->2#print_method:227
-            for (int i = 3; i <= 4 && i < prev_method.length; i++) {
-                str.append(to)
-                        .append(prev_method[i].getMethodName())
-                        .append(" ")
-                        .append(i)
-                        .append("#")
-                        .append(prev_method[i].getLineNumber())
-                ;
-                to = " <- ";
-            }
-        } catch (Exception e) {
-            str.append("异常").append(e.getMessage());
-        }
-        Log.e("StackTrace", str.toString());
-    }
-
 
     /**
      * 方法用于用户界面初始化，主要用于service运行过程中配置信息发生改变的情况（横竖屏转换等）。
@@ -413,39 +396,28 @@ public class SoftKeyboard extends InputMethodService {
 
     private String get_user_html_path() {
         // 检测用户自定义html是否存在
-        // 路径是/storage/emulated/0/Android/data/qidizi.js_ime/files
-        File sd_dir = this.getExternalFilesDir(null);
-
-        if (null == sd_dir) {
+        if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) &&
+                !Environment.MEDIA_MOUNTED_READ_ONLY.equals(Environment.getExternalStorageState()))
             return null;
-        }
 
-        final File user_html = new File(sd_dir, USER_HTML);
+        File use_index = new File(getExternalFilesDir(null), "index.html");
 
-        if (user_html.exists()) {
-            // 优先使用用户的文件
-            return "file://" + user_html.getAbsolutePath();
-        }
-        return null;
+
+        if (!use_index.exists())
+            return null;
+
+        // 优先使用用户的文件
+        return "file://" + use_index.getAbsolutePath();
     }
 
     @SuppressLint({"SetJavaScriptEnabled", "JavascriptInterface", "AddJavascriptInterface"})
     private void create_webview() {
         // 防止重复创建，以内存换html启动时间
         if (null != webView) return;
-        final String url, user_html;
-	    final SoftKeyboard skb = this;
         String tmp = get_user_html_path();
-
-        if (null != tmp) {
-            // 优先使用用户html
-            url = tmp;
-            user_html = tmp;
-        } else {
-            url = ASSET_PROTO + DEFAULT_HTML;
-            user_html = "";
-        }
-
+        // 优先使用用户文件
+        final String url = tmp == null ? ASSET_PROTO + DEFAULT_HTML : tmp;
+        final SoftKeyboard skb = this;
         webView = new WebView(this);
 
         WebSettings webSettings = webView.getSettings();
@@ -495,18 +467,6 @@ public class SoftKeyboard extends InputMethodService {
                 return super.onConsoleMessage(consoleMessage);
             }
         });
-
-        webView.setWebViewClient(new WebViewClient() {
-
-            @Override
-            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                super.onReceivedError(view, request, error);
-		//String msg = error.getDescription().toString() + "\n\n";
-                //msg += request.getUrl();                  
-                //msg = Base64.encodeToString(msg.getBytes(), Base64.NO_PADDING);
-                //view.loadData(msg, "text/plain", "base64");
-            }
-        });
         // webview内部不允许通过触摸或是物理键盘切换焦点
         webView.setFocusable(false);
         // logcat要设置成info级别才能看到异常，像：
@@ -514,13 +474,25 @@ public class SoftKeyboard extends InputMethodService {
         // "Failed to load module script: The server responded with a non-JavaScript MIME type of "".
         // Strict MIME type checking is enforced for module scripts per HTML spec.",
         // source: file:///android_asset/web/index.js?1569008605055 (0)
+        can_use_internet();
         webView.loadUrl(url);
+    }
+
+    private boolean can_use_internet() {
+        if (PackageManager.PERMISSION_DENIED == checkCallingOrSelfPermission(Manifest.permission.INTERNET)) {
+            Toast.makeText(this, "请授予本输入法网络权限,否则无法访问录音或是网络资源", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // todo 小米9,没有授权,也返回了0;其实是不正确的
+        return true;
     }
 
     void reload_webview() {
         // 重新走：优先使用存在的自定义html，否则使用默认
         if (null == webView) return;
 
+        can_use_internet();
         String url = get_user_html_path();
 
         if (null == url) {
@@ -634,13 +606,13 @@ public class SoftKeyboard extends InputMethodService {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                String js = "if ('function' === typeof " + js_listener + ") {\n" 
-			+ js_listener +  ".call(" 
-			+ JS_NAME
+                String js = "if ('function' === typeof " + js_listener + ") {\n"
+                        + js_listener + ".call("
+                        + JS_NAME
                         + ",'" + event_type + "'"
-                        + "," + (null == json_encode ? "null": json_encode)
+                        + "," + (null == json_encode ? "null" : json_encode)
                         + ");\n"
-	                + "}";
+                        + "}";
                 webView.evaluateJavascript(
                         js,
                         new ValueCallback<String>() {

@@ -100,14 +100,14 @@
       <template v-for="(kv,i) in kbd">
         
          <kbd v-if="kv" :class="(kv.cls||'') + ' keys'" :data-i="i">
-            <kbd :class="get_key_class('c',kv)" v-if="kv.c">{{kv.c.label}}</kbd>
-            <kbd :class="get_key_class('u',kv)" v-if="kv.u">{{kv.u.label}}</kbd>
-            <kbd :class="get_key_class('d',kv)" v-if="kv.d">{{kv.d.label}}</kbd>
-            <kbd :class="get_key_class('l',kv)" v-if="kv.l">{{kv.l.label}}</kbd>
-            <kbd :class="get_key_class('r',kv)" v-if="kv.r">{{kv.r.label}}</kbd>
+            <kbd :class="get_key_class('c',kv) +' c'" v-show="kv.c">{{get_key_label('c',kv)}}</kbd>
+            <kbd :class="get_key_class('u',kv) +' u'" v-show="kv.u">{{get_key_label('u',kv)}}</kbd>
+            <kbd :class="get_key_class('d',kv) +' d'" v-show="kv.d">{{get_key_label('d',kv)}}</kbd>
+            <kbd :class="get_key_class('l',kv) +' l'" v-show="kv.l">{{get_key_label('l',kv)}}</kbd>
+            <kbd :class="get_key_class('r',kv) +' r'" v-show="kv.r">{{get_key_label('r',kv)}}</kbd>
          </kbd>
          
-         <div v-else class="wrap_flex"></div>
+         <div v-else class="wrap"></div>
   
       </template>
     </kbd>

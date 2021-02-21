@@ -151,8 +151,8 @@ function vue_en(name) {
                 if ('console_log' === what) {
                     debug(info.text);
                 }
-                 
-               // debug(what, info);
+
+                // debug(what, info);
                 this.$children.forEach(function (vm) {
                     vm.$emit(what, info);
                 });
@@ -327,6 +327,10 @@ function vue_en(name) {
                     cls += ' hold_key';
                 return cls + ' key';
             },
+            get_key_label(which, kv) {
+                let obj = kv[which];
+                return !obj || undefined === obj.label ? '' : obj.label;
+            },
             get_meta_state() {
                 // 获取控制键状态组合
                 let state = 0;
@@ -405,123 +409,137 @@ function vue_en(name) {
                 default_uid: null,
                 only_en: 1,
                 kbd: [
-                    {//
-                        "c": {"label": 1},
-                        "d": {"label": "F1", code: android.KEYCODE_F1},
-                        "u": {"label": "F12", code: android.KEYCODE_F12}
+                    {
+                        c: {label: 1},
+                        u: {label: "!"},
+                        d: {label: "?"},
                     },
                     {
-                        "c": {"label": 2},
-                        "d": {"label": "F2", code: android.KEYCODE_F2},
-                        "u": {"label": "F11", code: android.KEYCODE_F11},
+                        c: {label: 2},
+                        u: {label: "@"},
+                        d: {label: "<"},
                     },
                     {
-                        "c": {"label": 3},
-                        "l": {"label": '《'},
-                        "r": {"label": '》'},
-                        "d": {"label": "F3", code: android.KEYCODE_F3}
+                        c: {label: 3},
+                        u: {label: "#"},
+                        d: {label: ">"},
                     },
                     {
-                        "c": {"label": 4},
-                        "l": {"label": '〈'},
-                        "r": {"label": '〉'},
-                        "d": {"label": "F4", code: android.KEYCODE_F4},
+                        c: {label: 4},
+                        l: {label: "`"},
+                        r: {label: "~"},
+                        u: {label: "$"},
+                        d: {label: "'"},
                     },
                     {
-                        "c": {"label": 5},
-                        "d": {"label": "F5", code: android.KEYCODE_F5}
+                        c: {label: 5},
+                        u: {label: "%"},
+                        l: {label: ":"},
+                        r: {label: ';'},
+                        d: {label: '"'},
                     },
                     {
-                        "c": {"label": 6},
-                        "d": {"label": "F6", code: android.KEYCODE_F6}
+                        c: {label: 6},
+                        u: {label: "^"},
+                        l: {label: '|'},
+                        r: {label: '\\'},
+                        d: {label: '/'},
                     },
                     {
-                        "c": {"label": 7},
-                        "d": {"label": "F7", code: android.KEYCODE_F7}
+                        c: {label: 7},
+                        u: {label: '&'},
+                        l: {label: '_'},
+                        r: {label: '-'},
+                        d: {label: '{'},
                     },
                     {
-                        "c": {"label": 8},
-                        "d": {"label": "F8", code: android.KEYCODE_F8}
+                        c: {label: 8},
+                        u: {label: '*'},
+                        l: {label: "+"},
+                        r: {label: "="},
+                        d: {label: '}'},
                     },
                     {
-                        "d": {"label": "F9", code: android.KEYCODE_F9},
-                        "c": {"label": 9}
-
+                        c: {label: 9},
+                        u: {label: '('},
+                        d: {label: '['},
                     },
                     {
-                        "c": {"label": 0},
-                        "d": {"label": "F10", code: android.KEYCODE_F10}
+                        c: {label: 0},
+                        u: {label: ")"},
+                        d: {label: "]"},
                     },
                     0,
                     {
-                        "c": {"label": "Q"}
+                        c: {label: "Q"},
+                        u: {label: '《'},
+                        d: {label: '〈'},
                     },
                     {
-                        "c": {"label": "W"},
-                        "l": {"label": "【"},
-                        "r": {"label": "】"},
+                        c: {label: "W"},
+                        u: {label: '》'},
+                        d: {label: '〉'},
                     },
                     {
-                        "c": {"label": "E"},
-                        "l": {"label": "["},
-                        "r": {"label": "]"},
-                        "d": {"label": "/"},
+                        c: {label: "E"},
+                        u: {label: "【"},
+                        d: {label: "["},
                     },
                     {
-                        "c": {"label": "R"},
-                        u: {label: '！'},
-                        d: {label: '，'},
+                        c: {label: "R"},
+                        u: {label: "】"},
+                        d: {label: "]"},
+                        l: {label: '，'},
+                        r: {label: '。'},
+                    },
+                    {
+                        c: {label: "T"},
+                        u: {label: "『"},
+                        d: {label: "「"},
+                        r: {label: '！'},
+                        l: {label: '？'},
+                    },
+                    {
+                        c: {label: "Y"},
+                        u: {label: "』"},
+                        d: {label: "」"},
+                        r: {label: "；"},
+                        l: {label: "："},
+                    },
+                    {
+                        c: {label: "U"},
+                        u: {label: "——"},
+                        d: {label: "___"},
                         l: {label: '“'},
                         r: {label: '”'}
                     },
                     {
-                        "c": {"label": "T"},
-                        "l": {"label": "（"},
-                        "r": {"label": "）"},
-                        "d": {"label": "；"},
-                        "u": {"label": "："},
-                    },
-                    {
-                        "c": {"label": "Y"},
-                        u: {label: '？'},
+                        c: {label: "I"},
+                        u: {label: "……"},
+                        d: {label: "、"},
                         l: {label: '‘'},
-                        d: {label: '。'},
                         r: {label: '’'}
                     },
                     {
-                        "c": {"label": "U"},
-                        "u": {"label": "——"},
-                        "l": {"label": "「"},
-                        "r": {"label": "」"},
-                        "d": {"label": "___"}
+                        c: {label: "O"},
+                        u: {label: "（"},
+                        d: {label: "〔"},
                     },
                     {
-                        "c": {"label": "I"},
-                        "u": {"label": "……"},
-                        "l": {"label": "『"},
-                        "r": {"label": "』"},
-                        "d": {"label": "、"},
-                    },
-                    {
-                        "c": {"label": "O"},
-                        "l": {"label": "〔"},
-                        "r": {"label": "〕"}
-                    },
-                    {
-                        "c": {"label": "P"}
+                        c: {label: "P"},
+                        u: {label: "）"},
+                        d: {label: "〕"}
                     },
                     0,
                     {
-                        "c": {"label": "A"},
-                        "d": {"label": "-"},
-                        "r": {"label": "·"}
+                        c: {label: "A"},
                     },
                     {
-                        "c": {"label": "S"}
+                        c: {label: "S"}
 
                     },
                     {
-                        "c": {"label": "D"},
+                        c: {label: "D"},
                         r: {
                             label: '撤消',
                             fn() {
@@ -530,8 +548,8 @@ function vue_en(name) {
                         }
                     },
                     {
-                        "c": {"label": "F"},
-                        "cls": "kbd_f",
+                        c: {label: "F"},
+                        cls: "kbd_f",
                         d: {
                             label: '粘贴', fn() {
                                 java.send_paste();
@@ -555,148 +573,127 @@ function vue_en(name) {
                         }
                     },
                     {
-                        "u": {"label": "Esc", code: android.KEYCODE_ESCAPE},
-                        "c": {"label": "G"},
-                    },
-                    {
-                        "c": {"label": "H"},
-                        u: {label: 'Ctrl', code: android.KEYCODE_CTRL_LEFT},
-                        d: {label: 'Alt', code: android.KEYCODE_ALT_LEFT},
-                        
-                    },
-                    {
-                        "c": {"label": "J"},
-                        "cls": "kbd_j"
-                    },
-                    {
-                        "c": {"label": "K"}
-                    },
-                    {
-                        "c": {"label": "L"}
-                    },
-                    0,
-                    {
-                        "c": {
-                            "label": " 🄰", code: android.KEYCODE_SHIFT_LEFT
-                        },
-                        cls: 'kbd_l_margin_right'
-                    },
-                    {
-                        "c": {"label": "Z"},
-                        "u": {"label": "^"},
-                    },
-                    {
-                        "c": {"label": "X"},
-                        "l": {"label": ":"},
-                        "r": {"label": ";"}
-                    },
-                    {
-                        "c": {"label": "C"},
-                        "u": {"label": "\\"},
-                        "r": {"label": "|"},
-                        "d": {"label": "#"},
-                        "l": {"label": "_"}
-                    },
-                    {
-                        "c": {"label": "V"},
-                        "u": {"label": "&"},
-                        "l": {"label": "["},
-                        "r": {"label": "]"},
-                        "d": {"label": "`"}
-                    },
-                    {
-                        "c": {"label": "B"},
-                        "u": {"label": '"'},
-                        "l": {"label": "{"},
-                        "r": {"label": "}"},
-                        "d": {"label": "$"}
-                    },
-                    {                                                
-                        u: {"label": "'"},
-                        "c": {"label": "N"},
-                        "l": {"label": "<"},
-                        "r": {"label": ">"},
-                        "d": {"label": "~"}
-                    },
-                    {
-                        "u": {"label": "%"},
-                        "c": {"label": "M"},
-                        "l": {"label": "("},
-                        "d": {"label": "@"},
-                        "r": {"label": ")"}
-                    },
-                    {
-                        "u": {"label": "*"},                        
-                        "c": {"label": "/"},
-                        "l": {"label": "+"},
-                        "r": {"label": "-"},
-                        "d": {"label": "="},
-                    },
-                    0,
-                    {
-                        "c": {"label": "⌫", code: android.KEYCODE_DEL},
-                        "u": {"label": "⌦", code: android.KEYCODE_FORWARD_DEL},
-                        "cls": "kbd_15"
-                    },
-                    {//
-                        "c": {
-                            "label": "⇦", fn() {
-                                java.send_left();
-                            }
-                        },
-                        "u": {
-                            "label": "⇤", fn() {
+                        u: {label: "Esc", code: android.KEYCODE_ESCAPE},
+                        c: {label: "G"},
+                        l: {
+                            label: "⇤", fn() {
                                 java.send_key_press(android.KEYCODE_TAB, android.META_SHIFT_MASK);
                             }
-                        }
-                    },
-                    {
-                        "c": {
-                            "label": "⇩", fn() {
-                                java.send_down();
-                            }
-                        }
-                    },
-                    {
-                        "c": {
-                            "label": "⇧", fn() {
-                                java.send_up();
-                            }
-                        }
-                    },
-                    {
-                        "c": {
-                            "label": "⇨", fn() {
-                                java.send_right();
-                            }
                         },
-                        "u": {
-                            "label": "⇥", fn() {
+                        r: {
+                            label: "⇥", fn() {
                                 java.send_key_press(android.KEYCODE_TAB);
                             }
                         }
                     },
                     {
-                        "u": {
-                            "label": "语音", fn: function () {
+                        c: {label: "H"},
+                        u: {label: 'Ctrl', code: android.KEYCODE_CTRL_LEFT},
+                        d: {label: 'Alt', code: android.KEYCODE_ALT_LEFT},
+
+                    },
+                    {
+                        c: {label: "J"},
+                        cls: "kbd_j"
+                    },
+                    {
+                        c: {label: "K"}
+                    },
+                    {
+                        c: {label: "L"}
+                    },
+                    0,
+                    {
+                        c: {
+                            label: "🄰", code: android.KEYCODE_SHIFT_LEFT
+                        },
+                    },
+                    {
+                        c: {label: "Z"},
+                    },
+                    {
+                        c: {label: "X"},
+                    },
+                    {
+                        c: {label: "C"},
+                    },
+                    {
+                        c: {label: "V"},
+                    },
+                    {
+                        c: {label: "B"},
+                        u: {label: "F1", code: android.KEYCODE_F1},
+                        r: {label: "F2", code: android.KEYCODE_F2},
+                        d: {label: "F3", code: android.KEYCODE_F3},
+                        l: {label: "F4", code: android.KEYCODE_F4},
+                    },
+                    {
+                        c: {label: "N"},
+                        u: {label: "F5", code: android.KEYCODE_F5},
+                        r: {label: "F6", code: android.KEYCODE_F6},
+                        d: {label: "F7", code: android.KEYCODE_F7},
+                        l: {label: "F8", code: android.KEYCODE_F8},
+                    },
+                    {
+                        c: {label: "M"},
+                        u: {label: "F9", code: android.KEYCODE_F9},
+                        r: {label: "F10", code: android.KEYCODE_F10},
+                        d: {label: "F11", code: android.KEYCODE_F11},
+                        l: {label: "F12", code: android.KEYCODE_F12},
+                    },
+                    {
+                        c: {label: "⌫", code: android.KEYCODE_DEL},
+                        u: {label: "⌦", code: android.KEYCODE_FORWARD_DEL},
+                        cls: "keys_1_5"
+                    },
+                    0,
+                    {
+                        c: {
+                            label: "⇦", fn() {
+                                java.send_left();
+                            }
+                        },
+                    },
+                    {
+                        c: {
+                            label: "⇩", fn() {
+                                java.send_down();
+                            }
+                        }
+                    },
+                    {
+                        c: {
+                            label: "⇧", fn() {
+                                java.send_up();
+                            }
+                        }
+                    },
+                    {
+                        c: {
+                            label: "⇨", fn() {
+                                java.send_right();
+                            }
+                        },
+                    },
+                    {
+                        u: {
+                            label: "语音", fn: function () {
                                 _t.$emit('speech_show');
                             }
                         },
-                        "c": {"label": "␣", code: android.KEYCODE_SPACE},
-                        "cls": "kbd_20"
+                        c: {label: "␣", code: android.KEYCODE_SPACE},
+                        cls: "keys_2"
                     },
                     {
-                        
-                        "c": {"label": ","},
-                        "u": {"label": "!"},
+
+                        c: {label: ","},
                     },
                     {
-                        u: {label: '?'},
-                        "c": {"label": "."},
+                        c: {label: "."},
                     },
                     {
-                        "c": {"label": "⏎", code: android.KEYCODE_ENTER},
-                        "cls": "kbd_20"
+                        c: {label: "⏎", code: android.KEYCODE_ENTER},
+                        cls: "keys_2"
                     }
                 ]
             };

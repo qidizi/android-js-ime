@@ -3,14 +3,15 @@
 https://material.io/resources/color/#!/?view.left=1&view.right=0&secondary.color=f9f9f9&primary.color=212121
 */
 
+/*https://www.onlinewebfonts.com/download/a6ffc5d72a96b65159e710ea6d258ba4*/
 @font-face {
-    font-family: "menlo";
-    src: url('./Menlo-Regular.ttf') /*format("truetype")*/;
+    font-family: "Menlo";
+    src: url("./menlo.woff") format("woff");
 }
 
 html, body {
-    display: block;    
-    background: transparent;
+    display: block;
+    background: rgba(0, 0, 0, 0.8);
 }
 
 * {
@@ -19,17 +20,20 @@ html, body {
     margin: 0;
 }
 
+kbd {
+    font-family: 'Menlo', monospace;
+}
+
 html {
     /*如果不设置背景色，就能透明看到窗口后面内容*/
     font-size: 62.5%;
 }
 
 body {
-    /*在某些版本的案卓高度为0*/    
-    font-family: menlo, monospace;
+    /*在某些版本的案卓高度为0*/
+    font-family: Menlo, monospace;
     /*禁用选择文字，防止长按触发，会中断touch事件*/
     user-select: none;
-
 }
 
 main {
@@ -51,46 +55,36 @@ kbd.kbd {
     margin: 0;
     padding: 0;
     text-align: center;
-    
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: center;
-    display: flex;
+    display: inline-block;
 }
 
-div.wrap_flex{
-  flex-basis: 100%;
+div.wrap {
+    visibility: hidden;
+    height: 0;
+    width: 0;
 }
 
 kbd.kbd > kbd.keys {
     background-color: #212121;
-    color: rgba(255,255,255,0.54);
-    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.54);
+    border-radius: 5px;
     overflow: hidden;
     cursor: pointer;
     position: relative;
-    height: 50px;
+    height: 40px;
     width: 8vw;
     display: inline-block;
-    padding: 0px;
+    padding: 0;
     margin: 1vw;
     /*border: 5px solid rgba(255,255,255,0.1);*/
 }
 
-kbd.kbd > kbd.kbd_150 {
-    /*9.1/2+9/100/11+9.1*/
-    width: 15vw;
+kbd.kbd > kbd.keys_1_5 {
+    width: 13vw;
 }
 
-kbd.kbd > kbd.kbd_15 {
-    /*9.1/2+9/100/11+9.1*/
-    width: 15vw;
-}
-
-kbd.kbd > kbd.kbd_20 {
-    /*9.1/2+9/100/11+9.1*/
-    width: 20vw;
+kbd.kbd > kbd.keys_2 {
+    width: 17vw;
 }
 
 kbd.kbd > kbd.kbd_f {
@@ -111,42 +105,42 @@ kbd.kbd > kbd.keys > kbd {
 
 kbd.kbd > kbd.keys > kbd.c {
     font-weight: bold;
-    font-size: 0.9rem;
-    line-height: 1rem;
-    width: 0.9rem;
+    font-size: 1.8rem;
     top: 50%; /*相对父元素*/
     left: 50%;
     transform: translate(-50%, -50%); /*相对于本身，margin相对父元素*/
 }
 
 kbd.kbd > kbd.keys > kbd.u {
-    top: 1px;
+    top: 0;
     left: 0;
-    width: 100%;
-    font-size: 0.8rem;
+    right: 0;
+    font-size: 1rem;
+    line-height: 1.1rem;
 }
 
 kbd.kbd > kbd.keys > kbd.r {
     top: 50%;
-    right: 1px;
+    right: 0;
     font-size: 0.9rem;
-    line-height: 0.9rem;
+    line-height: 1rem;
     width: 0.8rem;
     transform: translateY(-50%);
 }
 
 kbd.kbd > kbd.keys > kbd.d {
-    bottom: 1px;
+    bottom: 0;
     left: 0;
-    width: 100%;
-    font-size: 0.8rem;
+    right: 0;
+    font-size: 1rem;
+    line-height: 1.1rem;
 }
 
 kbd.kbd > kbd.keys > kbd.l {
     top: 50%;
-    left: 1px;
+    left: 0;
     line-height: 0.9rem;
-    font-size: 0.8rem;
+    font-size: 1rem;
     width: 0.8rem;
     transform: translateY(-50%);
 }
