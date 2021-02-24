@@ -179,6 +179,12 @@ public class SoftKeyboard extends InputMethodService {
 
     @JavascriptInterface
     public void open_speech_recognizer() {
+        if (!SpeechRecognizer.isRecognitionAvailable(this)) {
+            SoftKeyboard.emit_js_str(webView,
+                    "speech_recognizer_on_error", "语音识别服务不可用");
+            return;
+        }
+
         if (!can_use_internet()) {
             SoftKeyboard.emit_js_str(webView,
                     "speech_recognizer_on_error", "请授予本输入法网络权限才能使用语音识别功能");
@@ -253,7 +259,14 @@ public class SoftKeyboard extends InputMethodService {
             }
 
             xf_recognition = new ComponentName(info.serviceInfo.packageName, info.serviceInfo.name);
-            // Log.e("qidizi", info.serviceInfo.packageName + "/" + info.serviceInfo.name);
+            Log.e("qidizi", info.serviceInfo.packageName + "/" + info.serviceInfo.name);
+        }
+
+
+        if (xf_recognition == null) {
+            SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_error",
+                    "没有可用的语音识别组件");
+            return;
         }
 
         speech_recognizer = SpeechRecognizer.createSpeechRecognizer(this, xf_recognition);

@@ -322,14 +322,19 @@ function vue_en(name) {
                 if (!obj) return 'hide';
                 let cls = which;
                 if (obj.cls) cls += ' ' + obj.cls;
+                let code = undefined === obj.code ? (
+                    'function' === typeof obj['get_code'] ? obj['get_code'].call(this) : undefined
+                ) : obj.code;
 
-                if (obj.code && this.is_meta_code(obj.code) && this.set_meta_down(obj.code))
+                if (code && this.is_meta_code(code) && this.set_meta_down(code))
                     cls += ' hold_key';
                 return cls + ' key';
             },
             get_key_label(which, kv) {
                 let obj = kv[which];
-                return !obj || undefined === obj.label ? '' : obj.label;
+
+                if (!obj || undefined === obj.label) return '';
+                return 'function' === typeof obj.label ? obj.label.call(this) : obj.label;
             },
             get_meta_state() {
                 // 获取控制键状态组合
@@ -408,6 +413,7 @@ function vue_en(name) {
                 textarea_value: '',
                 default_uid: null,
                 only_en: 1,
+                is_zh: 0,
                 kbd: [
                     {
                         c: {label: 1},
@@ -605,7 +611,24 @@ function vue_en(name) {
                     0,
                     {
                         c: {
-                            label: "🄰", code: android.KEYCODE_SHIFT_LEFT
+                            label: function () {
+                                return this.is_zh ? '中' : "🄰";
+                            },
+                            get_code: function () {
+                                return this.is_zh ? undefined : android.KEYCODE_SHIFT_LEFT;
+                            }, fn: function (ev) {
+                                if (this.is_zh) {
+                                    // 中文用途
+                                    this.java_listener('reset_zh', null);
+                                    return;
+                                }
+
+                                // 英文用途
+                                if ('long_tab' === ev.custom_type) return;
+                                let code = android.KEYCODE_SHIFT_LEFT;
+                                let new_status = !this.set_meta_down(code);
+                                this.set_meta_down(code, new_status);
+                            }
                         },
                     },
                     {

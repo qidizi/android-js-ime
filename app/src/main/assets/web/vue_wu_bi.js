@@ -30,6 +30,7 @@ function vue_wu_bi(name) {
         mounted() {
             this.$root.$on('0-d>u', this.on_show);
             this.$on('hide', this.on_hide);
+            this.$on('reset_zh', this.keyboard_reset);
         },
         methods: {
             on_show() {
@@ -39,9 +40,11 @@ function vue_wu_bi(name) {
                     return _this.on_touch(ev);
                 });
                 this.show = false;
+                this.$root.is_zh = 1;
             },
             on_hide() {
                 this.show = false;
+                this.$root.is_zh = 0;
             },
             on_touch(ev) {
                 if (!ev.custom_key) return;

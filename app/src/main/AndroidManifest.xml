@@ -19,6 +19,7 @@
     <application
             android:allowBackup="false"
             android:label="@string/app_name" tools:ignore="MissingApplicationIcon">
+
         <!--暂不提供程序图标，使用系统默认的-->
         <activity
                 android:name=".MainActivity"
@@ -29,6 +30,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
         </activity>
 
         <service
@@ -41,6 +43,8 @@
             <meta-data
                     android:name="android.view.im"
                     android:resource="@xml/key_board_method"/>
+
+
         </service>
     </application>
 
