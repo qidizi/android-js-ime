@@ -9,10 +9,12 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.inputmethodservice.InputMethodService;
 import android.os.*;
+import android.provider.Settings;
 import android.speech.RecognitionListener;
 import android.speech.RecognitionService;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.InputDevice;
 import android.view.KeyEvent;
@@ -30,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SoftKeyboard extends InputMethodService {
+    final static String LOG_TAG = "js_ime";
     static String js_listener = null;
     // java方法提供给js的命名空间
     private final static String JS_NAME = "JAVA";
@@ -180,8 +183,9 @@ public class SoftKeyboard extends InputMethodService {
     @JavascriptInterface
     public void open_speech_recognizer() {
         if (!SpeechRecognizer.isRecognitionAvailable(this)) {
+            dbg("没有可用的语音引擎");
             SoftKeyboard.emit_js_str(webView,
-                    "speech_recognizer_on_error", "语音识别服务不可用");
+                    "speech_recognizer_on_error", "没有可用的语音引擎");
             return;
         }
 
@@ -194,11 +198,11 @@ public class SoftKeyboard extends InputMethodService {
         if (PackageManager.PERMISSION_DENIED == checkCallingOrSelfPermission(Manifest.permission.RECORD_AUDIO)) {
             SoftKeyboard.emit_js_str(webView,
                     "speech_recognizer_on_error", "请授予本输入法录音权限才能使用语音识别功能");
+            return;
         }
 
         Handler mainHandler = new Handler(getMainLooper());
         Runnable myRunnable = new Runnable() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void run() {
                 if (null == speech_recognizer)
@@ -215,6 +219,7 @@ public class SoftKeyboard extends InputMethodService {
                 // 小米9设置语音输入为小爱同学时，会出现无法绑定的异常，需要去掉勾选成讯飞语记才能使用；
                 // 且没有错误提示
 
+                // 2021-02-25 00:32:06.949 20528-20528/qidizi.js_ime E/SpeechRecognizer: bind to recognition service failed
                 speech_recognizer.startListening(speechIntent);
                 SoftKeyboard.emit_js_str(webView,
                         "speech_recognizer_on_tip", "启动监听...");
@@ -234,42 +239,47 @@ public class SoftKeyboard extends InputMethodService {
         speechIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     private void create_speech_recognizer() {
-        ComponentName xf_recognition = null;
+        // 如果是小米,默认是小爱; 就算是在输入法语音引擎中优先其它
+        String serviceComponent = Settings.Secure.getString(getContentResolver(),
+                "voice_recognition_service");
 
-        // 查找得到的 "可用的" 语音识别服务
-        List<ResolveInfo> list = getPackageManager().queryIntentServices(
-                new Intent(RecognitionService.SERVICE_INTERFACE), PackageManager.MATCH_ALL
-        );
-
-        if (0 == list.size()) {
-            SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_error",
-                    "没有可用的语音识别组件");
+        if (TextUtils.isEmpty(serviceComponent)) {
+            dbg("没有可用的语音引擎");
+            SoftKeyboard.emit_js_str(webView,
+                    "speech_recognizer_on_error", "没有可用的语音引擎");
             return;
         }
 
-        for (ResolveInfo info : list) {
-            if (
-                    "com.iflytek.vflynote".equals(info.serviceInfo.packageName)
-                            &&
-                            "com.iflytek.iatservice.SpeechService".equals(info.serviceInfo.name)
-            ) {
+        dbg("当前默认语音引擎:" + serviceComponent);
+
+        final List<ResolveInfo> list = getPackageManager().queryIntentServices(
+                new Intent(RecognitionService.SERVICE_INTERFACE), 0);
+
+        dbg("语音引擎个数:" + list.size());
+        ComponentName componentName = null;
+
+        for (ResolveInfo item : list) {
+            if (null == item.serviceInfo) continue;
+            dbg("引擎:" + item.serviceInfo.packageName + "/" + item.serviceInfo.name);
+
+            if (!"com.iflytek.vflynote".equals(item.serviceInfo.packageName)) {
                 continue;
             }
 
-            xf_recognition = new ComponentName(info.serviceInfo.packageName, info.serviceInfo.name);
-            Log.e("qidizi", info.serviceInfo.packageName + "/" + info.serviceInfo.name);
+            dbg("已安装讯飞语记");
+            componentName = ComponentName.unflattenFromString(item.serviceInfo.packageName + "/" + item.serviceInfo.name);
         }
 
-
-        if (xf_recognition == null) {
-            SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_error",
-                    "没有可用的语音识别组件");
+        if (componentName == null) {
+            SoftKeyboard.emit_js_str(webView,
+                    "speech_recognizer_on_error", "未安装讯飞语记");
+            dbg("未安装讯飞语记");
             return;
         }
 
-        speech_recognizer = SpeechRecognizer.createSpeechRecognizer(this, xf_recognition);
+        // 还要讯飞语记能使用网络,mic等权限,才能使用,建议先用它试一下正常了再试
+        speech_recognizer = SpeechRecognizer.createSpeechRecognizer(this, componentName);
         speech_recognizer.setRecognitionListener(new RecognitionListener() {
 
             @Override
@@ -322,7 +332,7 @@ public class SoftKeyboard extends InputMethodService {
                         break;
                 }
                 // 如小米9，设置语音识别为小爱同学时，收不到这个错误： 11059-11059/qidizi.js_ime E/SpeechRecognizer: bind to recognition service failed
-                Log.e("qidizi", "出错了（" + error + "）");
+                dbg("出错了（" + error + "）");
                 SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_error", "出错了（" + error + "）");
             }
 
@@ -335,13 +345,13 @@ public class SoftKeyboard extends InputMethodService {
             @Override
             public void onEvent(int i, Bundle bundle) {
                 // 必须重写
-                Log.e("qidizi", "onEvent（" + i + "）");
+                dbg("onEvent（" + i + "）");
             }
 
             @Override
             public void onBufferReceived(byte[] bytes) {
                 // 必须重写
-                Log.e("qidizi", "onBufferReceived " + bytes.length);
+                dbg("onBufferReceived " + bytes.length);
             }
 
             @Override
@@ -358,7 +368,7 @@ public class SoftKeyboard extends InputMethodService {
             @Override
             public void onRmsChanged(float v) {
                 // 必须重写
-                Log.e("qidizi", "onRmsChanged " + v);
+                dbg("onRmsChanged " + v);
             }
 
             @Override
@@ -366,6 +376,7 @@ public class SoftKeyboard extends InputMethodService {
                 SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_listening", "请说话...");
             }
         });
+        dbg("创建语音实例");
     }
 
 
@@ -375,6 +386,9 @@ public class SoftKeyboard extends InputMethodService {
         super.onCreate();
     }
 
+    private void dbg(String msg) {
+        Log.d(LOG_TAG, msg);
+    }
 
     /**
      * 方法用于用户界面初始化，主要用于service运行过程中配置信息发生改变的情况（横竖屏转换等）。
