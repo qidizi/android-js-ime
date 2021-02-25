@@ -222,7 +222,7 @@ public class SoftKeyboard extends InputMethodService {
                 // 2021-02-25 00:32:06.949 20528-20528/qidizi.js_ime E/SpeechRecognizer: bind to recognition service failed
                 speech_recognizer.startListening(speechIntent);
                 SoftKeyboard.emit_js_str(webView,
-                        "speech_recognizer_on_tip", "启动监听...");
+                        "speech_recognizer_on_tip", "讯飞语记启动中...本提示久未消失请先打开语记试用确保可以语音识别成文字,如允许录音、联网等权限");
             }
         };
         mainHandler.post(myRunnable);
@@ -240,40 +240,45 @@ public class SoftKeyboard extends InputMethodService {
     }
 
     private void create_speech_recognizer() {
-        // 如果是小米,默认是小爱; 就算是在输入法语音引擎中优先其它
-        String serviceComponent = Settings.Secure.getString(getContentResolver(),
-                "voice_recognition_service");
+        ComponentName componentName = null;
+        // 如果是小米,默认是小爱; 就算是在输入法语音引擎中首先其它,这个方法返回的也是小爱
+        // 目前无法调用小米的小爱,会被链式启动规则禁用
+//        String serviceComponent = Settings.Secure.getString(getContentResolver(),
+//                "voice_recognition_service");
+//
+//        if (TextUtils.isEmpty(serviceComponent)) {
+//            dbg("没有可用的语音引擎");
+//            SoftKeyboard.emit_js_str(webView,
+//                    "speech_recognizer_on_error", "没有可用的语音引擎");
+//            return;
+//        }
+//        componentName = ComponentName.unflattenFromString(serviceComponent);
 
-        if (TextUtils.isEmpty(serviceComponent)) {
-            dbg("没有可用的语音引擎");
-            SoftKeyboard.emit_js_str(webView,
-                    "speech_recognizer_on_error", "没有可用的语音引擎");
-            return;
-        }
 
-        dbg("当前默认语音引擎:" + serviceComponent);
+     //   dbg("当前默认语音引擎:" + serviceComponent);
 
         final List<ResolveInfo> list = getPackageManager().queryIntentServices(
                 new Intent(RecognitionService.SERVICE_INTERFACE), 0);
 
-        dbg("语音引擎个数:" + list.size());
-        ComponentName componentName = null;
+        dbg("语音识别引擎个数:" + list.size());
+        String pn ;
 
         for (ResolveInfo item : list) {
-            if (null == item.serviceInfo) continue;
-            dbg("引擎:" + item.serviceInfo.packageName + "/" + item.serviceInfo.name);
+            pn = item.serviceInfo.packageName + "/" + item.serviceInfo.name;
+            dbg("语音识别引擎:" + pn);
 
             if (!"com.iflytek.vflynote".equals(item.serviceInfo.packageName)) {
                 continue;
             }
 
             dbg("已安装讯飞语记");
-            componentName = ComponentName.unflattenFromString(item.serviceInfo.packageName + "/" + item.serviceInfo.name);
+            componentName = ComponentName.unflattenFromString(pn);
+            break;
         }
 
         if (componentName == null) {
             SoftKeyboard.emit_js_str(webView,
-                    "speech_recognizer_on_error", "未安装讯飞语记");
+                    "speech_recognizer_on_error", "请安装讯飞语记");
             dbg("未安装讯飞语记");
             return;
         }
@@ -281,21 +286,6 @@ public class SoftKeyboard extends InputMethodService {
         // 还要讯飞语记能使用网络,mic等权限,才能使用,建议先用它试一下正常了再试
         speech_recognizer = SpeechRecognizer.createSpeechRecognizer(this, componentName);
         speech_recognizer.setRecognitionListener(new RecognitionListener() {
-
-            @Override
-            public void onResults(Bundle results) {
-                ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-                String result = "";
-
-                if (null != matches && matches.size() > 0) {
-                    // 识别出文字，异步通知给js
-                    result = matches.get(0);
-                }
-
-                SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_result", result);
-            }
-
-
             @Override
             public void onError(int i) {
                 String error;
@@ -307,7 +297,7 @@ public class SoftKeyboard extends InputMethodService {
                         error = "tts组件异常";
                         break;
                     case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
-                        error = "请授予录音权限";
+                        error = "请授予讯飞语记录音权限";
                         break;
                     case SpeechRecognizer.ERROR_NETWORK:
                         error = "tts网络异常";
@@ -334,6 +324,19 @@ public class SoftKeyboard extends InputMethodService {
                 // 如小米9，设置语音识别为小爱同学时，收不到这个错误： 11059-11059/qidizi.js_ime E/SpeechRecognizer: bind to recognition service failed
                 dbg("出错了（" + error + "）");
                 SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_error", "出错了（" + error + "）");
+            }
+
+            @Override
+            public void onResults(Bundle results) {
+                ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                String result = "";
+
+                if (null != matches && matches.size() > 0) {
+                    // 识别出文字，异步通知给js
+                    result = matches.get(0);
+                }
+
+                SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_result", result);
             }
 
             @Override
