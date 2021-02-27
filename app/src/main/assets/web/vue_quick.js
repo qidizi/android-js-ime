@@ -55,18 +55,25 @@ function vue_quick(name) {
                             sides.shift();
                             continue;
                         }
-
-                        let key = {label: display, text: text}
+                        
+                        let side = sides.shift();
+                        
+                        let key = {
+                            label: display, 
+                            text: text,
+                            cls: display.length > 1 && "c" === side ? 'c2' : null
+                        }
 
                         if (0 === i) {
                             delete key.text;
                             key.fn = _this.on_edit;
                         }
 
-                        kbd[kbd.length - 1][sides.shift()] = key;
+                        kbd[kbd.length - 1][side] = key;
                         return;
                     }
                 });
+                
                 return this.kbd = kbd;
             }
         },
@@ -139,13 +146,17 @@ function vue_quick(name) {
              <button class="apply btn" @click.stop.prevent="on_save">应用</button>
          </footer>
          
-            <kbd  :class="(kv.cls||'') + ' keys'" :data-i="i"  v-for="(kv,i) in quick_input_parse" >
+         <template v-for="(kv,i) in quick_input_parse">
+            <kbd  :class="(kv.cls||'') + ' keys'" :data-i="i"  v-if="kv">
                 <kbd :class="get_key_class('c',kv)" v-if="kv.c">{{kv.c.label}}</kbd>
                 <kbd :class="get_key_class('u',kv)" v-if="kv.u">{{kv.u.label}}</kbd>
                 <kbd :class="get_key_class('d',kv)" v-if="kv.d">{{kv.d.label}}</kbd>
                 <kbd :class="get_key_class('l',kv)" v-if="kv.l">{{kv.l.label}}</kbd>
                 <kbd :class="get_key_class('r',kv)" v-if="kv.r">{{kv.r.label}}</kbd>
             </kbd>       
+            
+            <div v-else class="wrap"></div> 
+         </template>
         </kbd>
 `
 
