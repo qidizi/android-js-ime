@@ -100,11 +100,11 @@
       <template v-for="(kv,i) in kbd">
         
          <kbd v-if="kv" :class="(kv.cls||'') + ' keys'" :data-i="i">
-            <kbd :class="get_key_class('c',kv) +' c'" v-show="kv.c">{{get_key_label('c',kv)}}</kbd>
-            <kbd :class="get_key_class('u',kv) +' u'" v-show="kv.u">{{get_key_label('u',kv)}}</kbd>
-            <kbd :class="get_key_class('d',kv) +' d'" v-show="kv.d">{{get_key_label('d',kv)}}</kbd>
-            <kbd :class="get_key_class('l',kv) +' l'" v-show="kv.l">{{get_key_label('l',kv)}}</kbd>
-            <kbd :class="get_key_class('r',kv) +' r'" v-show="kv.r">{{get_key_label('r',kv)}}</kbd>
+            <kbd :class="get_key_class('c',kv)" v-show="kv.c">{{get_key_label('c',kv)}}</kbd>
+            <kbd :class="get_key_class('u',kv)" v-show="kv.u">{{get_key_label('u',kv)}}</kbd>
+            <kbd :class="get_key_class('d',kv)" v-show="kv.d">{{get_key_label('d',kv)}}</kbd>
+            <kbd :class="get_key_class('l',kv)" v-show="kv.l">{{get_key_label('l',kv)}}</kbd>
+            <kbd :class="get_key_class('r',kv)" v-show="kv.r">{{get_key_label('r',kv)}}</kbd>
          </kbd>
          
          <div v-else class="wrap"></div>
