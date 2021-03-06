@@ -1,11 +1,11 @@
 function vue_en(name) {
 // 小于这个毫秒就是按
-    const SMALL_IS_SHORT_PRESS_MS = 500;
+    const SMALL_IS_SHORT_PRESS_MS = 400;
 // 在这个范围内就是按，否则就是swipe
     const SMALL_IS_PRESS_PX = 5;
 // 长按激活后，多少毫秒发送一次按下事件
     const LONG_PRESS_REPEAT_MS = 50;
-    // 达到本px的位移才计一个方向；减少提高灵敏度，增大减少灵敏度
+    // 达到本px的位移才计一个方向；数字小灵敏度高，数字大灵敏度低
     const MIN_PX_FOR_ONE_DIRECTION = 10;
 
 // 创建临时全局变量，不放到vue data中，防止刷新ui

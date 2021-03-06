@@ -327,13 +327,13 @@ window.java = {
         window['JAVA'] ? window['JAVA'].js_onload(js_listener_fn) :
             debug('java收到html onload，java回调接收方法为：' + js_listener_fn);
     },
-    reload() {
+    'reload'() {
         window['JAVA'] ? window['JAVA'].reload() : debug('java收到重载html的请求');
     },
     open_speech_recognizer() {
         window['JAVA'] ? window['JAVA'].open_speech_recognizer() : debug('java收到打开语音识别的请求');
     },
-    stop_speech_recognizer() {
+    'stop_speech_recognizer'() {
         window['JAVA'] ? window['JAVA'].stop_speech_recognizer() : debug('java收到停止语音识别的请求');
     },
     cancel_speech_recognizer() {
@@ -365,5 +365,10 @@ window.java = {
     },
     send_down() {
         java.send_key_press(android.KEYCODE_DPAD_DOWN);
+    },
+    quick_word(input) {
+        if ('string' !== typeof input) input = null;
+        return window['JAVA'] ? window['JAVA'].quick_word(input) :
+            (null === input ? '测试 模拟时没有短语' : input);
     }
 };

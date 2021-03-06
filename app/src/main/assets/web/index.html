@@ -35,10 +35,10 @@
 
         function ajax(src, cb, method, body) {
             let xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function () {
-                if (200 === xhr.status) {
-                    'function' === typeof cb && cb.call(xhr, xhr.responseText);
-                }
+            xhr.onloadend = function () {
+                if (200 !== xhr.status)
+                    return debug('加载五笔词库失败');
+                'function' === typeof cb && cb.call(xhr, xhr.responseText);
             };
             xhr.open(method || 'GET', src);
             xhr.send(body);

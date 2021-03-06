@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 28
+    // 目前aide不支持29
     buildToolsVersion "28.0.1"
     defaultConfig {
         // 如果这个不正确aide会提示R找不到。as正常不影响
@@ -13,11 +14,11 @@ android {
     }
 
     signingConfigs {
-        release {
+        debug {
             //配置keystore文件的各种信息
 
-            //加载本工程目录之外的资源，防止git缓存
-            Properties properties = new Properties()
+            // 可以使用以下方式,加载本工程目录之外的资源，防止git缓存
+            //Properties properties = new Properties()
             // 请在本工程同级创建如下目录和编写下列文件名的properties文件，追加内容如下
 
             //  KEY_PATH=签名key.keystore文件的绝对路径
@@ -25,19 +26,20 @@ android {
             //  KEY_ALIAS_NAME=key的别名
             //  KEY_ALIAS_PASS=别名的密码
 
-            InputStream inputStream = file('/Users/qidizi/my.linux/apk-private-properties/private.properties').newDataInputStream()
-            properties.load(inputStream)
+            //InputStream inputStream = file('/Users/qidizi/my.linux/apk-private-properties/private.properties').newDataInputStream()
+            //properties.load(inputStream)
 
-            //签名key文件
-            //storeFile file(properties.getProperty('KEY_PATH'))
-            //storePassword properties.getProperty('KEY_PASS')
-           // keyAlias properties.getProperty('KEY_ALIAS_NAME')
-            //keyPassword properties.getProperty('KEY_ALIAS_PASS')
+            //总是使用android 默认的keystore来,签名debug版本,暂不用提供release版本
+            storeFile file('../android_debug.keystore')
+            // 官方的默认密码
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
         }
     }
 
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
             // 禁用混淆
             // proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -46,12 +48,7 @@ android {
 
             // 禁止idea提示 Cannot infer arguments types
             //noinspection GroovyAssignabilityCheck
-            //signingConfig signingConfigs.release
-        }
-
-        debug {
-            //noinspection GroovyAssignabilityCheck
-            //signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
         }
     }
 }

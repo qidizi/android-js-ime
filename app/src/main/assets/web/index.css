@@ -273,6 +273,16 @@ kbd.vue_quick {
     top: 0;
     right: 0;
     flex-direction: unset;
+    background-color: black;
+}
+
+kbd.vue_quick kbd.keys kbd.c {
+    font-size: 1.3rem;
+}
+
+kbd.vue_quick kbd.u, kbd.vue_quick kbd.r, kbd.vue_quick kbd.d, kbd.vue_quick kbd.l {
+    font-size: 1rem;
+    line-height: 1.2rem;
 }
 
 kbd.vue_wu_bi {

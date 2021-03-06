@@ -9,12 +9,10 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.inputmethodservice.InputMethodService;
 import android.os.*;
-import android.provider.Settings;
 import android.speech.RecognitionListener;
 import android.speech.RecognitionService;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.InputDevice;
 import android.view.KeyEvent;
@@ -24,14 +22,18 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.webkit.*;
 import android.widget.Toast;
-import androidx.annotation.RequiresApi;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SoftKeyboard extends InputMethodService {
+    // 路径会是 /data/user/0/包名/files/quick_word.txt
+    final static String quick_word_file = "quick_word.txt";
     final static String LOG_TAG = "js_ime";
     static String js_listener = null;
     // java方法提供给js的命名空间
@@ -46,7 +48,7 @@ public class SoftKeyboard extends InputMethodService {
     private Intent speechIntent = null;
     private SpeechRecognizer speech_recognizer = null;
 
-    private void send_key_event(int action, int key_code, int repeat, int meta_state) {
+    private void send_key_event(int action, int key_code, @SuppressWarnings("SameParameterValue") int repeat, int meta_state) {
         // 向当前绑定到键盘的应用发送键盘事件
         InputConnection ic = getCurrentInputConnection();
         long down_time = SystemClock.uptimeMillis();
@@ -100,17 +102,6 @@ public class SoftKeyboard extends InputMethodService {
     }
 
     //--------------供js调用方法-------
-
-    //    // TODO 注意暴露给js的方法必须是public，包内是不行的
-    //    @JavascriptInterface
-    //    public void send_key_down(int key_code, int repeat, int meta_state) {
-    //        send_key_event(KeyEvent.ACTION_DOWN, key_code, repeat, meta_state);
-    //    }
-    //
-    //    @JavascriptInterface
-    //    public void send_key_up(int key_code, int meta_state) {
-    //        send_key_event(KeyEvent.ACTION_UP, key_code, 0, meta_state);
-    //    }
 
     @JavascriptInterface
     public void send_key_press(int key_code, int meta_state) {
@@ -167,6 +158,51 @@ public class SoftKeyboard extends InputMethodService {
     }
 
     @JavascriptInterface
+    public String quick_word(String input) {
+        if (null != input) {
+            // 修改短语
+            try (FileOutputStream fos = openFileOutput(quick_word_file, MODE_PRIVATE)) {
+                // 写入短语
+                fos.write(input.getBytes(StandardCharsets.UTF_8));
+                return input;
+            } catch (Exception e) {
+                return "出错 " + "写入短语出错:" + e.getMessage().replaceAll("\\s+", ";");
+            }
+        } else {
+            FileInputStream fis = null;
+
+            try {
+                // 获取快捷短语
+                File file = new File(getFilesDir(), quick_word_file);
+
+                if (!file.exists()) {
+                    // 文件不存在
+                    return null;
+                }
+
+                // 存在,读取返回
+                byte[] bytes = new byte[(int) file.length()];
+                fis = openFileInput(quick_word_file);
+
+                if (fis.read(bytes) > -1) {
+                    return new String(bytes);
+                }
+
+                throw new Exception("读取" + file.getAbsolutePath() + "失败");
+            } catch (Exception e) {
+                return "出错 " + e.getMessage().replaceAll("\\s+", ";");
+            } finally {
+                if (null != fis) {
+                    try {
+                        fis.close();
+                    } catch (Exception ignore) {
+                    }
+                }
+            }
+        }
+    }
+
+    @JavascriptInterface
     public void cancel_speech_recognizer() {
         if (null == speech_recognizer) return;
 
@@ -183,7 +219,7 @@ public class SoftKeyboard extends InputMethodService {
     @JavascriptInterface
     public void open_speech_recognizer() {
         if (!SpeechRecognizer.isRecognitionAvailable(this)) {
-            dbg("没有可用的语音引擎");
+            error("没有可用的语音引擎");
             SoftKeyboard.emit_js_str(webView,
                     "speech_recognizer_on_error", "没有可用的语音引擎");
             return;
@@ -243,35 +279,22 @@ public class SoftKeyboard extends InputMethodService {
         ComponentName componentName = null;
         // 如果是小米,默认是小爱; 就算是在输入法语音引擎中首先其它,这个方法返回的也是小爱
         // 目前无法调用小米的小爱,会被链式启动规则禁用
-//        String serviceComponent = Settings.Secure.getString(getContentResolver(),
-//                "voice_recognition_service");
-//
-//        if (TextUtils.isEmpty(serviceComponent)) {
-//            dbg("没有可用的语音引擎");
-//            SoftKeyboard.emit_js_str(webView,
-//                    "speech_recognizer_on_error", "没有可用的语音引擎");
-//            return;
-//        }
-//        componentName = ComponentName.unflattenFromString(serviceComponent);
-
-
-     //   dbg("当前默认语音引擎:" + serviceComponent);
 
         final List<ResolveInfo> list = getPackageManager().queryIntentServices(
                 new Intent(RecognitionService.SERVICE_INTERFACE), 0);
 
-        dbg("语音识别引擎个数:" + list.size());
-        String pn ;
+        error("语音识别引擎个数:" + list.size());
+        String pn;
 
         for (ResolveInfo item : list) {
             pn = item.serviceInfo.packageName + "/" + item.serviceInfo.name;
-            dbg("语音识别引擎:" + pn);
+            error("语音识别引擎:" + pn);
 
             if (!"com.iflytek.vflynote".equals(item.serviceInfo.packageName)) {
                 continue;
             }
 
-            dbg("已安装讯飞语记");
+            error("已安装讯飞语记");
             componentName = ComponentName.unflattenFromString(pn);
             break;
         }
@@ -279,7 +302,7 @@ public class SoftKeyboard extends InputMethodService {
         if (componentName == null) {
             SoftKeyboard.emit_js_str(webView,
                     "speech_recognizer_on_error", "请安装讯飞语记");
-            dbg("未安装讯飞语记");
+            error("未安装讯飞语记");
             return;
         }
 
@@ -322,7 +345,7 @@ public class SoftKeyboard extends InputMethodService {
                         break;
                 }
                 // 如小米9，设置语音识别为小爱同学时，收不到这个错误： 11059-11059/qidizi.js_ime E/SpeechRecognizer: bind to recognition service failed
-                dbg("出错了（" + error + "）");
+                error("出错了（" + error + "）");
                 SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_error", "出错了（" + error + "）");
             }
 
@@ -348,13 +371,13 @@ public class SoftKeyboard extends InputMethodService {
             @Override
             public void onEvent(int i, Bundle bundle) {
                 // 必须重写
-                dbg("onEvent（" + i + "）");
+                error("onEvent（" + i + "）");
             }
 
             @Override
             public void onBufferReceived(byte[] bytes) {
                 // 必须重写
-                dbg("onBufferReceived " + bytes.length);
+                error("onBufferReceived " + bytes.length);
             }
 
             @Override
@@ -371,7 +394,7 @@ public class SoftKeyboard extends InputMethodService {
             @Override
             public void onRmsChanged(float v) {
                 // 必须重写
-                dbg("onRmsChanged " + v);
+                error("onRmsChanged " + v);
             }
 
             @Override
@@ -379,7 +402,7 @@ public class SoftKeyboard extends InputMethodService {
                 SoftKeyboard.emit_js_str(webView, "speech_recognizer_on_listening", "请说话...");
             }
         });
-        dbg("创建语音实例");
+        error("创建语音实例");
     }
 
 
@@ -389,8 +412,8 @@ public class SoftKeyboard extends InputMethodService {
         super.onCreate();
     }
 
-    private void dbg(String msg) {
-        Log.d(LOG_TAG, msg);
+    private void error(String msg) {
+        Log.e(LOG_TAG, msg);
     }
 
     /**
@@ -447,7 +470,6 @@ public class SoftKeyboard extends InputMethodService {
         String tmp = get_user_html_path();
         // 优先使用用户文件
         final String url = tmp == null ? ASSET_PROTO + DEFAULT_HTML : tmp;
-        final SoftKeyboard skb = this;
         webView = new WebView(this);
 
         WebSettings webSettings = webView.getSettings();
@@ -514,7 +536,7 @@ public class SoftKeyboard extends InputMethodService {
             return false;
         }
 
-        // todo 小米9,没有授权,也返回了0;其实是不正确的
+        //  小米9,没有授权,也返回了0;其实是不正确的
         return true;
     }
 
