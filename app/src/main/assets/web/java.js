@@ -327,9 +327,6 @@ window.java = {
         window['JAVA'] ? window['JAVA'].js_onload(js_listener_fn) :
             debug('java收到html onload，java回调接收方法为：' + js_listener_fn);
     },
-    'reload'() {
-        window['JAVA'] ? window['JAVA'].reload() : debug('java收到重载html的请求');
-    },
     open_speech_recognizer() {
         window['JAVA'] ? window['JAVA'].open_speech_recognizer() : debug('java收到打开语音识别的请求');
     },

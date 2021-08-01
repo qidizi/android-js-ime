@@ -4,7 +4,7 @@ function vue_en(name) {
 // 在这个范围内就是按，否则就是swipe
     const SMALL_IS_PRESS_PX = 5;
 // 长按激活后，多少毫秒发送一次按下事件
-    const LONG_PRESS_REPEAT_MS = 50;
+    const LONG_PRESS_REPEAT_MS = 20;
     // 达到本px的位移才计一个方向；数字小灵敏度高，数字大灵敏度低
     const MIN_PX_FOR_ONE_DIRECTION = 10;
 
@@ -539,6 +539,11 @@ function vue_en(name) {
                     0,
                     {
                         c: {label: "A"},
+                        l: {
+                            label: '重载', fn() {
+                                location.reload();
+                            }
+                        }
                     },
                     {
                         c: {label: "S"}

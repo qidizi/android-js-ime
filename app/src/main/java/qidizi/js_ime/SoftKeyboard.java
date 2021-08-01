@@ -122,17 +122,6 @@ public class SoftKeyboard extends InputMethodService {
         ic.endBatchEdit();
     }
 
-    @JavascriptInterface
-    public void reload() {
-        // 重新加载，比如载入html;因为这个类是运行在其它线程，需要操作ui要把处理扔给ui线程处理
-        webView.post(new Runnable() {
-            @Override
-            public void run() {
-                reload_webview();
-            }
-        });
-    }
-
     /**
      * js 加载ok后给java通知，并注册回调方法
      *
@@ -245,8 +234,6 @@ public class SoftKeyboard extends InputMethodService {
                     create_speech_recognizer();
 
                 if (null == speech_recognizer) {
-                    SoftKeyboard.emit_js_str(webView,
-                            "speech_recognizer_on_error", "无法创建语音识别服务");
                     return;
                 }
 
@@ -258,7 +245,8 @@ public class SoftKeyboard extends InputMethodService {
                 // 2021-02-25 00:32:06.949 20528-20528/qidizi.js_ime E/SpeechRecognizer: bind to recognition service failed
                 speech_recognizer.startListening(speechIntent);
                 SoftKeyboard.emit_js_str(webView,
-                        "speech_recognizer_on_tip", "讯飞语记启动中...本提示久未消失请先打开语记试用确保可以语音识别成文字,如允许录音、联网等权限");
+                        "speech_recognizer_on_tip",
+                        "启动语音引擎...(需直接打开语记可以正常识别语音)");
             }
         };
         mainHandler.post(myRunnable);
