@@ -50,6 +50,18 @@ android {
             //noinspection GroovyAssignabilityCheck
             signingConfig signingConfigs.debug
         }
+    
+    release {
+            minifyEnabled false
+            // 禁用混淆
+            // proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            debuggable true
+            // 点击idea右侧的Gradle面板中的other/assembleRelease即可自动签名apk
+
+            // 禁止idea提示 Cannot infer arguments types
+            //noinspection GroovyAssignabilityCheck
+            signingConfig signingConfigs.debug
+        }
     }
 }
 
