@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -150,12 +151,22 @@ public class SoftKeyboard extends InputMethodService {
     public String quick_word(String input) {
         if (null != input) {
             // 修改短语
-            try (FileOutputStream fos = openFileOutput(quick_word_file, MODE_PRIVATE)) {
+            FileOutputStream fos = null;
+            try {
+                fos = openFileOutput(quick_word_file, MODE_PRIVATE);
                 // 写入短语
                 fos.write(input.getBytes(StandardCharsets.UTF_8));
                 return input;
             } catch (Exception e) {
                 return "出错 " + "写入短语出错:" + e.getMessage().replaceAll("\\s+", ";");
+            } finally {
+                if (fos != null) {
+                    try {
+                        fos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         } else {
             FileInputStream fis = null;
