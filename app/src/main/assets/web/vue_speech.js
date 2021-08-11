@@ -24,7 +24,7 @@ function vue_speech(name) {
             });
             this.$on('speech_recognizer_on_result', function (obj) {
                 // 返回语音结果
-                
+
                 if (obj) {
                     this.tip = '识别完成';
                     this.text = obj.text;
@@ -35,26 +35,41 @@ function vue_speech(name) {
             });
             this.$root.$on('speech_show', this.on_show);
             this.$on('hide', this.on_hide);
+            this.$on('touch.' + name, this.on_touch);
         },
         methods: {
             on_show() {
                 // 不能从其它键盘返回到本键盘
-                this.$root.$emit('child_show', this);
+                this.$root.$emit('child_show', this, (ev) => {
+                    return this.on_touch(ev);
+                });
                 this.show = true;
-                this.tip = "请稍候...";   
+                this.tip = "请稍候...";
                 this.text = '';
                 java.open_speech_recognizer();
             },
             on_hide() {
                 this.text = '';
                 this.show = false;
-                    // 要停止聆听
-                java.cancel_speech_recognizer();                
+                // 要停止聆听
+                java.cancel_speech_recognizer();
             },
             'on_commit_text'() {
                 java.send_text(this.text);
                 this.text = '';
-            }
+            },
+            on_touch(ev) {
+                // 没有待上屏字符，不占用事件
+                if ('' === this.text || !ev.custom_kbd_obj) return false;
+                let kbd_obj = ev.custom_kbd_obj;
+                if (kbd_obj.code === android.KEYCODE_SPACE) {
+                    this.on_commit_text();
+                    // 消耗掉空格键事件，en不要做处理了
+                    return true;
+                }
+
+                return false;
+            },
         },
         template: `
         

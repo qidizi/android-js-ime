@@ -24,7 +24,7 @@ ajax('vue_wu_bi_dict.txt?' + +new Date, function (str) {
 
 function vue_wu_bi(name) {
 // 匹配中文，候选框只显示前面x个
-    const CANDIDATE_LIMIT = 10;
+    const CANDIDATE_LIMIT = 100;
 
     Vue.component(name, {
         mounted() {
@@ -35,9 +35,8 @@ function vue_wu_bi(name) {
         methods: {
             on_show() {
                 // 注册hook
-                let _this = this;
-                this.$root.$emit('child_show', this, function (ev) {
-                    return _this.on_touch(ev);
+                this.$root.$emit('child_show', this,  (ev)=> {
+                    return this.on_touch(ev);
                 });
                 this.show = false;
                 this.$root.is_zh = 1;

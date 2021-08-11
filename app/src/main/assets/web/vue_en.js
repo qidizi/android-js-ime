@@ -50,8 +50,11 @@ function vue_en(name) {
                 this.on_child_show(this);
                 this.show = true;
             },
-            hook(ev) {
-                return glb.hook && glb.hook(ev) || false;
+            // 用来给其它面板拦截像空格之类的处理，比如可以给语音键盘利用空格上屏，如果这个方法返回true，
+            // 那么en这个面板将不再做处理
+            event_override(ev) {
+                let result = 'function' === typeof glb.event_override && glb.event_override(ev);
+                return Boolean(result);
             },
             'on_menu'(ev) {
                 // 按钮有长按功能,不显示菜单
@@ -93,11 +96,11 @@ function vue_en(name) {
             },
             on_touch_en(ev) {
                 // 英文面板必须有key
-                if (!ev.custom_key) return this.hook(ev);
+                if (!ev.custom_key) return this.event_override(ev);
                 // 手势u、d、l、r；tab、long_tab
                 let kbd_obj = this.kbd[ev.custom_kbd_i][ev.custom_key];
                 // 英文面板必须是点击了实键
-                if (!kbd_obj) return this.hook(ev);
+                if (!kbd_obj) return this.event_override(ev);
                 ev.custom_kbd_obj = kbd_obj;
                 ev.meta_state = this.get_meta_state();
                 // 优先fn
@@ -118,14 +121,14 @@ function vue_en(name) {
                             android.KEYCODE_DEL,
                             android.KEYCODE_SPACE
                         ] + ',').indexOf(kbd_obj.code) < 0 ||
-                        true !== this.hook(ev))
+                        true !== this.event_override(ev))
                         java.send_key_press(kbd_obj.code, ev.meta_state);
                 } else if (kbd_obj.text)
                     // 字符串,无需子件处理
                     java.send_text(kbd_obj.text);
                 else if (/^[A-Z]$/.test(kbd_obj.label)) {
                     // 26个英文字
-                    if (true !== this.hook(ev))
+                    if (true !== this.event_override(ev))
                         java.send_key_press(android['KEYCODE_' + kbd_obj.label], ev.meta_state);
                 } else
                     // 符号
@@ -133,9 +136,9 @@ function vue_en(name) {
                 // 除了shift按键,按任何键都尝试清除掉像alt,ctrl之类控制键
                 this.clear_meta(kbd_obj.code);
             },
-            on_child_show(vm, hook) {
+            on_child_show(vm, event_override) {
                 this.only_en = +(vm === this);
-                glb.hook = hook || false;
+                glb.event_override = event_override || false;
                 glb.show_uid = vm._uid;
                 // 某个组件显示,通知其它的隐藏
                 this.$children.forEach(function (_vm) {
@@ -144,7 +147,7 @@ function vue_en(name) {
             },
             on_child_hide() {
                 delete glb.show_uid;
-                delete glb.hook;
+                delete glb.event_override;
             },
             "java_listener"(what, info) {
                 // 接收java通知，比如输入框要求显示数字键盘
