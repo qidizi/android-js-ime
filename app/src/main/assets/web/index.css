@@ -58,18 +58,19 @@ div.wrap {
 
 kbd.kbd > kbd.keys {
     background-color: #212121;
-    color: rgba(255, 255, 255, 0.54);
+    color: rgba(255, 255, 255, 1);
     border-radius: 5px;
     overflow: hidden;
     cursor: pointer;
     position: relative;
-    height: 40px;
-    width: 8vw;
+    height: 13vw;
+    width: 10vw;
     display: inline-block;
-    padding: 0;
-    margin: 1vw;
-    /*border: 5px solid rgba(255,255,255,0.1);*/
+    padding: 0; 
+    border: 1px solid rgba(255,255,255,0.1);
+    margin:0;
 }
+
 
 kbd.kbd > kbd.keys_1_5 {
     width: 13vw;
@@ -156,13 +157,6 @@ kbd.hold_key {
     animation: hold_key 1s ease-in-out infinite;
 }
 
-@media only screen and (min-width: 800px) {
-    /*横屏时要调整一下高度，目前未找到webview的媒体查询方向切换不起作用的原因，但是使用大小却有效*/
-    section kbd, section.number kbd {
-        line-height: 3rem;
-        height: 3rem;
-    }
-}
 
 header.candidates {
     width: 100%;
@@ -170,7 +164,7 @@ header.candidates {
     overflow-y: hidden;
     white-space: nowrap;
     text-align: left;
-    height: 3rem;
+    height: 13vw;
     margin-bottom: 5px;
 }
 
@@ -178,7 +172,7 @@ header.candidates samp {
     margin: 0 5px;
     background-color: white;
     display: inline-block;
-    padding: 1px 2px;
+    padding: 1px 2px; 
     border-radius: 2px;
     text-align: left;
     min-width: 3rem;
@@ -186,12 +180,12 @@ header.candidates samp {
 
 header.candidates samp sup {
     display: block;
-    font-size: 1rem;
+    font-size: 1.7rem;
 }
 
 header.candidates samp sub {
     display: block;
-    font-size: 1.2rem;
+    font-size: 1.7rem;
 }
 
 header.candidates .selected {
@@ -299,3 +293,24 @@ kbd.vue_wu_bi {
 .hide {
     display: none;
 }
+
+
+@media only screen and (min-width: 800px) {
+	kbd.kbd > kbd.keys {
+		height: 12vh;
+		min-height: 45px;
+	    width: 5vw;
+	/*border-width:0.5vw;*/
+		}
+		
+		    /*横屏时要调整一下高度，目前未找到webview的媒体查询方向切换不起作用的原因，但是使用大小却有效*/
+    section kbd, section.number kbd {
+        line-height: 3rem;
+        height: 3rem;
+    }
+    
+    header.candidates {
+    
+    height: 45px;
+}
+	}

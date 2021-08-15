@@ -6,7 +6,14 @@ function vue_quick(name) {
                 show_editor: false,
                 show: false,
                 quick_input: java.quick_word(),
-                kbd: []
+                kbd: [],
+                ph: `
+                因限制请剪出编辑，再贴回应用,格式如下：
+          
+键面文字       上屏内容文字
+...
+键面文字     上屏内容文字
+                `
             };
         },
         mounted() {
@@ -154,7 +161,7 @@ function vue_quick(name) {
         <footer class="editor_box" v-show="show_editor">
             <textarea 
             class="quick_editor"
-             placeholder="说明   请剪出编辑，再贴回应用\n键面文字       上屏内容文字\n键面文字2     上屏内容文字2\n"
+             :placeholder="ph"
              v-model.trim="lines"
              ></textarea>
              <button class="cancel btn" @click.stop.prevent="on_edit_cancel">取消</button>
